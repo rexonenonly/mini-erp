@@ -64,7 +64,7 @@
         <span class="material-symbols-outlined {{ request()->is('dashboard') ? 'text-white' : '' }}">dashboard</span>
         <span>Dashboard</span>
       </a>
-      <a href="/master-data/products" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('master-data/*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+      <a href="/master-data" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('master-data*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
         <span class="material-symbols-outlined">dataset</span>
         <span>Master Data</span>
       </a>

@@ -72,8 +72,8 @@
         <span class="material-symbols-outlined {{ request()->is('inventory') ? 'text-white' : '' }}">inventory_2</span>
         <span>Inventory</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">shopping_cart</span>
+      <a href="/purchasing" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('purchasing') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('purchasing') ? 'text-white' : '' }}">shopping_cart</span>
         <span>Purchasing</span>
       </a>
       <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">

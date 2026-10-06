@@ -18,6 +18,10 @@
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
+            sidebar: '#0f172a',
+            'sidebar-hover': '#1e293b',
+            'sidebar-active': '#2563eb',
+            'sidebar-muted': '#94a3b8',
             primary: '#2563eb',
             'primary-hover': '#1d4ed8',
           }
@@ -26,103 +30,150 @@
     }
   </script>
   <style>
-    body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #1e293b;
+      background-color: #f8fafc;
+      -webkit-font-smoothing: antialiased;
+    }
   </style>
 </head>
-<body class="min-h-screen flex bg-slate-50">
+<body class="min-h-screen flex bg-slate-50 text-slate-800">
 
-  <aside class="w-60 bg-slate-900 text-white flex-shrink-0 flex flex-col fixed inset-y-0 left-0 z-30">
-    <div class="h-16 px-5 flex items-center gap-3 border-b border-slate-800">
-      <div class="w-8 h-8 rounded bg-primary flex items-center justify-center font-bold">M</div>
-      <div class="flex flex-col min-w-0">
-        <span class="font-bold text-sm">MiniERP</span>
-        <span class="text-xs text-slate-400 truncate">PT Distribusi Mandiri Utama</span>
+  <!-- SIDEBAR -->
+  <aside class="w-[240px] bg-sidebar text-slate-200 flex flex-col shrink-0 min-h-screen border-r border-slate-800 select-none">
+    <div class="px-5 py-5 border-b border-slate-800/80">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded bg-primary flex items-center justify-center text-white font-bold text-base tracking-tight">M</div>
+        <div class="font-bold text-lg text-white tracking-tight">MiniERP</div>
       </div>
+      <div class="text-xs text-sidebar-muted mt-1 leading-tight truncate">PT Distribusi Mandiri Utama</div>
     </div>
 
-    <nav class="p-3 space-y-1 flex-1">
-      <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">dashboard</span>
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('dashboard') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('dashboard') ? 'text-white' : '' }}">dashboard</span>
         <span>Dashboard</span>
       </a>
-      <a href="/master-data/products" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">grid_view</span>
+      <a href="/master-data/products" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('master-data/*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined">dataset</span>
         <span>Master Data</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">inventory_2</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">inventory_2</span>
         <span>Inventory</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">shopping_cart</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">shopping_cart</span>
         <span>Purchasing</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">point_of_sale</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">point_of_sale</span>
         <span>Sales</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">account_balance</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">account_balance</span>
         <span>Accounting</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">bar_chart</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">bar_chart</span>
         <span>Laporan</span>
       </a>
 
-      <div class="pt-4 pb-1 px-3">
-        <p class="text-xs font-semibold text-slate-500 uppercase">Sistem</p>
+      <div class="pt-4 pb-2">
+        <div class="h-px bg-slate-800 mx-1"></div>
+        <div class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Sistem</div>
       </div>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">group</span>
+
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">group</span>
         <span>Pengguna & Role</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">history</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">history</span>
         <span>Audit Log</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
-        <span class="material-symbols-outlined text-xl">verified_user</span>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
+        <span class="material-symbols-outlined">health_and_safety</span>
         <span>Kesehatan Sistem</span>
       </a>
     </nav>
 
-    <div class="p-4 border-t border-slate-800">
-      <div class="text-xs text-slate-400">
-        <span class="block text-slate-500 font-medium">Periode Akuntansi:</span>
-        <div class="flex items-center justify-between mt-1">
-          <span class="font-medium text-slate-200">Oktober 2026</span>
-          <span class="px-1.5 py-0.5 rounded text-xs bg-emerald-950 text-emerald-400 border border-emerald-800/60">Open</span>
-        </div>
+    <div class="p-4 border-t border-slate-800/80 bg-slate-950/40 text-xs">
+      <div class="text-slate-400">Periode Akuntansi:</div>
+      <div class="font-medium text-slate-200 mt-0.5 flex items-center justify-between">
+        <span>Oktober 2026</span>
+        <span class="inline-block text-xs font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-1.5 py-0.5 rounded">Open</span>
       </div>
     </div>
   </aside>
 
-  <div class="flex-1 flex flex-col min-w-0 pl-60">
-    <header class="h-16 bg-white border-b px-8 flex items-center justify-between sticky top-0 z-20">
-      <div class="flex items-center gap-2 text-sm text-slate-500">
-        <span>Operasional</span>
-        <span>/</span>
-        <span class="font-semibold text-slate-900">@yield('breadcrumb', 'Dashboard')</span>
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- TOPBAR -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between gap-4 shrink-0">
+      <div class="flex items-center gap-4">
+        <h1 class="text-xl font-semibold text-slate-900 tracking-tight">@yield('page-title', 'Dashboard')</h1>
+      </div>
+
+      <div class="flex-1 max-w-md mx-4">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">search</span>
+          <input type="text" placeholder="Cari SKU, PO, SO, atau jurnal..." class="w-full h-9 pl-9 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+        </div>
       </div>
 
       <div class="flex items-center gap-4">
-        <input type="text" placeholder="Cari SKU, PO, SO, atau jurnal..." class="w-80 h-9 pl-3 bg-slate-50 border rounded-lg text-sm">
-        <button class="w-9 h-9 flex items-center justify-center rounded-lg border">
+        <div class="relative group">
+          <button type="button" class="h-9 px-3.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+            <span class="material-symbols-outlined text-lg">add</span>
+            <span>Transaksi Baru</span>
+            <span class="material-symbols-outlined text-base text-blue-200 ml-0.5">expand_more</span>
+          </button>
+          <div class="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 hidden group-hover:block z-20">
+            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+              <span class="material-symbols-outlined text-slate-400 text-lg">shopping_cart</span>
+              <span>Purchase Order</span>
+            </a>
+            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+              <span class="material-symbols-outlined text-slate-400 text-lg">point_of_sale</span>
+              <span>Sales Order</span>
+            </a>
+            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors border-t border-slate-100">
+              <span class="material-symbols-outlined text-slate-400 text-lg">tune</span>
+              <span>Opname Stok</span>
+            </a>
+          </div>
+        </div>
+
+        <button type="button" class="w-9 h-9 rounded-lg border border-slate-200 hover:bg-slate-50 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors relative">
           <span class="material-symbols-outlined text-xl">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
         </button>
-        <div class="flex items-center gap-3 pl-1 border-l ml-1">
-          <div class="w-9 h-9 rounded-full bg-slate-100 border flex items-center justify-center text-sm font-semibold">RP</div>
+
+        <div class="h-6 w-px bg-slate-200"></div>
+
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-semibold text-slate-700 text-sm select-none">RP</div>
           <div class="flex flex-col text-left">
-            <span class="text-sm font-semibold leading-none">Rex Pradana</span>
-            <span class="text-xs text-slate-500 mt-1 leading-none">Owner</span>
+            <span class="text-sm font-semibold text-slate-800 leading-tight">Rex Pradana</span>
+            <span class="text-xs text-slate-500 leading-tight">Owner</span>
           </div>
         </div>
       </div>
     </header>
 
-    <main class="flex-1 p-8 max-w-7xl w-full mx-auto">
+    <!-- CONTENT -->
+    <main class="flex-1 p-6 space-y-6 overflow-y-auto">
       @yield('content')
     </main>
   </div>

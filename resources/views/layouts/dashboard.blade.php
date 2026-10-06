@@ -68,8 +68,8 @@
         <span class="material-symbols-outlined">dataset</span>
         <span>Master Data</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">inventory_2</span>
+      <a href="/inventory" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('inventory') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('inventory') ? 'text-white' : '' }}">inventory_2</span>
         <span>Inventory</span>
       </a>
       <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">

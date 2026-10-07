@@ -84,8 +84,8 @@
         <span class="material-symbols-outlined {{ request()->is('accounting') ? 'text-white' : '' }}">account_balance</span>
         <span>Accounting</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">bar_chart</span>
+      <a href="/reports" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('reports*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('reports*') ? 'text-white' : '' }}">bar_chart</span>
         <span>Laporan</span>
       </a>
 

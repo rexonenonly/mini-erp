@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', fn() => redirect('/login'));
 
@@ -13,3 +14,4 @@ Route::get('/inventory', fn() => view('inventory'));
 Route::get('/purchasing', fn() => view('purchasing'));
 Route::get('/sales', fn() => view('sales'));
 Route::get('/accounting', fn() => view('accounting'));
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

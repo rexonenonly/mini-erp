@@ -31,10 +31,10 @@
     </nav>
   </div>
 
-  @include('reports.partials.neraca-saldo')
-  @include('reports.partials.laba-rugi')
-  @include('reports.partials.umur-piutang-hutang')
-  @include('reports.partials.nilai-persediaan')
+  @include('reports.partials.trial-balance')
+  @include('reports.partials.income-statement')
+  @include('reports.partials.aging')
+  @include('reports.partials.inventory-valuation')
 </div>
 
 <script>

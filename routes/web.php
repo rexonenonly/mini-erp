@@ -11,3 +11,5 @@ Route::get('/dashboard', [AuthController::class, 'showDashboard'])->name('dashbo
 Route::get('/master-data', fn() => view('master-data'));
 Route::get('/inventory', fn() => view('inventory'));
 Route::get('/purchasing', fn() => view('purchasing'));
+Route::get('/sales', fn() => view('sales'));
+Route::get('/accounting', fn() => view('accounting'));

@@ -48,7 +48,7 @@
         <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">24</span> PO</div>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm purchasing-table">
           <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
             <tr>
               <th class="py-3.5 px-5 text-left w-48">No. PO</th>
@@ -153,7 +153,7 @@
         <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">18</span> penerimaan</div>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm purchasing-table">
           <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
             <tr>
               <th class="py-3.5 px-5 text-left w-40">No. Penerimaan</th>
@@ -262,7 +262,7 @@
         <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">17</span> bill</div>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm purchasing-table">
           <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
             <tr>
               <th class="py-3.5 px-5 text-left w-44">No. Bill</th>
@@ -369,7 +369,7 @@
         <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">14</span> pembayaran</div>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm purchasing-table">
           <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
             <tr>
               <th class="py-3.5 px-5 text-left w-44">No. Pembayaran</th>

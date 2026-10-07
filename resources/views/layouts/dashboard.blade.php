@@ -76,12 +76,12 @@
         <span class="material-symbols-outlined {{ request()->is('purchasing') ? 'text-white' : '' }}">shopping_cart</span>
         <span>Purchasing</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">point_of_sale</span>
+      <a href="/sales" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('sales') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('sales') ? 'text-white' : '' }}">point_of_sale</span>
         <span>Sales</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">account_balance</span>
+      <a href="/accounting" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('accounting') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
+        <span class="material-symbols-outlined {{ request()->is('accounting') ? 'text-white' : '' }}">account_balance</span>
         <span>Accounting</span>
       </a>
       <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">

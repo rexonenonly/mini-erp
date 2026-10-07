@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.app')
 @section('title', 'Master Data - Chart of Accounts')
 @section('content')
 <div class="space-y-6">

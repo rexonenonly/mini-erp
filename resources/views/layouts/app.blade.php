@@ -45,6 +45,25 @@
       background-color: #f8fafc;
       -webkit-font-smoothing: antialiased;
     }
+    .inventory-page { min-width: 0; max-width: 100%; }
+    .inventory-page .inventory-toolbar { min-width: 0; flex-wrap: wrap; }
+    .inventory-page .inventory-toolbar > div:first-child { min-width: 0; flex-wrap: wrap; }
+    .inventory-page .inventory-table { width: 100%; }
+    .inventory-page .inventory-table th,
+    .inventory-page .inventory-table td { vertical-align: middle; white-space: nowrap; }
+    .inventory-page .inventory-table tbody tr { height: 52px; }
+    .inventory-page .inventory-table .product-name { min-width: 220px; white-space: normal; }
+    .inventory-page .inventory-table .warehouse { min-width: 128px; }
+    .inventory-page .inventory-table .numeric { min-width: 96px; font-variant-numeric: tabular-nums; }
+    .inventory-page .inventory-table .currency { min-width: 132px; font-variant-numeric: tabular-nums; }
+    .inventory-page .inventory-table th.text-right,
+    .inventory-page .inventory-table td.text-right { min-width: 96px; font-variant-numeric: tabular-nums; }
+    .inventory-page .stock-table th:nth-child(2),
+    .inventory-page .stock-table td:nth-child(2) { min-width: 220px; white-space: normal; }
+    .inventory-page .stock-table th:nth-child(3),
+    .inventory-page .stock-table td:nth-child(3) { min-width: 128px; }
+    .inventory-page select { height: 36px; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: #fff; }
+    .inventory-page input[type='search'] { border-color: #e2e8f0; background: #fff; }
   </style>
 </head>
 <body class="min-h-screen flex bg-slate-50 text-slate-800">
@@ -238,7 +257,7 @@
 
   function executeDelete() {
     if (!currentDeleteId) return;
-    fetch(`/master-data/${resource}/${currentDeleteId}`, {
+    fetch(`${resourceBase()}/${currentDeleteId}`, {
       method: 'DELETE',
       headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json'}
     })
@@ -258,8 +277,21 @@
     body.innerHTML = `<form id="dataForm" class="space-y-4">${fields}</form>`;
   }
 
-  function loadData(id, mode) {
-    fetch(`/master-data/${resource}/${id}`, {headers: {'Accept': 'application/json'}})
+  function resourceBase() {
+  const map = {
+    'products': @json(route('master-data.products')),
+    'warehouses': @json(route('master-data.warehouses')),
+    'partners': @json(route('master-data.partners')),
+    'accounts': @json(route('master-data.accounts')),
+    'stock': @json(route('inventory.stock')),
+    'stock-opnames': @json(url('/master-data/stock-opnames')),
+    'stock-transfers': @json(url('/master-data/stock-transfers')),
+  };
+  return map[resource] || '/' + (resource || '');
+}
+
+function loadData(id, mode) {
+    fetch(`${resourceBase()}/${id}`, {headers: {'Accept': 'application/json'}})
     .then(r => r.json())
     .then(data => {
       if (mode === 'view') renderView(data);
@@ -324,6 +356,63 @@
         <div><label class="flex items-center gap-2 cursor-pointer"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" ${d.is_active||!Object.keys(data).length?'checked':''} ${disabled} class="w-4 h-4 rounded"><span class="text-sm text-slate-700">Aktif</span></label></div>
       `;
     }
+    if (res === 'stock') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Produk <span class="text-red-500">*</span></label><select name="product_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Produk</option>
+          @foreach(\App\Models\Product::where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}" ${d.product_id==={{ $p->id }}?'selected':''}>{{ $p->sku }} - {{ $p->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Gudang <span class="text-red-500">*</span></label><select name="warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Gudang</option>
+          @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+          <option value="{{ $w->id }}" ${d.warehouse_id==={{ $w->id }}?'selected':''}>{{ $w->name }}</option>
+          @endforeach
+        </select></div>
+        <div class="grid grid-cols-3 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">On Hand <span class="text-red-500">*</span></label><input type="number" min="0" step="0.001" name="on_hand" value="${d.on_hand||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Reserved</label><input type="number" min="0" step="0.001" name="reserved" value="${d.reserved||0}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Harga Rata-rata</label><input type="number" min="0" step="0.01" name="unit_cost" value="${d.unit_cost||0}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        </div>
+      `;
+    }
+    if (res === 'stock-opnames') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal <span class="text-red-500">*</span></label><input type="date" name="opname_date" value="${d.opname_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Gudang <span class="text-red-500">*</span></label><select name="warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Gudang</option>
+          @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+          <option value="{{ $w->id }}" ${d.warehouse_id==$w->id?'selected':''}>{{ $w->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="3" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
+    if (res === 'stock-transfers') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal <span class="text-red-500">*</span></label><input type="date" name="transfer_date" value="${d.transfer_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Dari Gudang <span class="text-red-500">*</span></label><select name="from_warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+            <option value="">Pilih Gudang</option>
+            @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+            <option value="{{ $w->id }}" ${d.from_warehouse_id==$w->id?'selected':''}>{{ $w->name }}</option>
+            @endforeach
+          </select></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Ke Gudang <span class="text-red-500">*</span></label><select name="to_warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+            <option value="">Pilih Gudang</option>
+            @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+            <option value="{{ $w->id }}" ${d.to_warehouse_id==$w->id?'selected':''}>{{ $w->name }}</option>
+            @endforeach
+          </select></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="3" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
     return '';
   }
 
@@ -334,6 +423,9 @@
     if (res === 'warehouses') return row('Kode', d.code) + row('Nama', d.name) + row('Alamat', d.address || '-') + row('Telepon', d.phone || '-') + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
     if (res === 'partners') return row('Kode', d.code) + row('Nama', d.name) + row('Tipe', d.type) + row('Kontak', d.contact_person || '-') + row('Telepon', d.phone || '-') + row('Email', d.email || '-') + row('Alamat', d.address || '-') + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
     if (res === 'accounts') return row('Kode', d.code) + row('Nama', d.name) + row('Tipe', d.type) + row('Saldo', fmt(d.balance)) + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
+    if (res === 'stock') return row('Produk', d.product?.sku + ' - ' + d.product?.name) + row('Gudang', d.warehouse?.name || '-') + row('On Hand', d.on_hand) + row('Reserved', d.reserved) + row('Available', Math.max(Number(d.on_hand) - Number(d.reserved), 0)) + row('Harga Rata-rata', fmt(d.unit_cost));
+    if (res === 'stock-opnames') return row('Nomor', d.number) + row('Tanggal', d.opname_date) + row('Gudang', d.warehouse?.name || '-') + row('Status', d.status) + row('Catatan', d.notes || '-');
+    if (res === 'stock-transfers') return row('Nomor', d.number) + row('Tanggal', d.transfer_date) + row('Dari', d.fromWarehouse?.name || '-') + row('Ke', d.toWarehouse?.name || '-') + row('Status', d.status);
     return '';
   }
 
@@ -341,7 +433,7 @@
     const form = document.getElementById('dataForm');
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
-    const url = id ? `/master-data/${resource}/${id}` : `/master-data/${resource}`;
+    const url = id ? `${resourceBase()}/${id}` : resourceBase();
     const method = id ? 'PUT' : 'POST';
     
     fetch(url, {

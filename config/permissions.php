@@ -9,7 +9,7 @@ return [
             'accounts' => ['label' => 'Akun', 'actions' => ['view', 'create', 'update']],
         ],
         'Inventory' => [
-            'stock' => ['label' => 'Stok', 'actions' => ['view']],
+            'stock' => ['label' => 'Stok', 'actions' => ['view', 'create', 'update']],
             'stock-opnames' => ['label' => 'Opname Stok', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
             'stock-transfers' => ['label' => 'Transfer Stok', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
         ],

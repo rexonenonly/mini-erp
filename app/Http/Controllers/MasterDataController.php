@@ -23,6 +23,8 @@ class MasterDataController extends Controller
         'warehouses' => ['model' => \App\Models\Warehouse::class, 'label' => 'Gudang', 'singular' => 'gudang'],
         'partners' => ['model' => \App\Models\Partner::class, 'label' => 'Mitra', 'singular' => 'mitra'],
         'accounts' => ['model' => \App\Models\Account::class, 'label' => 'Akun', 'singular' => 'akun'],
+        'stock-opnames' => ['model' => \App\Models\StockOpname::class, 'label' => 'Opname Stok', 'singular' => 'opname stok'],
+        'stock-transfers' => ['model' => \App\Models\StockTransfer::class, 'label' => 'Transfer Stok', 'singular' => 'transfer stok'],
     ];
 
     public function index(string $resource)
@@ -36,6 +38,13 @@ class MasterDataController extends Controller
         $items = $query->latest()->paginate(15);
         $total = $model::count();
 
+        if ($resource === 'stock-opnames') {
+            return view('inventory.opname', compact('resource'));
+        }
+        if ($resource === 'stock-transfers') {
+            return view('inventory.transfers', compact('resource'));
+        }
+
         return view('master-data.index', compact('resource', 'cfg', 'items', 'total'));
     }
 
@@ -47,6 +56,7 @@ class MasterDataController extends Controller
         $model = $cfg['model'];
 
         $validated = $request->validate($this->rules($resource));
+        $validated = $this->withDefaults($resource, $validated, $request);
         $item = $model::create($validated);
 
         return response()->json(['success' => true, 'message' => ucfirst($cfg['singular']) . ' berhasil ditambahkan', 'item' => $item]);
@@ -87,6 +97,17 @@ class MasterDataController extends Controller
         return response()->json(['success' => true, 'message' => ucfirst($cfg['singular']) . ' berhasil dihapus']);
     }
 
+    private function withDefaults(string $resource, array $validated, Request $request): array
+    {
+        if ($resource === 'stock-opnames' || $resource === 'stock-transfers') {
+            $validated['created_by'] = $request->user()->id;
+            if (($validated['status'] ?? null) === 'posted') {
+                $validated['posted_at'] = now();
+            }
+        }
+        return $validated;
+    }
+
     private function rules(string $resource, ?int $id = null): array
     {
         $unique = $id ? ",{$id}" : '';
@@ -123,6 +144,21 @@ class MasterDataController extends Controller
                 'type' => 'required|in:asset,liability,equity,revenue,expense',
                 'balance' => 'required|numeric',
                 'is_active' => 'boolean',
+            ],
+            'stock-opnames' => [
+                'number' => "required|string|max:40|unique:stock_opnames,number{$unique}",
+                'opname_date' => 'required|date',
+                'warehouse_id' => 'required|exists:warehouses,id',
+                'notes' => 'nullable|string',
+                'status' => 'required|in:draft,posted,reversed',
+            ],
+            'stock-transfers' => [
+                'number' => "required|string|max:40|unique:stock_transfers,number{$unique}",
+                'transfer_date' => 'required|date',
+                'from_warehouse_id' => 'required|exists:warehouses,id|different:to_warehouse_id',
+                'to_warehouse_id' => 'required|exists:warehouses,id',
+                'notes' => 'nullable|string',
+                'status' => 'required|in:draft,posted,reversed',
             ],
             default => [],
         };

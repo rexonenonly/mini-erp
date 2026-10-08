@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\RoleController;
+use App\Http\Controllers\StockBalanceController;
 use App\Http\Controllers\MasterDataController;
 
 Route::get('/', fn() => redirect('/login'));
@@ -21,15 +22,18 @@ Route::middleware('auth')->group(function () {
     foreach (['products', 'warehouses', 'partners', 'accounts'] as $resource) {
         Route::get("/master-data/{$resource}", [MasterDataController::class, 'index'])->defaults('resource', $resource)->name("master-data.{$resource}");
     }
-    Route::post('/master-data/{resource}', [MasterDataController::class, 'store'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
-    Route::get('/master-data/{resource}/{id}', [MasterDataController::class, 'show'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
-    Route::put('/master-data/{resource}/{id}', [MasterDataController::class, 'update'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
-    Route::delete('/master-data/{resource}/{id}', [MasterDataController::class, 'destroy'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
 
     // Inventory
-    Route::view('/inventory/stock', 'inventory.stock')->name('inventory.stock')->middleware('can:stock.view');
-    Route::view('/inventory/opname', 'inventory.opname')->name('inventory.opname')->middleware('can:stock-opnames.view');
-    Route::view('/inventory/transfers', 'inventory.transfers')->name('inventory.transfers')->middleware('can:stock-transfers.view');
+    Route::get('/inventory/stock', [StockBalanceController::class, 'index'])->name('inventory.stock')->middleware('can:stock.view');
+    Route::get('/inventory/stock/{balance}', [StockBalanceController::class, 'show'])->name('inventory.stock.show')->middleware('can:stock.view');
+    Route::post('/inventory/stock', [StockBalanceController::class, 'store'])->name('inventory.stock.store')->middleware('can:stock.create');
+    Route::put('/inventory/stock/{balance}', [StockBalanceController::class, 'update'])->name('inventory.stock.update')->middleware('can:stock.update');
+    Route::get('/inventory/opname', [MasterDataController::class, 'index'])->defaults('resource', 'stock-opnames')->name('inventory.opname')->middleware('can:stock-opnames.view');
+    Route::get('/inventory/transfers', [MasterDataController::class, 'index'])->defaults('resource', 'stock-transfers')->name('inventory.transfers')->middleware('can:stock-transfers.view');
+    Route::post('/master-data/{resource}', [MasterDataController::class, 'store'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);
+    Route::get('/master-data/{resource}/{id}', [MasterDataController::class, 'show'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);
+    Route::put('/master-data/{resource}/{id}', [MasterDataController::class, 'update'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);
+    Route::delete('/master-data/{resource}/{id}', [MasterDataController::class, 'destroy'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);
 
     // Purchasing
     Route::view('/purchasing/orders', 'purchasing.orders')->name('purchasing.orders')->middleware('can:purchase-orders.view');

@@ -1,5 +1,5 @@
-  <!-- TAB: SALES ORDER -->
-  <div id="tab-so" class="tab-content">
+{{-- Sales Orders --}}
+<div id="tab-orders" class="tab-content {{ request('tab') !== 'orders' ? 'hidden' : '' }} space-y-4">
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">

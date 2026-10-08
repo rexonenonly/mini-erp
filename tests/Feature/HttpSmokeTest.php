@@ -124,6 +124,28 @@ class HttpSmokeTest extends TestCase
         $this->assertNotNull(\App\Models\Product::find($p2->id));
     }
 
+    public function test_no_modal_js_parse_error_in_rendered_html(): void
+    {
+        $this->be(User::where('email', 'owner@minierp.test')->firstOrFail());
+        $html = $this->get(route('master-data.products'))->getContent();
+        preg_match_all('/<script(?:[^>]*)>(.*?)<\/script>/s', $html, $m);
+        $js = implode("\n", $m[1] ?? []);
+        $this->assertStringNotContainsString('->', $js, 'Leaked PHP -> inside JS string');
+        $tmp = sys_get_temp_dir() . '/modal-js-' . md5($js) . '.js';
+        file_put_contents($tmp, $js);
+        exec("node --check " . escapeshellarg($tmp) . " 2>&1", $out, $code);
+        $this->assertSame(0, $code, 'node --check failed: ' . implode("\n", (array) $out));
+        foreach (['inventory.stock', 'inventory.opname', 'inventory.transfers'] as $r) {
+            $html2 = $this->get(route($r))->getContent();
+            preg_match_all('/<script(?:[^>]*)>(.*?)<\/script>/s', $html2, $m2);
+            $js2 = implode("\n", $m2[1] ?? []);
+            $tmp2 = sys_get_temp_dir() . '/modal-js2-' . $r . '.js';
+            file_put_contents($tmp2, $js2);
+            exec("node --check " . escapeshellarg($tmp2) . " 2>&1", $out2, $code2);
+            $this->assertSame(0, $code2, "$r js invalid: " . implode("\n", (array) $out2));
+        }
+    }
+
     public function test_guest_redirects_on_protected_pages(): void
     {
         foreach (['dashboard','system.users','master-data.products','reports.aging'] as $route) {

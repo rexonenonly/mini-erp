@@ -7,10 +7,10 @@ $tab = request('tab', 'trial-balance');
 $allowed = ['trial-balance', 'income-statement', 'aging', 'inventory-valuation'];
 if (!in_array($tab, $allowed)) { $tab = 'trial-balance'; }
 $tabConfig = [
-    'trial-balance'      => ['label' => 'Neraca Saldo', 'partial' => 'reports.partials.neraca-saldo'],
-    'income-statement'   => ['label' => 'Laba Rugi',     'partial' => 'reports.partials.laba-rugi'],
-    'aging'              => ['label' => 'Umur Piutang & Hutang', 'partial' => 'reports.partials.umur-piutang-hutang'],
-    'inventory-valuation' => ['label' => 'Nilai Persediaan', 'partial' => 'reports.partials.nilai-persediaan'],
+    'trial-balance'      => ['label' => 'Neraca Saldo', 'partial' => 'reports.partials.trial-balance'],
+    'income-statement'   => ['label' => 'Laba Rugi',     'partial' => 'reports.partials.income-statement'],
+    'aging'              => ['label' => 'Umur Piutang & Hutang', 'partial' => 'reports.partials.aging'],
+    'inventory-valuation' => ['label' => 'Nilai Persediaan', 'partial' => 'reports.partials.inventory-valuation'],
 ];
 @endphp
 

@@ -100,7 +100,7 @@
         <div class="text-sm text-slate-500">Halaman 1 dari 4</div>
         <div class="flex items-center gap-1">
           <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Sebelumnya</button>
-          <button class="w-8 h-8 bg-primary text-white text-sm font-medium flex items-center justify-center">1</button>
+          <button class="w-8 h-8 bg-slate-900 text-white text-sm font-medium flex items-center justify-center">1</button>
           <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">2</button>
           <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">3</button>
           <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">4</button>

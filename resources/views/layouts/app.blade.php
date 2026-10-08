@@ -79,24 +79,30 @@
 
       <div class="flex items-center gap-4">
         <div class="relative group">
-          <button type="button" class="h-9 px-3.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+          <button type="button" class="h-9 px-3.5 bg-white border border-slate-300 hover:bg-blue-50 hover:border-blue-400 text-primary text-sm font-medium rounded-lg flex items-center gap-1.5 transition-colors">
             <span class="material-symbols-outlined text-lg">add</span>
             <span>Transaksi Baru</span>
-            <span class="material-symbols-outlined text-base text-blue-200 ml-0.5">expand_more</span>
+            <span class="material-symbols-outlined text-base text-slate-400 ml-0.5">expand_more</span>
           </button>
           <div class="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 hidden group-hover:block z-20">
-            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+            @can('purchasing.purchase-orders.view')
+            <a href="{{ route('purchasing.orders') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
               <span class="material-symbols-outlined text-slate-400 text-lg">shopping_cart</span>
               <span>Purchase Order</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+            @endcan
+            @can('sales.sales-orders.view')
+            <a href="{{ route('sales.orders') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
               <span class="material-symbols-outlined text-slate-400 text-lg">point_of_sale</span>
               <span>Sales Order</span>
             </a>
+            @endcan
+            @can('inventory.stock-opnames.view')
             <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors border-t border-slate-100">
               <span class="material-symbols-outlined text-slate-400 text-lg">tune</span>
               <span>Opname Stok</span>
             </a>
+            @endcan
           </div>
         </div>
 
@@ -107,13 +113,28 @@
 
         <div class="h-6 w-px bg-slate-200"></div>
 
+        @auth
+        @php
+          $u = auth()->user();
+          $initials = collect(explode(' ', $u->name))->map(fn($p)=>mb_strtoupper(mb_substr($p,0,1)))->take(2)->implode('');
+          $roleName = $u->getRoleNames()->first() ?? '-';
+        @endphp
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-semibold text-slate-700 text-sm select-none">RP</div>
+          <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-semibold text-slate-700 text-sm select-none">{{ $initials }}</div>
           <div class="flex flex-col text-left">
-            <span class="text-sm font-semibold text-slate-800 leading-tight">Rex Pradana</span>
-            <span class="text-xs text-slate-500 leading-tight">Owner</span>
+            <span class="text-sm font-semibold text-slate-800 leading-tight">{{ $u->name }}</span>
+            <span class="text-xs text-slate-500 leading-tight">{{ $roleName }}</span>
           </div>
+          <form method="POST" action="{{ route('logout') }}" class="ml-2">
+            @csrf
+            <button type="submit" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900" title="Keluar">
+              <span class="material-symbols-outlined text-lg">logout</span>
+            </button>
+          </form>
         </div>
+        @else
+        <a href="{{ route('login') }}" class="text-sm font-medium text-primary hover:text-primary-hover">Masuk</a>
+        @endauth
       </div>
     </header>
 
@@ -122,6 +143,224 @@
       @yield('content')
     </main>
   </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" onclick="if(event.target===this) closeModal()">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-lg font-semibold text-slate-900"></h3>
+        <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div id="modalBody" class="p-6 overflow-y-auto flex-1"></div>
+      <div id="modalFooter" class="p-5 border-t border-slate-200 flex items-center justify-end gap-3"></div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM -->
+  <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" onclick="if(event.target===this) closeDeleteModal()">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md" onclick="event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-red-600 text-2xl">warning</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-slate-900 mb-1">Konfirmasi Hapus</h3>
+            <p class="text-sm text-slate-600">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-5 bg-slate-50 rounded-b-lg flex items-center justify-end gap-3">
+        <button onclick="closeDeleteModal()" class="h-9 px-4 border border-slate-200 rounded-lg text-sm bg-white hover:bg-slate-50 text-slate-700">Batal</button>
+        <button onclick="executeDelete()" class="h-9 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  @stack('scripts')
+  <script>
+  let currentDeleteId = null;
+
+  function openModal(mode, id = null) {
+    const modal = document.getElementById('modal');
+    const title = document.getElementById('modalTitle');
+    const body = document.getElementById('modalBody');
+    const footer = document.getElementById('modalFooter');
+    
+    if (mode === 'create') {
+      title.textContent = 'Tambah Data';
+      body.innerHTML = '<div class="text-center py-4 text-slate-500">Loading form...</div>';
+      footer.innerHTML = `
+        <button onclick="closeModal()" class="h-9 px-4 border border-slate-200 rounded-lg text-sm bg-white hover:bg-slate-50 text-slate-700">Batal</button>
+        <button onclick="submitForm()" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg">Simpan</button>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      loadForm(mode);
+    } else if (mode === 'view' || mode === 'edit') {
+      title.textContent = mode === 'view' ? 'Detail Data' : 'Ubah Data';
+      body.innerHTML = '<div class="text-center py-4 text-slate-500">Loading...</div>';
+      if (mode === 'view') {
+        footer.innerHTML = '<button onclick="closeModal()" class="h-9 px-4 border border-slate-200 rounded-lg text-sm bg-white hover:bg-slate-50 text-slate-700">Tutup</button>';
+      } else {
+        footer.innerHTML = `
+          <button onclick="closeModal()" class="h-9 px-4 border border-slate-200 rounded-lg text-sm bg-white hover:bg-slate-50 text-slate-700">Batal</button>
+          <button onclick="submitForm(${id})" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg">Simpan</button>
+        `;
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      loadData(id, mode);
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function confirmDelete(id) {
+    currentDeleteId = id;
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeDeleteModal() {
+    currentDeleteId = null;
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function executeDelete() {
+    if (!currentDeleteId) return;
+    fetch(`/master-data/${resource}/${currentDeleteId}`, {
+      method: 'DELETE',
+      headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json'}
+    })
+    .then(r => r.json())
+    .then(d => {
+      closeDeleteModal();
+      if (d.success) location.reload();
+      else alert(d.message || 'Gagal menghapus data');
+    })
+    .catch(() => alert('Terjadi kesalahan'));
+  }
+
+  function loadForm(mode, data = {}) {
+    // ponytail: dynamic form per resource, add when fields vary significantly
+    const body = document.getElementById('modalBody');
+    const fields = getFormFields(resource, data);
+    body.innerHTML = `<form id="dataForm" class="space-y-4">${fields}</form>`;
+  }
+
+  function loadData(id, mode) {
+    fetch(`/master-data/${resource}/${id}`, {headers: {'Accept': 'application/json'}})
+    .then(r => r.json())
+    .then(data => {
+      if (mode === 'view') renderView(data);
+      else loadForm(mode, data);
+    })
+    .catch(() => {
+      document.getElementById('modalBody').innerHTML = '<div class="text-center py-4 text-red-600">Gagal memuat data</div>';
+    });
+  }
+
+  function renderView(data) {
+    const body = document.getElementById('modalBody');
+    const fields = getViewFields(resource, data);
+    body.innerHTML = `<div class="space-y-4">${fields}</div>`;
+  }
+
+  function getFormFields(res, data) {
+    const d = data || {};
+    const disabled = Object.keys(data).length > 0 && !canUpdate ? 'disabled' : '';
+    if (res === 'products') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">SKU <span class="text-red-500">*</span></label><input type="text" name="sku" value="${d.sku||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nama Produk <span class="text-red-500">*</span></label><input type="text" name="name" value="${d.name||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Satuan <span class="text-red-500">*</span></label><input type="text" name="unit" value="${d.unit||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Harga Beli <span class="text-red-500">*</span></label><input type="number" name="purchase_price" value="${d.purchase_price||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Harga Jual <span class="text-red-500">*</span></label><input type="number" name="sale_price" value="${d.sale_price||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Stok Minimum <span class="text-red-500">*</span></label><input type="number" name="min_stock" value="${d.min_stock||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="flex items-center gap-2 cursor-pointer"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" ${d.is_active||!Object.keys(data).length?'checked':''} ${disabled} class="w-4 h-4 rounded"><span class="text-sm text-slate-700">Aktif</span></label></div>
+      `;
+    }
+    if (res === 'warehouses') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Kode <span class="text-red-500">*</span></label><input type="text" name="code" value="${d.code||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nama Gudang <span class="text-red-500">*</span></label><input type="text" name="name" value="${d.name||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Alamat</label><textarea name="address" rows="3" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.address||''}</textarea></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Telepon</label><input type="text" name="phone" value="${d.phone||''}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="flex items-center gap-2 cursor-pointer"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" ${d.is_active||!Object.keys(data).length?'checked':''} ${disabled} class="w-4 h-4 rounded"><span class="text-sm text-slate-700">Aktif</span></label></div>
+      `;
+    }
+    if (res === 'partners') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Kode <span class="text-red-500">*</span></label><input type="text" name="code" value="${d.code||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nama Mitra <span class="text-red-500">*</span></label><input type="text" name="name" value="${d.name||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tipe <span class="text-red-500">*</span></label><select name="type" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="customer" ${d.type==='customer'?'selected':''}>Customer</option><option value="supplier" ${d.type==='supplier'?'selected':''}>Supplier</option><option value="both" ${d.type==='both'||!d.type?'selected':''}>Both</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Kontak Person</label><input type="text" name="contact_person" value="${d.contact_person||''}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Telepon</label><input type="text" name="phone" value="${d.phone||''}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Email</label><input type="email" name="email" value="${d.email||''}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Alamat</label><textarea name="address" rows="3" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.address||''}</textarea></div>
+        <div><label class="flex items-center gap-2 cursor-pointer"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" ${d.is_active||!Object.keys(data).length?'checked':''} ${disabled} class="w-4 h-4 rounded"><span class="text-sm text-slate-700">Aktif</span></label></div>
+      `;
+    }
+    if (res === 'accounts') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Kode <span class="text-red-500">*</span></label><input type="text" name="code" value="${d.code||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nama Akun <span class="text-red-500">*</span></label><input type="text" name="name" value="${d.name||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tipe <span class="text-red-500">*</span></label><select name="type" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="asset" ${d.type==='asset'||!d.type?'selected':''}>Asset</option><option value="liability" ${d.type==='liability'?'selected':''}>Liability</option><option value="equity" ${d.type==='equity'?'selected':''}>Equity</option><option value="revenue" ${d.type==='revenue'?'selected':''}>Revenue</option><option value="expense" ${d.type==='expense'?'selected':''}>Expense</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Saldo <span class="text-red-500">*</span></label><input type="number" name="balance" value="${d.balance||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="flex items-center gap-2 cursor-pointer"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" ${d.is_active||!Object.keys(data).length?'checked':''} ${disabled} class="w-4 h-4 rounded"><span class="text-sm text-slate-700">Aktif</span></label></div>
+      `;
+    }
+    return '';
+  }
+
+  function getViewFields(res, d) {
+    const fmt = n => 'Rp ' + Number(n).toLocaleString('id-ID');
+    const row = (l, v) => `<div class="grid grid-cols-3 gap-4 py-2 border-b border-slate-100"><div class="text-xs font-semibold text-slate-500 uppercase">${l}</div><div class="col-span-2 text-sm text-slate-900">${v}</div></div>`;
+    if (res === 'products') return row('SKU', d.sku) + row('Nama', d.name) + row('Satuan', d.unit) + row('Harga Beli', fmt(d.purchase_price)) + row('Harga Jual', fmt(d.sale_price)) + row('Stok Min', d.min_stock) + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
+    if (res === 'warehouses') return row('Kode', d.code) + row('Nama', d.name) + row('Alamat', d.address || '-') + row('Telepon', d.phone || '-') + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
+    if (res === 'partners') return row('Kode', d.code) + row('Nama', d.name) + row('Tipe', d.type) + row('Kontak', d.contact_person || '-') + row('Telepon', d.phone || '-') + row('Email', d.email || '-') + row('Alamat', d.address || '-') + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
+    if (res === 'accounts') return row('Kode', d.code) + row('Nama', d.name) + row('Tipe', d.type) + row('Saldo', fmt(d.balance)) + row('Status', d.is_active ? '<span class="text-emerald-600">Aktif</span>' : '<span class="text-slate-500">Nonaktif</span>');
+    return '';
+  }
+
+  function submitForm(id = null) {
+    const form = document.getElementById('dataForm');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    const url = id ? `/master-data/${resource}/${id}` : `/master-data/${resource}`;
+    const method = id ? 'PUT' : 'POST';
+    
+    fetch(url, {
+      method: method,
+      headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) {
+        closeModal();
+        location.reload();
+      } else {
+        alert(d.message || 'Gagal menyimpan data');
+      }
+    })
+    .catch(() => alert('Terjadi kesalahan'));
+  }
+  </script>
 
 </body>
 </html>

@@ -8,10 +8,20 @@
   <div class="bg-white border rounded-lg p-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-3 flex-wrap">
       
+      @php
+        $canPiutang = auth()->user()->can('aging-receivable.view');
+        $canHutang = auth()->user()->can('aging-payable.view');
+      @endphp
+      @if($canPiutang || $canHutang)
       <div class="bg-slate-100 p-1 rounded-lg flex items-center shadow-inner">
-        <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium bg-white text-slate-900 shadow-xs border border-slate-200" data-segment="piutang">Piutang</button>
-        <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900" data-segment="hutang">Hutang</button>
+        @if($canPiutang)
+        <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium {{ $canHutang ? 'text-slate-600 hover:text-slate-900' : 'bg-white text-slate-900 shadow-xs border border-slate-200' }}" data-segment="piutang">Piutang</button>
+        @endif
+        @if($canHutang)
+        <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium {{ $canPiutang ? 'text-slate-600 hover:text-slate-900' : 'bg-white text-slate-900 shadow-xs border border-slate-200' }}" data-segment="hutang">Hutang</button>
+        @endif
       </div>
+      @endif
       
       <div class="relative">
         <button type="button" class="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 focus:outline-none transition-colors shadow-xs">

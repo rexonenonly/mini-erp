@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\RoleController;
+use App\Http\Controllers\MasterDataController;
 
 Route::get('/', fn() => redirect('/login'));
 
@@ -17,10 +18,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'showDashboard'])->name('dashboard');
 
     // Master Data
-    Route::view('/master-data/products', 'master-data.products')->name('master-data.products')->middleware('can:products.view');
-    Route::view('/master-data/warehouses', 'master-data.warehouses')->name('master-data.warehouses')->middleware('can:warehouses.view');
-    Route::view('/master-data/partners', 'master-data.partners')->name('master-data.partners')->middleware('can:partners.view');
-    Route::view('/master-data/accounts', 'master-data.accounts')->name('master-data.accounts')->middleware('can:accounts.view');
+    Route::get('/master-data/{resource}', [MasterDataController::class, 'index'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
+    Route::post('/master-data/{resource}', [MasterDataController::class, 'store'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
+    Route::get('/master-data/{resource}/{id}', [MasterDataController::class, 'show'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
+    Route::put('/master-data/{resource}/{id}', [MasterDataController::class, 'update'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
+    Route::delete('/master-data/{resource}/{id}', [MasterDataController::class, 'destroy'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
 
     // Inventory
     Route::view('/inventory/stock', 'inventory.stock')->name('inventory.stock')->middleware('can:stock.view');

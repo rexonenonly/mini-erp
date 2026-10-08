@@ -120,8 +120,8 @@
   <div id="tab-buku-besar" class="tab-content hidden space-y-4">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Saldo Awal</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 1.400.000.000</span><span class="text-xs text-slate-400 mt-1">Per 1 Okt 2026</span></div>
-      <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Total Debit</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 112.800.000</span><span class="text-xs text-slate-400 mt-1">Mutasi penambah</span></div>
-      <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Total Kredit</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 30.300.000</span><span class="text-xs text-slate-400 mt-1">Mutasi pengurang</span></div>
+      <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Total Debit</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 815.217.000</span><span class="text-xs text-slate-400 mt-1">Mutasi penambah</span></div>
+      <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Total Kredit</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 732.717.000</span><span class="text-xs text-slate-400 mt-1">Mutasi pengurang</span></div>
       <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Saldo Akhir</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 1.482.500.000</span><span class="text-xs text-slate-400 mt-1">Sama dengan Nilai Persediaan</span></div>
     </div>
     <div class="bg-white border rounded-lg">

@@ -16,10 +16,10 @@
   <div class="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
     <div>
       <div class="text-xs font-medium text-slate-500 h-5 flex items-center">Penjualan Bulan Ini</div>
-      <div class="text-2xl font-semibold text-slate-900 my-2">Rp 842.150.000</div>
+      <div class="text-2xl font-semibold text-slate-900 my-2">Rp 996.800.000</div>
     </div>
     <div class="text-xs text-slate-500 flex items-center gap-1.5 pt-1">
-      <span>142 sales order</span>
+      <span>90 sales order</span>
       <span class="text-slate-300">•</span>
       <span class="font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 text-xs">+12,4% vs bulan lalu</span>
     </div>
@@ -38,7 +38,7 @@
       <div class="text-xs font-medium text-slate-500 h-5 flex items-center">Hutang Jatuh Tempo</div>
       <div class="text-2xl font-semibold text-slate-900 my-2">Rp 194.200.000</div>
     </div>
-    <div class="text-xs text-slate-500 pt-1">9 vendor bill</div>
+    <div class="text-xs text-slate-500 pt-1">9 tagihan</div>
   </div>
 </section>
 

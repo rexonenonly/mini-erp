@@ -5,7 +5,7 @@
   <div class="flex justify-between items-center">
     <div>
       <h2 class="text-2xl font-semibold">Master Data</h2>
-      <p class="text-sm text-slate-500 mt-0.5">Kelola produk, gudang, partner, dan akun</p>
+      <p class="text-sm text-slate-500 mt-0.5">Kelola produk, gudang, mitra, dan akun</p>
     </div>
     <button id="btnAction" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium text-sm flex items-center gap-2">
       <span class="material-symbols-outlined text-lg">add</span>
@@ -24,7 +24,7 @@
         <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">4</span>
       </a>
       <a href="#partners" data-tab="partners" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 flex items-center gap-2">
-        <span>Partner</span>
+        <span>Mitra</span>
         <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">5</span>
       </a>
       <a href="#accounts" data-tab="accounts" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 flex items-center gap-2">
@@ -44,7 +44,7 @@
 const tabs = {
   products: 'Produk Baru',
   warehouses: 'Gudang Baru',
-  partners: 'Partner Baru',
+  partners: 'Mitra Baru',
   accounts: 'Akun Baru'
 };
 

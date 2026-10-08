@@ -30,7 +30,7 @@
               <th class="py-3.5 px-5 text-left">Supplier</th>
               <th class="py-3.5 px-5 text-left w-32">Gudang</th>
               <th class="py-3.5 px-5 text-right w-32">Nilai</th>
-              <th class="py-3.5 px-5 text-left w-32">Vendor Bill</th>
+              <th class="py-3.5 px-5 text-left w-32">Tagihan</th>
               <th class="py-3.5 px-5 text-center w-24">Status</th>
               <th class="py-3.5 px-5 text-center w-16">Aksi</th>
             </tr>

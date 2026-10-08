@@ -3,14 +3,14 @@
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">
-          <input type="text" placeholder="Cari kode atau nama partner..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
+          <input type="text" placeholder="Cari kode atau nama mitra..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
           <select class="h-9 px-3 border rounded-lg text-sm">
             <option>Tipe: Semua</option>
             <option>Customer</option>
             <option>Supplier</option>
           </select>
         </div>
-        <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">5</span> partner</div>
+        <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">5</span> mitra</div>
       </div>
       <table class="w-full text-sm">
         <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">

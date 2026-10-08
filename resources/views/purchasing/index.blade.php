@@ -20,7 +20,7 @@
     <nav class="flex gap-8 -mb-px">
       <a href="#po" data-tab="po" class="tab-link pb-3 border-b-2 border-primary text-primary font-semibold">Purchase Order</a>
       <a href="#penerimaan" data-tab="penerimaan" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Penerimaan</a>
-      <a href="#vendor-bill" data-tab="vendor-bill" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Vendor Bill</a>
+      <a href="#vendor-bill" data-tab="vendor-bill" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Tagihan</a>
       <a href="#pembayaran" data-tab="pembayaran" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Pembayaran</a>
     </nav>
   </div>
@@ -35,7 +35,7 @@
 const tabs = {
   'po': 'Purchase Order Baru',
   'penerimaan': 'Penerimaan Baru',
-  'vendor-bill': 'Vendor Bill Baru',
+  'vendor-bill': 'Tagihan Baru',
   'pembayaran': 'Pembayaran Baru'
 };
 

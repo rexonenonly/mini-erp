@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         }
 
         if (Schema::hasTable('accounts')) {
-            DB::table('accounts')->updateOrInsert(['code' => '11110'], ['name' => 'Bank', 'type' => 'Aset', 'normal_balance' => 'Debit', 'is_active' => true]);
+            DB::table('accounts')->updateOrInsert(['code' => '11110'], ['name' => 'Bank', 'type' => 'asset', 'is_active' => true]);
         } elseif (Schema::hasTable('chart_of_accounts')) {
-            DB::table('chart_of_accounts')->updateOrInsert(['code' => '11110'], ['name' => 'Bank', 'type' => 'Aset', 'normal_balance' => 'Debit', 'is_active' => true]);
+            DB::table('chart_of_accounts')->updateOrInsert(['code' => '11110'], ['name' => 'Bank', 'type' => 'asset', 'is_active' => true]);
         }
     }
 }

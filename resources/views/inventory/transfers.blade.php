@@ -1,11 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Transfer Stok')
 @section('content')
+<div class="inventory-page">
 <x-ui.page-header />
 <div class="bg-white border rounded-lg">
-  <div class="p-5 border-b flex justify-between items-center">
+  <div class="inventory-toolbar p-5 border-b flex justify-between items-center gap-3">
     <div class="flex gap-3">
-      <input type="text" placeholder="Cari nomor transfer..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
+      <input type="search" aria-label="Cari nomor transfer" placeholder="Cari nomor transfer..." class="w-72 h-9 pl-3 border border-slate-200 rounded-lg text-sm bg-white">
       <select class="h-9 px-3 border rounded-lg text-sm">
         <option>Gudang: Semua</option>
         <option>Gudang Utama</option>
@@ -23,7 +24,7 @@
     <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">9</span> transfer</div>
   </div>
   <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+    <table class="inventory-table w-full text-sm">
       <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
         <tr>
           <th class="py-3.5 px-5 text-left w-40">No. Transfer</th>
@@ -105,4 +106,12 @@
       <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Selanjutnya</button>
     </div>
   </div>
+</div>
+@push('scripts')
+<script>
+const resource = 'stock-transfers';
+const canCreate = @json(auth()->user()->can('stock-transfers.create'));
+const canUpdate = @json(auth()->user()->can('stock-transfers.update'));
+</script>
+@endpush
 @endsection

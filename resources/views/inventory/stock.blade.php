@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Stok')
 @section('content')
+<div class="inventory-page">
 <x-ui.page-header />
 <div class="space-y-4">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -27,10 +28,11 @@
   </div>
 
   <div class="bg-white border rounded-lg">
-    <div class="p-5 border-b flex justify-between items-center">
-      <div class="flex gap-3">
-        <input type="text" placeholder="Cari SKU atau nama produk..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
-        <select class="h-9 px-3 border rounded-lg text-sm">
+    <div class="inventory-toolbar p-5 border-b flex justify-between items-center gap-3">
+      <div class="flex flex-wrap gap-3 min-w-0">
+        <input type="search" aria-label="Cari SKU atau nama produk" placeholder="Cari SKU atau nama produk..." class="w-72 h-9 pl-3 border border-slate-200 rounded-lg text-sm bg-white">
+        <select aria-label="Filter gudang" class="h-9 px-3 border border-slate-200 rounded-lg text-sm bg-white">
+
           <option>Gudang: Semua</option>
           <option>Gudang Utama</option>
           <option>Gudang Display</option>
@@ -47,7 +49,7 @@
       <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">392</span> baris stok</div>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="inventory-table stock-table w-full text-sm">
         <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
           <tr>
             <th class="py-3.5 px-5 text-left w-32">SKU</th>
@@ -139,4 +141,12 @@
       </div>
     </div>
   </div>
+</div>
+@push('scripts')
+<script>
+const resource = 'stock';
+const canCreate = @json(auth()->user()->can('stock.create'));
+const canUpdate = @json(auth()->user()->can('stock.update'));
+</script>
+@endpush
 @endsection

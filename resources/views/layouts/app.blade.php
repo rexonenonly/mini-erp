@@ -49,80 +49,25 @@
 </head>
 <body class="min-h-screen flex bg-slate-50 text-slate-800">
 
-  <!-- SIDEBAR -->
-  <aside class="w-[240px] bg-sidebar text-slate-200 flex flex-col shrink-0 min-h-screen border-r border-slate-800 select-none">
-    <div class="px-5 py-5 border-b border-slate-800/80">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded bg-primary flex items-center justify-center text-white font-bold text-base tracking-tight">M</div>
-        <div class="font-bold text-lg text-white tracking-tight">MiniERP</div>
-      </div>
-      <div class="text-xs text-sidebar-muted mt-1 leading-tight truncate">PT Distribusi Mandiri Utama</div>
-    </div>
-
-    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-      <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('dashboard') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('dashboard') ? 'text-white' : '' }}">dashboard</span>
-        <span>Dashboard</span>
-      </a>
-      <a href="/master-data" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('master-data*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined">dataset</span>
-        <span>Master Data</span>
-      </a>
-      <a href="/inventory" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('inventory') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('inventory') ? 'text-white' : '' }}">inventory_2</span>
-        <span>Inventory</span>
-      </a>
-      <a href="/purchasing" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('purchasing') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('purchasing') ? 'text-white' : '' }}">shopping_cart</span>
-        <span>Purchasing</span>
-      </a>
-      <a href="/sales" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('sales') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('sales') ? 'text-white' : '' }}">point_of_sale</span>
-        <span>Sales</span>
-      </a>
-      <a href="/accounting" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('accounting') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('accounting') ? 'text-white' : '' }}">account_balance</span>
-        <span>Accounting</span>
-      </a>
-      <a href="/reports" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ request()->is('reports*') ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
-        <span class="material-symbols-outlined {{ request()->is('reports*') ? 'text-white' : '' }}">bar_chart</span>
-        <span>Laporan</span>
-      </a>
-
-      <div class="pt-4 pb-2">
-        <div class="h-px bg-slate-800 mx-1"></div>
-        <div class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Sistem</div>
-      </div>
-
-      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">group</span>
-        <span>Pengguna & Role</span>
-      </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">history</span>
-        <span>Audit Log</span>
-      </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-muted hover:bg-sidebar-hover hover:text-white text-sm transition-colors">
-        <span class="material-symbols-outlined">health_and_safety</span>
-        <span>Kesehatan Sistem</span>
-      </a>
-    </nav>
-
-    <div class="p-4 border-t border-slate-800/80 bg-slate-950/40 text-xs">
-      <div class="text-slate-400">Periode Akuntansi:</div>
-      <div class="font-medium text-slate-200 mt-0.5 flex items-center justify-between">
-        <span>Oktober 2026</span>
-        <span class="inline-block text-xs font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-1.5 py-0.5 rounded">Open</span>
-      </div>
-    </div>
-  </aside>
+  <x-layout.sidebar />
 
   <!-- MAIN WRAPPER -->
   <div class="flex-1 flex flex-col min-w-0">
     <!-- TOPBAR -->
     <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between gap-4 shrink-0">
       <div class="flex items-center gap-4">
-        <h1 class="text-xl font-semibold text-slate-900 tracking-tight">@yield('page-title', 'Dashboard')</h1>
+        <nav class="text-sm text-slate-500">
+          @php
+            $cr = Route::currentRouteName();
+            $cp = collect(config('navigation.pages'))->firstWhere('route', $cr);
+          @endphp
+          @if($cp)
+            @if($cp['group'])<span>{{ $cp['group'] }}</span><span class="mx-1.5 text-slate-300">/</span>@endif
+            <span class="text-slate-900 font-medium">{{ $cp['label'] }}</span>
+          @else
+            <span class="text-slate-900 font-medium">MiniERP</span>
+          @endif
+        </nav>
       </div>
 
       <div class="flex-1 max-w-md mx-4">

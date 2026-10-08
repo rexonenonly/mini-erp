@@ -1,5 +1,7 @@
-  <!-- TAB: PENERIMAAN -->
-  <div id="tab-receipts" class="tab-content">
+@extends('layouts.app')
+@section('title', 'Penerimaan Barang')
+@section('content')
+<x-ui.page-header />
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">
@@ -106,4 +108,4 @@
         </div>
       </div>
     </div>
-  </div>
+@endsection

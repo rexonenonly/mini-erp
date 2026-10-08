@@ -1,3 +1,8 @@
+@extends('layouts.app')
+@section('title', 'Periode Akuntansi')
+@section('content')
+<x-ui.page-header />
+<div class="space-y-4">
 <div class="bg-white border rounded-lg">
   <div class="p-4 border-b flex flex-wrap items-center justify-between gap-3">
     <div class="flex items-center gap-3">
@@ -30,3 +35,5 @@
     </div>
   </div>
 </div>
+</div>
+@endsection

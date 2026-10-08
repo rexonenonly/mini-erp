@@ -1,3 +1,7 @@
+@extends('layouts.app')
+@section('title', 'Buku Besar')
+@section('content')
+<x-ui.page-header />
 <div class="space-y-4">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="bg-white border rounded-lg p-4 flex flex-col"><span class="text-xs uppercase tracking-wider text-slate-500">Saldo Awal</span><span class="text-lg font-semibold tabular-nums mt-2">Rp 1.400.000.000</span><span class="text-xs text-slate-400 mt-1">Per 1 Okt 2026</span></div>
@@ -42,3 +46,4 @@
     </div>
   </div>
 </div>
+@endsection

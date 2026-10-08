@@ -1,5 +1,7 @@
-  <!-- TAB: VENDOR BILL -->
-  <div id="tab-bills" class="tab-content">
+@extends('layouts.app')
+@section('title', 'Tagihan')
+@section('content')
+<x-ui.page-header />
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">
@@ -105,4 +107,4 @@
         </div>
       </div>
     </div>
-  </div>
+@endsection

@@ -1,3 +1,7 @@
+@extends('layouts.app')
+@section('title', 'Opname Stok')
+@section('content')
+<x-ui.page-header />
 <div class="bg-white border rounded-lg">
   <div class="p-5 border-b flex justify-between items-center">
     <div class="flex gap-3">
@@ -96,4 +100,4 @@
       <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Selanjutnya</button>
     </div>
   </div>
-</div>
+@endsection

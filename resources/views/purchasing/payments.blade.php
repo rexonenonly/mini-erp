@@ -1,5 +1,7 @@
-  <!-- TAB: PEMBAYARAN -->
-  <div id="tab-payments" class="tab-content">
+@extends('layouts.app')
+@section('title', 'Pembayaran ke Supplier')
+@section('content')
+<x-ui.page-header />
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">
@@ -102,4 +104,4 @@
         </div>
       </div>
     </div>
-  </div>
+@endsection

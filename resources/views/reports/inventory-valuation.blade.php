@@ -1,7 +1,10 @@
-{{-- Nilai Persediaan --}}
-<div id="tab-inventory-valuation" class="space-y-4">
+@extends('layouts.app')
+@section('title', 'Nilai Persediaan')
+@section('content')
+<x-ui.page-header />
+<div class="space-y-4">
 
-  {{-- KPI CARDS (3 cards) --}}
+  
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="bg-white border rounded-lg p-5 flex flex-col justify-between">
       <span class="text-xs font-medium text-slate-500">Nilai Persediaan</span>
@@ -23,15 +26,15 @@
     </div>
   </div>
 
-  {{-- TOOLBAR --}}
+  
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
     <div class="flex items-center gap-3 flex-wrap">
-      {{-- Segmented control --}}
+      
       <div class="inline-flex bg-slate-100 p-0.5 rounded-md border border-slate-200/80 text-xs font-medium">
         <button type="button" class="px-3.5 py-1.5 rounded bg-white text-slate-900 font-semibold shadow-sm border border-slate-200/60" data-view="gudang">Per Gudang</button>
         <button type="button" class="px-3.5 py-1.5 rounded text-slate-600 hover:text-slate-900 transition-colors" data-view="produk">Per Produk</button>
       </div>
-      {{-- Date dropdown --}}
+      
       <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-md text-xs font-medium text-slate-700 shadow-sm">
         <span class="material-symbols-outlined text-[16px] text-slate-400">calendar_today</span>
         <span>Per Tanggal: 14 Okt 2026</span>
@@ -41,7 +44,7 @@
     <div class="text-xs text-slate-500">Menampilkan 4 gudang</div>
   </div>
 
-  {{-- TABLE --}}
+  
   <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
@@ -103,3 +106,4 @@
     </div>
   </div>
 </div>
+@endsection

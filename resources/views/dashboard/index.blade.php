@@ -3,6 +3,10 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<div class="mb-6">
+  <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">Dashboard</h1>
+  <p class="text-sm text-slate-500 mt-1">Ringkasan distribusi &amp; keuangan PT Distribusi Mandiri Utama</p>
+</div>
 <!-- a. ROW OF EXACTLY 4 KPI CARDS -->
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
   <div class="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
@@ -105,6 +109,30 @@
               <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
             </td>
           </tr>
+          <tr class="h-13 hover:bg-slate-50/70">
+            <td class="py-2.5 px-3">
+              <div class="font-medium text-slate-900">Pelumas Chain O-Ring Set</div>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-LUB-021</div>
+            </td>
+            <td class="py-2.5 px-3 text-slate-600">Gudang Surabaya</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-900">5 Ltr</td>
+            <td class="py-2.5 px-3 text-right text-slate-500">12</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
+            </td>
+          </tr>
+          <tr class="h-13 hover:bg-slate-50/70">
+            <td class="py-2.5 px-3">
+              <div class="font-medium text-slate-900">Kabel NYY 3x2.5mm Supreme</div>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-ELC-031</div>
+            </td>
+            <td class="py-2.5 px-3 text-slate-600">Gudang Utama</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-900">3 Roll</td>
+            <td class="py-2.5 px-3 text-right text-slate-500">5</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700 border border-red-200">Kritis</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -153,6 +181,30 @@
             <span class="font-mono font-medium text-slate-900">SO-2026-10-0089</span> dikonfirmasi, stok direservasi
           </div>
           <div class="text-xs text-slate-400 mt-0.5">14:02</div>
+        </div>
+      </div>
+
+      <div class="py-3.5 flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-lg">fact_check</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm text-slate-800 leading-snug">
+            <span class="font-mono font-medium text-slate-900">OP-2026-10-0004</span> diposting oleh Dewi
+          </div>
+          <div class="text-xs text-slate-400 mt-0.5">13:55</div>
+        </div>
+      </div>
+
+      <div class="py-3.5 flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-lg">payments</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm text-slate-800 leading-snug">
+            <span class="font-mono font-medium text-slate-900">RC-2026-10-0012</span> diterima dari Toko Sinar Teknik
+          </div>
+          <div class="text-xs text-slate-400 mt-0.5">13:40</div>
         </div>
       </div>
     </div>

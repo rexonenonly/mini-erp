@@ -1,7 +1,10 @@
-{{-- Neraca Saldo --}}
-<div id="tab-trial-balance" class="space-y-4">
+@extends('layouts.app')
+@section('title', 'Neraca Saldo')
+@section('content')
+<x-ui.page-header />
+<div class="space-y-4">
 
-  {{-- KPI CARDS --}}
+  
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="bg-white border rounded-lg p-4 flex flex-col">
       <span class="text-xs uppercase tracking-wider text-slate-500">Total Mutasi Debit</span>
@@ -25,7 +28,7 @@
     </div>
   </div>
 
-  {{-- TOOLBAR --}}
+  
   <div class="bg-white border rounded-lg p-4 flex flex-wrap justify-between items-center gap-3">
     <div class="flex flex-wrap items-center gap-3">
       <div class="relative">
@@ -49,7 +52,7 @@
     <div class="text-sm text-slate-500">Menampilkan 10 akun</div>
   </div>
 
-  {{-- TABLE --}}
+  
   <div class="bg-white border rounded-lg overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -80,3 +83,4 @@
     </div>
   </div>
 </div>
+@endsection

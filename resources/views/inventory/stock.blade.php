@@ -1,3 +1,7 @@
+@extends('layouts.app')
+@section('title', 'Stok')
+@section('content')
+<x-ui.page-header />
 <div class="space-y-4">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="bg-white border rounded-lg p-4">
@@ -135,4 +139,4 @@
       </div>
     </div>
   </div>
-</div>
+@endsection

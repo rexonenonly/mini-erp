@@ -1,3 +1,7 @@
+@extends('layouts.app')
+@section('title', 'Jurnal Umum')
+@section('content')
+<x-ui.page-header />
 <div class="space-y-4">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="bg-white border rounded-lg p-4 flex flex-col">
@@ -88,12 +92,4 @@
     </div>
   </div>
 </div>
-
-<script>
-document.querySelectorAll('.expand-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const row = document.getElementById(btn.dataset.target);
-    if (row) { row.classList.toggle('hidden'); btn.querySelector('.material-symbols-outlined').textContent = row.classList.contains('hidden') ? 'chevron_right' : 'expand_more'; }
-  });
-});
-</script>
+@endsection

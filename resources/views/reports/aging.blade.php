@@ -1,15 +1,18 @@
-{{-- Umur Piutang & Hutang --}}
-<div id="tab-aging" class="space-y-4">
+@extends('layouts.app')
+@section('title', 'Umur Piutang & Hutang')
+@section('content')
+<x-ui.page-header />
+<div class="space-y-4">
 
-  {{-- TOOLBAR --}}
+  
   <div class="bg-white border rounded-lg p-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-3 flex-wrap">
-      {{-- Segmented control --}}
+      
       <div class="bg-slate-100 p-1 rounded-lg flex items-center shadow-inner">
         <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium bg-white text-slate-900 shadow-xs border border-slate-200" data-segment="piutang">Piutang</button>
         <button type="button" class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900" data-segment="hutang">Hutang</button>
       </div>
-      {{-- Date dropdown --}}
+      
       <div class="relative">
         <button type="button" class="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 focus:outline-none transition-colors shadow-xs">
           <span class="material-symbols-outlined text-[16px] text-slate-500">calendar_today</span>
@@ -24,7 +27,7 @@
     </div>
   </div>
 
-  {{-- KPI CARDS (4 cards) --}}
+  
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs">
       <span class="text-xs font-medium text-slate-500 block">Total Piutang</span>
@@ -48,7 +51,30 @@
     </div>
   </div>
 
-  {{-- AGING TABLE --}}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs">
+      <span class="text-xs font-medium text-slate-500 block">Total Hutang</span>
+      <div class="text-2xl font-bold text-slate-900 mt-1 tabular-nums tracking-tight">Rp 531.800.000</div>
+      <span class="text-xs text-slate-500 mt-2 block">3 pemasok</span>
+    </div>
+    <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs">
+      <span class="text-xs font-medium text-slate-500 block">Belum Jatuh Tempo</span>
+      <div class="text-2xl font-bold text-slate-900 mt-1 tabular-nums tracking-tight">Rp 294.200.000</div>
+      <span class="text-xs text-slate-500 mt-2 block">Masih dalam termin</span>
+    </div>
+    <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs">
+      <span class="text-xs font-medium text-slate-500 block">Lewat Jatuh Tempo</span>
+      <div class="text-2xl font-bold text-slate-900 mt-1 tabular-nums tracking-tight">Rp 196.200.000</div>
+      <span class="text-xs text-slate-500 mt-2 block">9 tagihan pemasok</span>
+    </div>
+    <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs">
+      <span class="text-xs font-medium text-slate-500 block">Lewat Lebih dari 60 Hari</span>
+      <div class="text-2xl font-bold text-slate-900 mt-1 tabular-nums tracking-tight">Rp 41.400.000</div>
+      <span class="text-xs text-slate-500 mt-2 block">Perlu dibayar segera</span>
+    </div>
+  </div>
+
+  
   <div class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
@@ -112,3 +138,4 @@
     </div>
   </div>
 </div>
+@endsection

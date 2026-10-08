@@ -38,6 +38,14 @@
             <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span></td>
             <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></button></td>
           </tr>
+          <tr class="hover:bg-slate-50">
+            <td class="py-3.5 px-5 font-mono text-sm">11110</td>
+            <td class="py-3.5 px-5 font-medium">Bank</td>
+            <td class="py-3.5 px-5"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-700 border border-slate-200">Aset</span></td>
+            <td class="py-3.5 px-5">Debit</td>
+            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span></td>
+            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></button></td>
+          </tr>
         </tbody>
       </table>
     </div>

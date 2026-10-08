@@ -90,7 +90,7 @@
               <td class="py-3.5 px-5 text-slate-600">Gudang Surabaya</td>
               <td class="py-3.5 px-5 text-right font-medium">Rp 9.600.000</td>
               <td class="py-3.5 px-5 text-slate-500">-</td>
-              <td class="py-3.5 px-5 text-center"><span class="inline-flex px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Dibalik</span></td>
+              <td class="py-3.5 px-5 text-center"><span class="inline-flex px-2 py-0.5 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200">Dibalik</span></td>
               <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
             </tr>
           </tbody>

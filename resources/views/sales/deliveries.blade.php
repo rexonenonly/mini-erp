@@ -9,7 +9,6 @@
           <input type="text" placeholder="Cari nomor pengiriman atau SO..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
           <select class="h-9 px-3 border rounded-lg text-sm">
             <option>Status: Semua</option>
-            <option>Draft</option>
             <option>Diposting</option>
             <option>Dibalik</option>
           </select>
@@ -49,7 +48,7 @@
               <td class="py-3.5 px-5 text-right">1 item</td>
               <td class="py-3.5 px-5 text-right font-medium">-</td>
               <td class="py-3.5 px-5 text-slate-400">-</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600 border border-slate-200">Draft</span></td>
+              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs border border-slate-400 text-slate-700">Dikonfirmasi</span></td>
               <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
             </tr>
             <tr class="hover:bg-slate-50">
@@ -97,7 +96,7 @@
               <td class="py-3.5 px-5 text-right">1 item</td>
               <td class="py-3.5 px-5 text-right font-medium">Rp 3.925.000</td>
               <td class="py-3.5 px-5 text-slate-400">-</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Dibalik</span></td>
+              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200">Dibalik</span></td>
               <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
             </tr>
           </tbody>

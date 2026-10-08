@@ -83,7 +83,7 @@
           <td class="py-3.5 px-5 font-medium">Gudang Transit</td>
           <td class="py-3.5 px-5 text-right">1 item</td>
           <td class="py-3.5 px-5 text-right">-Rp 157.000</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Dibalik</span></td>
+          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200">Dibalik</span></td>
           <td class="py-3.5 px-5">Hasan</td>
           <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
         </tr>

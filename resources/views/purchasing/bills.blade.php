@@ -11,7 +11,6 @@
             <option>Terbuka</option>
             <option>Dibayar Sebagian</option>
             <option>Lunas</option>
-            <option>Dibalik</option>
           </select>
           <select class="h-9 px-3 border rounded-lg text-sm">
             <option>Supplier: Semua</option>
@@ -89,7 +88,7 @@
               <td class="py-3.5 px-4 font-medium">PT Tembaga Nusantara</td>
               <td class="py-3.5 px-4 text-right font-medium">Rp 15.300.000</td>
               <td class="py-3.5 px-4 text-right text-slate-400">-</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-amber-50 text-amber-800 border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Dibalik</span></td>
+              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-rose-50 text-rose-800 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Dibalik</span></td>
               <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
             </tr>
           </tbody>

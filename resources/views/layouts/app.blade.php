@@ -107,13 +107,28 @@
 
         <div class="h-6 w-px bg-slate-200"></div>
 
+        @auth
+        @php
+          $u = auth()->user();
+          $initials = collect(explode(' ', $u->name))->map(fn($p)=>mb_strtoupper(mb_substr($p,0,1)))->take(2)->implode('');
+          $roleName = $u->getRoleNames()->first() ?? '-';
+        @endphp
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-semibold text-slate-700 text-sm select-none">RP</div>
+          <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-semibold text-slate-700 text-sm select-none">{{ $initials }}</div>
           <div class="flex flex-col text-left">
-            <span class="text-sm font-semibold text-slate-800 leading-tight">Rex Pradana</span>
-            <span class="text-xs text-slate-500 leading-tight">Owner</span>
+            <span class="text-sm font-semibold text-slate-800 leading-tight">{{ $u->name }}</span>
+            <span class="text-xs text-slate-500 leading-tight">{{ $roleName }}</span>
           </div>
+          <form method="POST" action="{{ route('logout') }}" class="ml-2">
+            @csrf
+            <button type="submit" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900" title="Keluar">
+              <span class="material-symbols-outlined text-lg">logout</span>
+            </button>
+          </form>
         </div>
+        @else
+        <a href="{{ route('login') }}" class="text-sm font-medium text-primary hover:text-primary-hover">Masuk</a>
+        @endauth
       </div>
     </header>
 

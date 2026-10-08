@@ -18,10 +18,10 @@
 
   <div class="border-b">
     <nav class="flex gap-8 -mb-px">
-      <a href="#so" data-tab="so" class="tab-link pb-3 border-b-2 border-primary text-primary font-semibold">Sales Order</a>
-      <a href="#pengiriman" data-tab="pengiriman" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Pengiriman</a>
-      <a href="#invoice" data-tab="invoice" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Invoice</a>
-      <a href="#pembayaran" data-tab="pembayaran" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Pembayaran</a>
+      <a href="?tab=orders" data-tab="orders" class="tab-link pb-3 border-b-2 border-primary text-primary font-semibold">Sales Order</a>
+      <a href="?tab=deliveries" data-tab="deliveries" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Pengiriman</a>
+      <a href="?tab=invoices" data-tab="invoices" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Invoice</a>
+      <a href="?tab=payments" data-tab="payments" class="tab-link pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900">Pembayaran</a>
     </nav>
   </div>
 

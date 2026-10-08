@@ -90,9 +90,15 @@
                 <span class="inline-flex px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600 border border-slate-200">Nonaktif</span>
               @endif
             </td>
-            <td class="px-5 py-3.5 text-center">
+            <td class="px-5 py-3.5 text-center whitespace-nowrap">
+              @can($resource . '.view')
+                <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Lihat" aria-label="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button>
+              @endcan
               @can($resource . '.update')
-                <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
+                <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah" aria-label="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
+              @endcan
+              @can($resource . '.delete')
+                <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600 rounded hover:bg-red-50" title="Hapus" aria-label="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button>
               @endcan
             </td>
           </tr>

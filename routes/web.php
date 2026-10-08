@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventory/stock/{balance}', [StockBalanceController::class, 'show'])->name('inventory.stock.show')->middleware('can:stock.view');
     Route::post('/inventory/stock', [StockBalanceController::class, 'store'])->name('inventory.stock.store')->middleware('can:stock.create');
     Route::put('/inventory/stock/{balance}', [StockBalanceController::class, 'update'])->name('inventory.stock.update')->middleware('can:stock.update');
+    Route::delete('/inventory/stock/{balance}', [StockBalanceController::class, 'destroy'])->name('inventory.stock.destroy')->middleware('can:stock.delete');
     Route::get('/inventory/opname', [MasterDataController::class, 'index'])->defaults('resource', 'stock-opnames')->name('inventory.opname')->middleware('can:stock-opnames.view');
     Route::get('/inventory/transfers', [MasterDataController::class, 'index'])->defaults('resource', 'stock-transfers')->name('inventory.transfers')->middleware('can:stock-transfers.view');
     Route::post('/master-data/{resource}', [MasterDataController::class, 'store'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);

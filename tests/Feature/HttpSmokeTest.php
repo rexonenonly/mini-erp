@@ -83,6 +83,47 @@ class HttpSmokeTest extends TestCase
         $this->assertStringContainsString('Role &amp; Izin', $html2);
     }
 
+    public function test_tables_expose_view_edit_delete_actions(): void
+    {
+        $this->be(User::where('email', 'owner@minierp.test')->firstOrFail());
+
+        $wh = \App\Models\Warehouse::create(['code' => 'W1', 'name' => 'Gudang Uji', 'is_active' => true]);
+        $prod = \App\Models\Product::create(['sku' => 'P1', 'name' => 'Produk Uji', 'unit' => 'pcs', 'purchase_price' => 1, 'sale_price' => 1, 'min_stock' => 0, 'is_active' => true]);
+        \App\Models\Partner::create(['code' => 'M1', 'name' => 'Mitra Uji', 'type' => 'both', 'is_active' => true]);
+        \App\Models\Account::create(['code' => 'A1', 'name' => 'Akun Uji', 'type' => 'asset', 'balance' => 0, 'is_active' => true]);
+        \App\Models\StockBalance::create(['product_id' => $prod->id, 'warehouse_id' => $wh->id, 'on_hand' => 10, 'reserved' => 0, 'unit_cost' => 100]);
+        \App\Models\StockOpname::create(['number' => 'OP-1', 'opname_date' => now(), 'warehouse_id' => $wh->id, 'status' => 'draft', 'created_by' => auth()->id()]);
+        \App\Models\StockTransfer::create(['number' => 'TF-1', 'transfer_date' => now(), 'from_warehouse_id' => $wh->id, 'to_warehouse_id' => $wh->id, 'status' => 'draft', 'created_by' => auth()->id()]);
+
+        foreach (['master-data.products', 'master-data.warehouses', 'master-data.partners', 'master-data.accounts',
+                  'inventory.stock', 'inventory.opname', 'inventory.transfers'] as $route) {
+            $html = $this->get(route($route))->getContent();
+            $this->assertStringContainsString('openModal(\'view\'', $html, "$route: no view action");
+            $this->assertStringContainsString('openModal(\'edit\'', $html, "$route: no edit action");
+            $this->assertStringContainsString('confirmDelete(', $html, "$route: no delete action");
+        }
+    }
+
+    public function test_delete_endpoints_authorize_and_remove(): void
+    {
+        $this->be(User::where('email', 'owner@minierp.test')->firstOrFail());
+        $product = \App\Models\Product::create([
+            'sku' => 'TEST-DEL-1', 'name' => 'Hapus Saya', 'unit' => 'pcs',
+            'purchase_price' => 1, 'sale_price' => 1, 'min_stock' => 0, 'is_active' => true,
+        ]);
+        $this->delete("/master-data/products/{$product->id}")->assertOk();
+        $this->assertNull(\App\Models\Product::find($product->id));
+
+        // Staf Gudang has no delete permission -> 403
+        $this->be(User::where('email', 'gudang@minierp.test')->firstOrFail());
+        $p2 = \App\Models\Product::create([
+            'sku' => 'TEST-DEL-2', 'name' => 'Tetap Ada', 'unit' => 'pcs',
+            'purchase_price' => 1, 'sale_price' => 1, 'min_stock' => 0, 'is_active' => true,
+        ]);
+        $this->delete("/master-data/products/{$p2->id}")->assertForbidden();
+        $this->assertNotNull(\App\Models\Product::find($p2->id));
+    }
+
     public function test_guest_redirects_on_protected_pages(): void
     {
         foreach (['dashboard','system.users','master-data.products','reports.aging'] as $route) {

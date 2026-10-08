@@ -12,7 +12,8 @@ class MasterDataController extends Controller
         $permission = match($action) {
             'index', 'show' => "{$resource}.view",
             'store' => "{$resource}.create",
-            'update', 'destroy' => "{$resource}.update",
+            'update' => "{$resource}.update",
+            'destroy' => "{$resource}.delete",
             default => "{$resource}.view"
         };
         $this->authorize($permission);
@@ -35,14 +36,19 @@ class MasterDataController extends Controller
         $model = $cfg['model'];
         
         $query = $model::query();
+        if (in_array($resource, ['stock-opnames', 'stock-transfers'], true)) {
+            $query->withCount('items');
+        }
         $items = $query->latest()->paginate(15);
         $total = $model::count();
 
         if ($resource === 'stock-opnames') {
-            return view('inventory.opname', compact('resource'));
+            $items->load(['warehouse', 'creator']);
+            return view('inventory.opname', compact('resource', 'items', 'total'));
         }
         if ($resource === 'stock-transfers') {
-            return view('inventory.transfers', compact('resource'));
+            $items->load(['fromWarehouse', 'toWarehouse', 'creator']);
+            return view('inventory.transfers', compact('resource', 'items', 'total'));
         }
 
         return view('master-data.index', compact('resource', 'cfg', 'items', 'total'));
@@ -68,6 +74,8 @@ class MasterDataController extends Controller
         abort_unless(isset($this->config[$resource]), 404);
         $model = $this->config[$resource]['model'];
         $item = $model::findOrFail($id);
+        if ($resource === 'stock-opnames') $item->load('warehouse');
+        if ($resource === 'stock-transfers') $item->load(['fromWarehouse', 'toWarehouse']);
         return response()->json($item);
     }
 

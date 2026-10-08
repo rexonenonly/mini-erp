@@ -361,13 +361,13 @@ function loadData(id, mode) {
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Produk <span class="text-red-500">*</span></label><select name="product_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
           <option value="">Pilih Produk</option>
           @foreach(\App\Models\Product::where('is_active', true)->get() as $p)
-          <option value="{{ $p->id }}" ${d.product_id==={{ $p->id }}?'selected':''}>{{ $p->sku }} - {{ $p->name }}</option>
+          <option value="{{ $p->id }}" ${d.product_id=={{ $p->id }}?'selected':''}>{{ $p->sku }} - {{ $p->name }}</option>
           @endforeach
         </select></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Gudang <span class="text-red-500">*</span></label><select name="warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
           <option value="">Pilih Gudang</option>
           @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
-          <option value="{{ $w->id }}" ${d.warehouse_id==={{ $w->id }}?'selected':''}>{{ $w->name }}</option>
+          <option value="{{ $w->id }}" ${d.warehouse_id=={{ $w->id }}?'selected':''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
         <div class="grid grid-cols-3 gap-4">

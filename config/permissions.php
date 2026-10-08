@@ -3,15 +3,15 @@
 return [
     'groups' => [
         'Master Data' => [
-            'products' => ['label' => 'Produk', 'actions' => ['view', 'create', 'update']],
-            'warehouses' => ['label' => 'Gudang', 'actions' => ['view', 'create', 'update']],
-            'partners' => ['label' => 'Mitra', 'actions' => ['view', 'create', 'update']],
-            'accounts' => ['label' => 'Akun', 'actions' => ['view', 'create', 'update']],
+            'products' => ['label' => 'Produk', 'actions' => ['view', 'create', 'update', 'delete']],
+            'warehouses' => ['label' => 'Gudang', 'actions' => ['view', 'create', 'update', 'delete']],
+            'partners' => ['label' => 'Mitra', 'actions' => ['view', 'create', 'update', 'delete']],
+            'accounts' => ['label' => 'Akun', 'actions' => ['view', 'create', 'update', 'delete']],
         ],
         'Inventory' => [
-            'stock' => ['label' => 'Stok', 'actions' => ['view', 'create', 'update']],
-            'stock-opnames' => ['label' => 'Opname Stok', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
-            'stock-transfers' => ['label' => 'Transfer Stok', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
+            'stock' => ['label' => 'Stok', 'actions' => ['view', 'create', 'update', 'delete']],
+            'stock-opnames' => ['label' => 'Opname Stok', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
+            'stock-transfers' => ['label' => 'Transfer Stok', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
         ],
         'Purchasing' => [
             'purchase-orders' => ['label' => 'Purchase Order', 'actions' => ['view', 'create', 'update', 'confirm', 'cancel']],
@@ -49,6 +49,7 @@ return [
         'view' => 'Lihat',
         'create' => 'Buat',
         'update' => 'Ubah',
+        'delete' => 'Hapus',
         'confirm' => 'Konfirmasi',
         'cancel' => 'Batalkan',
         'post' => 'Posting',

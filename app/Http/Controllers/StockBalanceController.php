@@ -13,7 +13,7 @@ class StockBalanceController extends Controller
         $this->authorize('stock.view');
 
         $balances = StockBalance::with(['product:id,sku,name,unit,min_stock', 'warehouse:id,name'])
-            ->orderByRaw('GREATEST(on_hand - reserved, 0) DESC')
+            ->orderByRaw('CASE WHEN on_hand - reserved > 0 THEN on_hand - reserved ELSE 0 END DESC')
             ->paginate(15);
 
         $total = StockBalance::count();
@@ -56,6 +56,13 @@ class StockBalanceController extends Controller
             'message' => 'Saldo stok berhasil disimpan',
             'item' => $row->load(['product:id,sku,name,unit,min_stock', 'warehouse:id,name']),
         ]);
+    }
+
+    public function destroy(int $id)
+    {
+        $this->authorize('stock.delete');
+        StockBalance::findOrFail($id)->delete();
+        return response()->json(['success' => true, 'message' => 'Saldo stok berhasil dihapus']);
     }
 
     public function update(Request $request, int $id)

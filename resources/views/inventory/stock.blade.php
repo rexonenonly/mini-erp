@@ -65,66 +65,26 @@
           </tr>
         </thead>
         <tbody class="divide-y">
-          <tr class="hover:bg-slate-50">
-            <td class="py-3.5 px-5 font-mono text-xs">SKU-ELC-091</td>
-            <td class="py-3.5 px-5 font-medium">Kabel NYM 3x2.5mm (100m)</td>
-            <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-            <td class="py-3.5 px-5 text-right font-medium">150 Roll</td>
-            <td class="py-3.5 px-5 text-right">40 Roll</td>
-            <td class="py-3.5 px-5 text-right font-medium">110 Roll</td>
-            <td class="py-3.5 px-5 text-right">Rp 678.529</td>
-            <td class="py-3.5 px-5 text-right font-medium">Rp 101.779.350</td>
-            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Tersedia</span></td>
-            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span></button></td>
-          </tr>
-          <tr class="hover:bg-slate-50">
-            <td class="py-3.5 px-5 font-mono text-xs">SKU-ELC-003</td>
-            <td class="py-3.5 px-5 font-medium">MCB 1P 16A Schneider</td>
-            <td class="py-3.5 px-5 text-slate-600">Gudang Display</td>
-            <td class="py-3.5 px-5 text-right font-medium">12 Pcs</td>
-            <td class="py-3.5 px-5 text-right">10 Pcs</td>
-            <td class="py-3.5 px-5 text-right font-medium">2 Pcs</td>
-            <td class="py-3.5 px-5 text-right">Rp 51.500</td>
-            <td class="py-3.5 px-5 text-right font-medium">Rp 618.000</td>
-            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-red-50 text-red-700 border border-red-200">Kritis</span></td>
-            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span></button></td>
-          </tr>
-          <tr class="hover:bg-slate-50">
-            <td class="py-3.5 px-5 font-mono text-xs">SKU-MEC-014</td>
-            <td class="py-3.5 px-5 font-medium">Bearing Ball Industrial 6205</td>
-            <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-            <td class="py-3.5 px-5 text-right font-medium">35 Pcs</td>
-            <td class="py-3.5 px-5 text-right">27 Pcs</td>
-            <td class="py-3.5 px-5 text-right font-medium">8 Pcs</td>
-            <td class="py-3.5 px-5 text-right">Rp 145.000</td>
-            <td class="py-3.5 px-5 text-right font-medium">Rp 5.075.000</td>
-            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Menipis</span></td>
-            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span></button></td>
-          </tr>
-          <tr class="hover:bg-slate-50">
-            <td class="py-3.5 px-5 font-mono text-xs">SKU-LUB-082</td>
-            <td class="py-3.5 px-5 font-medium">Oli Pelumas Industri ISO-VG46</td>
-            <td class="py-3.5 px-5 text-slate-600">Gudang Surabaya</td>
-            <td class="py-3.5 px-5 text-right font-medium">24 Pail</td>
-            <td class="py-3.5 px-5 text-right">15 Pail</td>
-            <td class="py-3.5 px-5 text-right font-medium">9 Pail</td>
-            <td class="py-3.5 px-5 text-right">Rp 1.150.000</td>
-            <td class="py-3.5 px-5 text-right font-medium">Rp 27.600.000</td>
-            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Menipis</span></td>
-            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span></button></td>
-          </tr>
-          <tr class="hover:bg-slate-50">
-            <td class="py-3.5 px-5 font-mono text-xs">SKU-BLD-002</td>
-            <td class="py-3.5 px-5 font-medium">Semen Mortar Skimcoat 40kg</td>
-            <td class="py-3.5 px-5 text-slate-600">Gudang Transit</td>
-            <td class="py-3.5 px-5 text-right font-medium">620 Sak</td>
-            <td class="py-3.5 px-5 text-right">0 Sak</td>
-            <td class="py-3.5 px-5 text-right font-medium">620 Sak</td>
-            <td class="py-3.5 px-5 text-right">Rp 78.500</td>
-            <td class="py-3.5 px-5 text-right font-medium">Rp 48.670.000</td>
-            <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Tersedia</span></td>
-            <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span></button></td>
-          </tr>
+          @forelse($balances as $item)
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-5 font-mono text-xs">{{ $item->product->sku }}</td>
+              <td class="py-3.5 px-5 font-medium">{{ $item->product->name }}</td>
+              <td class="py-3.5 px-5 text-slate-600">{{ $item->warehouse->name }}</td>
+              <td class="py-3.5 px-5 text-right font-medium">{{ $item->on_hand }} {{ $item->product->unit }}</td>
+              <td class="py-3.5 px-5 text-right">{{ $item->reserved }} {{ $item->product->unit }}</td>
+              <td class="py-3.5 px-5 text-right font-medium">{{ $item->available }} {{ $item->product->unit }}</td>
+              <td class="py-3.5 px-5 text-right">Rp {{ number_format($item->unit_cost, 0, ',', '.') }}</td>
+              <td class="py-3.5 px-5 text-right font-medium">Rp {{ number_format($item->value, 0, ',', '.') }}</td>
+              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600 border border-slate-200">{{ ucfirst($item->status) }}</span></td>
+              <td class="py-3.5 px-5 text-center whitespace-nowrap">
+                @can('stock.view') <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary" title="Lihat" aria-label="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button> @endcan
+                @can('stock.update') <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary" title="Ubah" aria-label="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button> @endcan
+                @can('stock.delete') <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600" title="Hapus" aria-label="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button> @endcan
+              </td>
+            </tr>
+          @empty
+            <tr><td colspan="10" class="px-5 py-8 text-center text-slate-500">Tidak ada data stok.</td></tr>
+          @endforelse
         </tbody>
       </table>
     </div>

@@ -39,61 +39,25 @@
         </tr>
       </thead>
       <tbody class="divide-y">
+        @forelse($items as $item)
         <tr class="hover:bg-slate-50">
-          <td class="py-3.5 px-5 font-mono text-xs">TF-2026-10-0005</td>
-          <td class="py-3.5 px-5 text-slate-600">14 Okt 2026</td>
-          <td class="py-3.5 px-5 font-medium">Gudang Utama</td>
-          <td class="py-3.5 px-5 text-slate-600">Gudang Display</td>
-          <td class="py-3.5 px-5 text-right">2 item</td>
+          <td class="py-3.5 px-5 font-mono text-xs">{{ $item->number }}</td>
+          <td class="py-3.5 px-5 text-slate-600">{{ optional($item->transfer_date)->format('d M Y') }}</td>
+          <td class="py-3.5 px-5 font-medium">{{ $item->fromWarehouse?->name ?? '-' }}</td>
+          <td class="py-3.5 px-5 text-slate-600">{{ $item->toWarehouse?->name ?? '-' }}</td>
+          <td class="py-3.5 px-5 text-right">{{ $item->items_count }} item</td>
           <td class="py-3.5 px-5 text-right">-</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600 border border-slate-200">Draft</span></td>
-          <td class="py-3.5 px-5">Hasan</td>
-          <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
+          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600 border border-slate-200">{{ ucfirst($item->status) }}</span></td>
+          <td class="py-3.5 px-5">{{ $item->creator?->name ?? '-' }}</td>
+          <td class="py-3.5 px-5 text-center whitespace-nowrap">
+            @can('stock-transfers.view') <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary" title="Lihat" aria-label="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button> @endcan
+            @can('stock-transfers.update') <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary" title="Ubah" aria-label="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button> @endcan
+            @can('stock-transfers.delete') <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600" title="Hapus" aria-label="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button> @endcan
+          </td>
         </tr>
-        <tr class="hover:bg-slate-50">
-          <td class="py-3.5 px-5 font-mono text-xs">TF-2026-10-0004</td>
-          <td class="py-3.5 px-5 text-slate-600">11 Okt 2026</td>
-          <td class="py-3.5 px-5 font-medium">Gudang Transit</td>
-          <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-          <td class="py-3.5 px-5 text-right">1 item</td>
-          <td class="py-3.5 px-5 text-right font-medium">Rp 15.700.000</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Diposting</span></td>
-          <td class="py-3.5 px-5">Hasan</td>
-          <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-        </tr>
-        <tr class="hover:bg-slate-50">
-          <td class="py-3.5 px-5 font-mono text-xs">TF-2026-10-0003</td>
-          <td class="py-3.5 px-5 text-slate-600">08 Okt 2026</td>
-          <td class="py-3.5 px-5 font-medium">Gudang Utama</td>
-          <td class="py-3.5 px-5 text-slate-600">Gudang Surabaya</td>
-          <td class="py-3.5 px-5 text-right">3 item</td>
-          <td class="py-3.5 px-5 text-right font-medium">Rp 18.250.000</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Diposting</span></td>
-          <td class="py-3.5 px-5">Hasan</td>
-          <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-        </tr>
-        <tr class="hover:bg-slate-50">
-          <td class="py-3.5 px-5 font-mono text-xs">TF-2026-10-0002</td>
-          <td class="py-3.5 px-5 text-slate-600">04 Okt 2026</td>
-          <td class="py-3.5 px-5 font-medium">Gudang Utama</td>
-          <td class="py-3.5 px-5 text-slate-600">Gudang Display</td>
-          <td class="py-3.5 px-5 text-right">1 item</td>
-          <td class="py-3.5 px-5 text-right font-medium">Rp 3.090.000</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Diposting</span></td>
-          <td class="py-3.5 px-5">Hasan</td>
-          <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-        </tr>
-        <tr class="hover:bg-slate-50">
-          <td class="py-3.5 px-5 font-mono text-xs">TF-2026-10-0001</td>
-          <td class="py-3.5 px-5 text-slate-600">02 Okt 2026</td>
-          <td class="py-3.5 px-5 font-medium">Gudang Surabaya</td>
-          <td class="py-3.5 px-5 text-slate-600">Gudang Transit</td>
-          <td class="py-3.5 px-5 text-right">1 item</td>
-          <td class="py-3.5 px-5 text-right font-medium">Rp 5.800.000</td>
-          <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200">Dibalik</span></td>
-          <td class="py-3.5 px-5">Hasan</td>
-          <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-        </tr>
+        @empty
+        <tr><td colspan="9" class="px-5 py-8 text-center text-slate-500">Tidak ada data transfer.</td></tr>
+        @endforelse
       </tbody>
     </table>
   </div>

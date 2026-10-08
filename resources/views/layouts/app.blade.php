@@ -85,18 +85,24 @@
             <span class="material-symbols-outlined text-base text-blue-200 ml-0.5">expand_more</span>
           </button>
           <div class="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 hidden group-hover:block z-20">
-            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+            @can('purchasing.purchase-orders.view')
+            <a href="{{ route('purchasing.orders') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
               <span class="material-symbols-outlined text-slate-400 text-lg">shopping_cart</span>
               <span>Purchase Order</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+            @endcan
+            @can('sales.sales-orders.view')
+            <a href="{{ route('sales.orders') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
               <span class="material-symbols-outlined text-slate-400 text-lg">point_of_sale</span>
               <span>Sales Order</span>
             </a>
+            @endcan
+            @can('inventory.stock-opnames.view')
             <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors border-t border-slate-100">
               <span class="material-symbols-outlined text-slate-400 text-lg">tune</span>
               <span>Opname Stok</span>
             </a>
+            @endcan
           </div>
         </div>
 

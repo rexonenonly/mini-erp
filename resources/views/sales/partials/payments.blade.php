@@ -1,5 +1,5 @@
   {{-- Payments --}}
-<div id="tab-payments" class="tab-content {{ request('tab') !== 'payments' ? 'hidden' : '' }} space-y-4">
+<div id="tab-payments" class="tab-content" space-y-4">
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">

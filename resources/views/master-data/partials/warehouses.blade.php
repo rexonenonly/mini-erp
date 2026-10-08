@@ -1,5 +1,5 @@
   <!-- TAB: GUDANG -->
-  <div id="tab-warehouses" class="tab-content hidden">
+  <div id="tab-warehouses" class="tab-content">
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">

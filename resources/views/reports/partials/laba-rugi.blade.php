@@ -1,5 +1,5 @@
 {{-- Laba Rugi --}}
-<div id="tab-laba-rugi" class="tab-content {{ request('tab') !== 'laba-rugi' ? 'hidden' : '' }} space-y-4">
+<div id="tab-income-statement" class="space-y-4">
 
   {{-- KPI CARDS --}}
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4">

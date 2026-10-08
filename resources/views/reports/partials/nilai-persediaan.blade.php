@@ -1,5 +1,5 @@
 {{-- Nilai Persediaan --}}
-<div id="tab-nilai-persediaan" class="tab-content {{ request('tab') !== 'nilai-persediaan' ? 'hidden' : '' }} space-y-4">
+<div id="tab-inventory-valuation" class="space-y-4">
 
   {{-- KPI CARDS (3 cards) --}}
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

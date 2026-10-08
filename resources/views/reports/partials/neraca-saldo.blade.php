@@ -1,5 +1,5 @@
 {{-- Neraca Saldo --}}
-<div id="tab-neraca-saldo" class="tab-content {{ request('tab') !== 'neraca-saldo' ? 'hidden' : '' }} space-y-4">
+<div id="tab-trial-balance" class="space-y-4">
 
   {{-- KPI CARDS --}}
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

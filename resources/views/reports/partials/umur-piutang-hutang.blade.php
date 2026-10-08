@@ -1,5 +1,5 @@
 {{-- Umur Piutang & Hutang --}}
-<div id="tab-umur-piutang-hutang" class="tab-content {{ request('tab') !== 'umur-piutang-hutang' ? 'hidden' : '' }} space-y-4">
+<div id="tab-aging" class="space-y-4">
 
   {{-- TOOLBAR --}}
   <div class="bg-white border rounded-lg p-4 flex flex-wrap justify-between items-center gap-4">

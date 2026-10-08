@@ -1,5 +1,5 @@
   <!-- TAB: VENDOR BILL -->
-  <div id="tab-vendor-bill" class="tab-content hidden">
+  <div id="tab-bills" class="tab-content">
     <div class="bg-white border rounded-lg">
       <div class="p-5 border-b flex justify-between items-center">
         <div class="flex gap-3">

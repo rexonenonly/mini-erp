@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
     public function run(): void
     {
-        $this->call(RolePermissionSeeder::class);
+        $this->call([RolePermissionSeeder::class, MasterDataSeeder::class]);
 
         if (User::count() === 0) {
             User::factory()->create(['name' => 'Test User','email' => 'test@example.com']);

@@ -7,20 +7,15 @@ use Illuminate\Support\Str;
 
 class MasterDataController extends Controller
 {
-    public function __construct()
+    private function authorizeAction(string $resource, string $action): void
     {
-        $this->middleware(function ($request, $next) {
-            $resource = $request->route('resource');
-            $action = $request->route()->getActionMethod();
-            $permission = match($action) {
-                'index', 'show' => "{$resource}.view",
-                'store' => "{$resource}.create",
-                'update', 'destroy' => "{$resource}.update",
-                default => "{$resource}.view"
-            };
-            abort_unless($request->user()->can($permission), 403);
-            return $next($request);
-        });
+        $permission = match($action) {
+            'index', 'show' => "{$resource}.view",
+            'store' => "{$resource}.create",
+            'update', 'destroy' => "{$resource}.update",
+            default => "{$resource}.view"
+        };
+        $this->authorize($permission);
     }
 
     private array $config = [
@@ -32,6 +27,7 @@ class MasterDataController extends Controller
 
     public function index(string $resource)
     {
+        $this->authorizeAction($resource, 'index');
         abort_unless(isset($this->config[$resource]), 404);
         $cfg = $this->config[$resource];
         $model = $cfg['model'];
@@ -45,6 +41,7 @@ class MasterDataController extends Controller
 
     public function store(Request $request, string $resource)
     {
+        $this->authorizeAction($resource, 'store');
         abort_unless(isset($this->config[$resource]), 404);
         $cfg = $this->config[$resource];
         $model = $cfg['model'];
@@ -57,6 +54,7 @@ class MasterDataController extends Controller
 
     public function show(string $resource, int $id)
     {
+        $this->authorizeAction($resource, 'show');
         abort_unless(isset($this->config[$resource]), 404);
         $model = $this->config[$resource]['model'];
         $item = $model::findOrFail($id);
@@ -65,6 +63,7 @@ class MasterDataController extends Controller
 
     public function update(Request $request, string $resource, int $id)
     {
+        $this->authorizeAction($resource, 'update');
         abort_unless(isset($this->config[$resource]), 404);
         $cfg = $this->config[$resource];
         $model = $cfg['model'];
@@ -78,6 +77,7 @@ class MasterDataController extends Controller
 
     public function destroy(string $resource, int $id)
     {
+        $this->authorizeAction($resource, 'destroy');
         abort_unless(isset($this->config[$resource]), 404);
         $cfg = $this->config[$resource];
         $model = $cfg['model'];

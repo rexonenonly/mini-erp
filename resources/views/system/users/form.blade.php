@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', $isEdit ? 'Ubah Pengguna' : 'Pengguna Baru')
 @section('content')
-<x-ui.page-header :title="$isEdit ? 'Ubah Pengguna' : 'Pengguna Baru'" :subtitle="$isEdit ? 'Perbarui data pengguna' : 'Tambah pengguna baru'" :breadcrumb="$isEdit ? 'Sistem / Pengguna / Ubah' : 'Sistem / Pengguna / Baru'" />
+<x-ui.page-header :title="$isEdit ? 'Ubah Pengguna' : 'Pengguna Baru'" :subtitle="$isEdit ? 'Perbarui data pengguna' : 'Tambah pengguna baru'" />
 
 @if($errors->any())
   <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">

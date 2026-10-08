@@ -79,10 +79,10 @@
 
       <div class="flex items-center gap-4">
         <div class="relative group">
-          <button type="button" class="h-9 px-3.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+          <button type="button" class="h-9 px-3.5 bg-white border border-slate-300 hover:bg-blue-50 hover:border-blue-400 text-primary text-sm font-medium rounded-lg flex items-center gap-1.5 transition-colors">
             <span class="material-symbols-outlined text-lg">add</span>
             <span>Transaksi Baru</span>
-            <span class="material-symbols-outlined text-base text-blue-200 ml-0.5">expand_more</span>
+            <span class="material-symbols-outlined text-base text-slate-400 ml-0.5">expand_more</span>
           </button>
           <div class="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 hidden group-hover:block z-20">
             @can('purchasing.purchase-orders.view')

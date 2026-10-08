@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Role & Izin')
 @section('content')
-<x-ui.page-header title="Role & Izin" subtitle="Atur hak akses setiap role" breadcrumb="Sistem / Role & Izin" />
+<x-ui.page-header title="Role & Izin" subtitle="Atur hak akses setiap role" />
 
 @if(session('success'))
   <div class="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-700">{{ session('success') }}</div>

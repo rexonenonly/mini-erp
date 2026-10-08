@@ -24,15 +24,15 @@ foreach ($groups as $name => $items) {
 }
 $groupIcons = ['Master Data'=>'dataset','Inventory'=>'inventory_2','Purchasing'=>'shopping_cart','Sales'=>'point_of_sale','Accounting'=>'account_balance','Laporan'=>'bar_chart'];
 @endphp
-<aside class="w-[240px] bg-sidebar text-slate-200 flex flex-col shrink-0 min-h-screen border-r border-slate-800 select-none">
-  <div class="px-5 py-5 border-b border-slate-800/80">
+<aside class="w-[240px] bg-sidebar text-slate-200 flex flex-col shrink-0 h-screen sticky top-0 border-r border-slate-800 select-none">
+  <div class="px-5 py-5 border-b border-slate-800/80 shrink-0">
     <div class="flex items-center gap-2">
       <div class="w-7 h-7 rounded bg-primary flex items-center justify-center text-white font-bold text-base tracking-tight">M</div>
       <div class="font-bold text-lg text-white tracking-tight">MiniERP</div>
     </div>
     <div class="text-xs text-sidebar-muted mt-1 leading-tight truncate">PT Distribusi Mandiri Utama</div>
   </div>
-  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto min-h-0">
     @if($standalone)
     @php $dashActive = $current === $standalone['route']; @endphp
     <a href="{{ route($standalone['route']) }}" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors {{ $dashActive ? 'bg-sidebar-active text-white font-medium' : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white' }}">
@@ -66,7 +66,7 @@ $groupIcons = ['Master Data'=>'dataset','Inventory'=>'inventory_2','Purchasing'=
     @endforeach
     @endif
   </nav>
-  <div class="p-4 border-t border-slate-800/80 bg-slate-950/40 text-xs">
+  <div class="p-4 border-t border-slate-800/80 bg-slate-950/40 text-xs shrink-0">
     <div class="text-slate-400">Periode Akuntansi:</div>
     <div class="font-medium text-slate-200 mt-0.5 flex items-center justify-between"><span>Oktober 2026</span><span class="inline-block text-xs font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-1.5 py-0.5 rounded">Open</span></div>
   </div>

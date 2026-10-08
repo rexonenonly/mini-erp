@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', $cfg['label'])
 @section('content')
-<x-ui.page-header :title="$cfg['label']" :subtitle="'Kelola data ' . strtolower($cfg['label'])" :breadcrumb="'Master Data / ' . $cfg['label']" />
+<x-ui.page-header :title="$cfg['label']" :subtitle="'Kelola data ' . strtolower($cfg['label'])" />
 
 @if(session('success'))
   <div class="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-700">{{ session('success') }}</div>
@@ -17,9 +17,6 @@
     </div>
     <div class="flex items-center gap-3">
       <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">{{ $items->count() }}</span> dari <span class="font-medium text-slate-900">{{ $total }}</span> {{ strtolower($cfg['label']) }}</div>
-      @can($resource . '.create')
-        <button onclick="openModal('create')" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg shadow-sm transition-colors">+ Tambah Data</button>
-      @endcan
     </div>
   </div>
 
@@ -35,28 +32,28 @@
             <th class="py-3.5 px-5 text-right w-36">Harga Jual</th>
             <th class="py-3.5 px-5 text-right w-28">Stok Min</th>
             <th class="py-3.5 px-5 text-center w-28">Status</th>
-            <th class="py-3.5 px-5 text-center w-32">Aksi</th>
+            <th class="py-3.5 px-5 text-center w-14">Aksi</th>
           @elseif($resource === 'warehouses')
             <th class="py-3.5 px-5 text-left w-32">Kode</th>
             <th class="py-3.5 px-5 text-left">Nama Gudang</th>
             <th class="py-3.5 px-5 text-left w-48">Alamat</th>
             <th class="py-3.5 px-5 text-left w-36">Telepon</th>
             <th class="py-3.5 px-5 text-center w-28">Status</th>
-            <th class="py-3.5 px-5 text-center w-32">Aksi</th>
+            <th class="py-3.5 px-5 text-center w-14">Aksi</th>
           @elseif($resource === 'partners')
             <th class="py-3.5 px-5 text-left w-32">Kode</th>
             <th class="py-3.5 px-5 text-left">Nama Mitra</th>
             <th class="py-3.5 px-5 text-center w-32">Tipe</th>
             <th class="py-3.5 px-5 text-left w-40">Kontak</th>
             <th class="py-3.5 px-5 text-center w-28">Status</th>
-            <th class="py-3.5 px-5 text-center w-32">Aksi</th>
+            <th class="py-3.5 px-5 text-center w-14">Aksi</th>
           @elseif($resource === 'accounts')
             <th class="py-3.5 px-5 text-left w-32">Kode</th>
             <th class="py-3.5 px-5 text-left">Nama Akun</th>
             <th class="py-3.5 px-5 text-center w-32">Tipe</th>
             <th class="py-3.5 px-5 text-right w-40">Saldo</th>
             <th class="py-3.5 px-5 text-center w-28">Status</th>
-            <th class="py-3.5 px-5 text-center w-32">Aksi</th>
+            <th class="py-3.5 px-5 text-center w-14">Aksi</th>
           @endif
         </tr>
       </thead>
@@ -94,13 +91,9 @@
               @endif
             </td>
             <td class="px-5 py-3.5 text-center">
-              <div class="flex items-center justify-center gap-1">
-                <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button>
-                @can($resource . '.update')
-                  <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
-                  <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600 rounded hover:bg-slate-100" title="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button>
-                @endcan
-              </div>
+              @can($resource . '.update')
+                <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
+              @endcan
             </td>
           </tr>
         @empty

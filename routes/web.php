@@ -18,7 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'showDashboard'])->name('dashboard');
 
     // Master Data
-    Route::get('/master-data/{resource}', [MasterDataController::class, 'index'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
+    foreach (['products', 'warehouses', 'partners', 'accounts'] as $resource) {
+        Route::get("/master-data/{$resource}", [MasterDataController::class, 'index'])->defaults('resource', $resource)->name("master-data.{$resource}");
+    }
     Route::post('/master-data/{resource}', [MasterDataController::class, 'store'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
     Route::get('/master-data/{resource}/{id}', [MasterDataController::class, 'show'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);
     Route::put('/master-data/{resource}/{id}', [MasterDataController::class, 'update'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts']);

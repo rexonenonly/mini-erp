@@ -111,26 +111,26 @@
           </tr>
           <tr class="h-13 hover:bg-slate-50/70">
             <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Pelumas Chain O-Ring Set</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-LUB-021</div>
+              <div class="font-medium text-slate-900">Oli Pelumas Industri ISO-VG46</div>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-LUB-082</div>
             </td>
             <td class="py-2.5 px-3 text-slate-600">Gudang Surabaya</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">5 Ltr</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">12</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-900">9 Pail</td>
+            <td class="py-2.5 px-3 text-right text-slate-500">10</td>
             <td class="py-2.5 px-3 text-center">
               <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
             </td>
           </tr>
           <tr class="h-13 hover:bg-slate-50/70">
             <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Kabel NYY 3x2.5mm Supreme</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-ELC-031</div>
+              <div class="font-medium text-slate-900">Konektor Pneumatik 1/4 inch</div>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-PNE-301</div>
             </td>
             <td class="py-2.5 px-3 text-slate-600">Gudang Utama</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">3 Roll</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">5</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-900">11 Pcs</td>
+            <td class="py-2.5 px-3 text-right text-slate-500">15</td>
             <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700 border border-red-200">Kritis</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
             </td>
           </tr>
         </tbody>

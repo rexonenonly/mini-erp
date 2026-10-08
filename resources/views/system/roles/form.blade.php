@@ -4,10 +4,9 @@
 @php
   $isOwner = $role && $role->name === 'Owner';
   $isSeeded = $role && in_array($role->name, \Database\Seeders\RolePermissionSeeder::SEEDED_ROLES);
-  $breadcrumb = $isEdit ? 'Sistem / Role & Izin / Ubah' : 'Sistem / Role & Izin / Baru';
   $pageTitle = $isEdit ? 'Ubah Role' : 'Role Baru';
 @endphp
-<x-ui.page-header :title="$pageTitle" subtitle="Atur hak akses setiap role" :breadcrumb="$breadcrumb" />
+<x-ui.page-header :title="$pageTitle" subtitle="Atur hak akses setiap role" />
 
 @if($isOwner)
   <div class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-sm text-amber-800">Role Owner memiliki semua izin dan tidak dapat diubah.</div>

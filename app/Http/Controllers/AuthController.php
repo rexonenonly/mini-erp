@@ -46,14 +46,14 @@ class AuthController extends Controller
 
     public function showDashboard()
     {
-        $lowStock = \DB::table('stock')
-            ->join('products', 'stock.product_id', '=', 'products.id')
-            ->join('warehouses', 'stock.warehouse_id', '=', 'warehouses.id')
-            ->whereRaw('(stock.on_hand - stock.reserved) < products.min_stock')
+        $lowStock = \DB::table('stock_balances')
+            ->join('products', 'stock_balances.product_id', '=', 'products.id')
+            ->join('warehouses', 'stock_balances.warehouse_id', '=', 'warehouses.id')
+            ->whereRaw('(stock_balances.on_hand - stock_balances.reserved) < products.min_stock')
             ->select('products.name', 'products.sku', 'warehouses.name as warehouse', 
-                     \DB::raw('stock.on_hand - stock.reserved as available'), 
+                     \DB::raw('stock_balances.on_hand - stock_balances.reserved as available'), 
                      'products.min_stock')
-            ->orderByRaw('(stock.on_hand - stock.reserved) / NULLIF(products.min_stock, 0)')
+            ->orderByRaw('(stock_balances.on_hand - stock_balances.reserved) / NULLIF(products.min_stock, 0)')
             ->limit(10)
             ->get();
         

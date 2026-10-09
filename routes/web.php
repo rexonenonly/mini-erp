@@ -37,10 +37,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/master-data/{resource}/{id}', [MasterDataController::class, 'destroy'])->whereIn('resource', ['products', 'warehouses', 'partners', 'accounts', 'stock-opnames', 'stock-transfers']);
 
     // Purchasing
-    Route::view('/purchasing/orders', 'purchasing.orders')->name('purchasing.orders')->middleware('can:purchase-orders.view');
-    Route::view('/purchasing/receipts', 'purchasing.receipts')->name('purchasing.receipts')->middleware('can:goods-receipts.view');
-    Route::view('/purchasing/bills', 'purchasing.bills')->name('purchasing.bills')->middleware('can:vendor-bills.view');
-    Route::view('/purchasing/payments', 'purchasing.payments')->name('purchasing.payments')->middleware('can:supplier-payments.view');
+    Route::get('/purchasing/orders', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'purchase-orders')->name('purchasing.orders');
+    Route::get('/purchasing/receipts', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'goods-receipts')->name('purchasing.receipts');
+    Route::get('/purchasing/bills', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'vendor-bills')->name('purchasing.bills');
+    Route::get('/purchasing/payments', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'supplier-payments')->name('purchasing.payments');
+    Route::post('/purchasing/{resource}', [\App\Http\Controllers\PurchasingController::class, 'store'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
+    Route::get('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'show'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
+    Route::put('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'update'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
+    Route::delete('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'destroy'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
 
     // Sales
     Route::view('/sales/orders', 'sales.orders')->name('sales.orders')->middleware('can:sales-orders.view');

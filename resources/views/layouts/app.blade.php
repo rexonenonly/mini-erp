@@ -302,6 +302,39 @@
   return map[resource] || '/' + (resource || '');
 }
 
+  function renderLines(type, lines) {
+    const rows = lines.map(ln => {
+      const sub = (ln.qty || 0) * (ln.unit_price || ln.unit_cost || 0);
+      if (type === 'product') {
+        const opts = PRODUCTS.map(p => `<option value="${p.id}" ${p.id==ln.product_id?'selected':''}>${p.sku} - ${p.name}</option>`).join('');
+        return `<tr class="border-b border-slate-100">
+          <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required><option value="">Pilih</option>${opts}</select></td>
+          <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.qty||1}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.unit||'pcs'}" required></td>
+          <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.unit_price||ln.unit_cost||0}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2 text-right text-xs font-medium">${sub.toFixed(2)}</td>
+          <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+        </tr>`;
+      } else {
+        return `<tr class="border-b border-slate-100">
+          <td class="py-2 pr-2" colspan="3"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" value="${ln.description||''}" required></td>
+          <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.amount||0}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2 text-right text-xs font-medium">${(ln.amount||0).toFixed(2)}</td>
+          <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+        </tr>`;
+      }
+    }).join('');
+    return `<div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Item <span class="text-red-500">*</span></label>
+      <div class="border border-slate-200 rounded-lg overflow-hidden">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50"><tr><th class="py-2 px-2 text-left font-semibold">${type==='product'?'Produk':'Deskripsi'}</th>${type==='product'?'<th class="py-2 px-2 text-left font-semibold w-20">Qty</th><th class="py-2 px-2 text-left font-semibold w-16">Unit</th>':''}<th class="py-2 px-2 text-left font-semibold w-24">Harga</th><th class="py-2 px-2 text-right font-semibold w-24">Subtotal</th><th class="py-2 px-2 w-10"></th></tr></thead>
+          <tbody id="linesBody">${rows}</tbody>
+        </table>
+        <div class="p-2 border-t border-slate-200 bg-slate-50"><button type="button" onclick="addLine('${type}')" class="text-xs text-primary hover:text-primary-hover font-medium flex items-center gap-1"><span class="material-symbols-outlined text-sm">add</span>Tambah Item</button></div>
+      </div>
+    </div>`;
+  }
+
 function loadData(id, mode) {
     fetch(`${resourceBase()}/${id}`, {headers: {'Accept': 'application/json'}})
     .then(r => r.json())
@@ -441,8 +474,9 @@ function loadData(id, mode) {
           <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
-        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="confirmed" ${d.status==='confirmed'?'selected':''}>Dikonfirmasi</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="completed" ${d.status==='completed'?'selected':''}>Selesai</option><option value="cancelled" ${d.status==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
+        ${renderLines('product', d.lines || [])}
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }

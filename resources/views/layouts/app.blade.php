@@ -302,6 +302,39 @@
   return map[resource] || '/' + (resource || '');
 }
 
+  function renderLines(type, lines) {
+    const rows = lines.map(ln => {
+      const sub = (ln.qty || 0) * (ln.unit_price || ln.unit_cost || 0);
+      if (type === 'product') {
+        const opts = PRODUCTS.map(p => `<option value="${p.id}" ${p.id==ln.product_id?'selected':''}>${p.sku} - ${p.name}</option>`).join('');
+        return `<tr class="border-b border-slate-100">
+          <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required><option value="">Pilih</option>${opts}</select></td>
+          <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.qty||1}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.unit||'pcs'}" required></td>
+          <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.unit_price||ln.unit_cost||0}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2 text-right text-xs font-medium">${sub.toFixed(2)}</td>
+          <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+        </tr>`;
+      } else {
+        return `<tr class="border-b border-slate-100">
+          <td class="py-2 pr-2" colspan="3"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" value="${ln.description||''}" required></td>
+          <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="${ln.amount||0}" onchange="calcSubtotal(this)" required></td>
+          <td class="py-2 px-2 text-right text-xs font-medium">${(ln.amount||0).toFixed(2)}</td>
+          <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+        </tr>`;
+      }
+    }).join('');
+    return `<div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Item <span class="text-red-500">*</span></label>
+      <div class="border border-slate-200 rounded-lg overflow-hidden">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50"><tr><th class="py-2 px-2 text-left font-semibold">${type==='product'?'Produk':'Deskripsi'}</th>${type==='product'?'<th class="py-2 px-2 text-left font-semibold w-20">Qty</th><th class="py-2 px-2 text-left font-semibold w-16">Unit</th>':''}<th class="py-2 px-2 text-left font-semibold w-24">Harga</th><th class="py-2 px-2 text-right font-semibold w-24">Subtotal</th><th class="py-2 px-2 w-10"></th></tr></thead>
+          <tbody id="linesBody">${rows}</tbody>
+        </table>
+        <div class="p-2 border-t border-slate-200 bg-slate-50"><button type="button" onclick="addLine('${type}')" class="text-xs text-primary hover:text-primary-hover font-medium flex items-center gap-1"><span class="material-symbols-outlined text-sm">add</span>Tambah Item</button></div>
+      </div>
+    </div>`;
+  }
+
 function loadData(id, mode) {
     fetch(`${resourceBase()}/${id}`, {headers: {'Accept': 'application/json'}})
     .then(r => r.json())
@@ -441,8 +474,9 @@ function loadData(id, mode) {
           <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
-        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="confirmed" ${d.status==='confirmed'?'selected':''}>Dikonfirmasi</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="completed" ${d.status==='completed'?'selected':''}>Selesai</option><option value="cancelled" ${d.status==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
+        ${renderLines('product', d.lines || [])}
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }
@@ -462,8 +496,9 @@ function loadData(id, mode) {
           <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
-        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total Nilai <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_value" value="${d.total_value||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        ${renderLines('product', d.lines || [])}
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total Nilai <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_value" value="${d.total_value||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }
@@ -480,8 +515,9 @@ function loadData(id, mode) {
           <option value="{{ $p->id }}" ${Number(d.supplier_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
           @endforeach
         </select></div>
+        ${renderLines('description', d.lines || [])}
         <div class="grid grid-cols-2 gap-4">
-          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
           <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Sudah Dibayar</label><input type="number" min="0" step="0.01" name="paid_amount" value="${d.paid_amount||0}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         </div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="open" ${d.status==='open'||!d.status?'selected':''}>Terbuka</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="paid" ${d.status==='paid'?'selected':''}>Dibayar</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
@@ -522,8 +558,9 @@ function loadData(id, mode) {
           <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
-        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="confirmed" ${d.status==='confirmed'?'selected':''}>Dikonfirmasi</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="completed" ${d.status==='completed'?'selected':''}>Selesai</option><option value="cancelled" ${d.status==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
+        ${renderLines('product', d.lines || [])}
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }
@@ -543,8 +580,9 @@ function loadData(id, mode) {
           <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
           @endforeach
         </select></div>
-        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total Nilai <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_value" value="${d.total_value||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        ${renderLines('product', d.lines || [])}
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total Nilai <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_value" value="${d.total_value||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }
@@ -561,8 +599,9 @@ function loadData(id, mode) {
           <option value="{{ $p->id }}" ${Number(d.customer_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
           @endforeach
         </select></div>
+        ${renderLines('product', d.lines || [])}
         <div class="grid grid-cols-2 gap-4">
-          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required readonly class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm bg-slate-50"></div>
           <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Sudah Dibayar</label><input type="number" min="0" step="0.01" name="paid_amount" value="${d.paid_amount||0}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
         </div>
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="open" ${d.status==='open'||!d.status?'selected':''}>Terbuka</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="paid" ${d.status==='paid'?'selected':''}>Dibayar</option><option value="overdue" ${d.status==='overdue'?'selected':''}>Jatuh Tempo</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
@@ -620,16 +659,22 @@ function loadData(id, mode) {
     const linesBody = document.getElementById('linesBody');
     if (linesBody) {
       data.lines = Array.from(linesBody.querySelectorAll('tr')).map(tr => {
-        const cells = tr.querySelectorAll('td');
-        return {
-          product_id: cells[0]?.querySelector('select')?.value || cells[0]?.dataset.productId,
-          qty: parseFloat(cells[1]?.querySelector('input')?.value || cells[1]?.textContent) || 0,
-          unit: cells[2]?.querySelector('input')?.value || cells[2]?.textContent || '',
-          unit_price: parseFloat(cells[3]?.querySelector('input')?.value || cells[3]?.textContent) || 0,
-          unit_cost: parseFloat(cells[3]?.querySelector('input')?.value || cells[3]?.textContent) || 0,
-          description: cells[0]?.querySelector('input[name*="description"]')?.value || '',
-          notes: cells[5]?.querySelector('input')?.value || ''
-        };
+        const inputs = tr.querySelectorAll('input, select');
+        const line = {};
+        inputs.forEach(inp => {
+          if (inp.tagName === 'SELECT') line.product_id = inp.value;
+          else if (inp.type === 'number') {
+            if (!line.qty) line.qty = parseFloat(inp.value) || 0;
+            else if (!line.unit_price && !line.unit_cost) {
+              line.unit_price = parseFloat(inp.value) || 0;
+              line.unit_cost = parseFloat(inp.value) || 0;
+            } else line.amount = parseFloat(inp.value) || 0;
+          } else if (inp.type === 'text') {
+            if (inp.placeholder === 'Deskripsi') line.description = inp.value;
+            else line.unit = inp.value;
+          }
+        });
+        return line;
       });
     }
     
@@ -671,9 +716,7 @@ function loadData(id, mode) {
       \`;
     } else {
       tr.innerHTML = \`
-        <td class="py-2 pr-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" required></td>
-        <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="1" onchange="calcSubtotal(this)"></td>
-        <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value=""></td>
+        <td class="py-2 pr-2" colspan="3"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" required></td>
         <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="0" onchange="calcSubtotal(this)" required></td>
         <td class="py-2 px-2 text-right text-xs font-medium">0.00</td>
         <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
@@ -684,11 +727,17 @@ function loadData(id, mode) {
   
   function calcSubtotal(input) {
     const tr = input.closest('tr');
-    const cells = tr.querySelectorAll('td');
-    const qty = parseFloat(cells[1]?.querySelector('input')?.value) || 0;
-    const price = parseFloat(cells[3]?.querySelector('input')?.value) || 0;
-    const subtotal = qty * price;
-    cells[4].textContent = subtotal.toFixed(2);
+    const inputs = tr.querySelectorAll('input[type="number"]');
+    let subtotal = 0;
+    if (inputs.length === 2) {
+      // product: qty * price
+      subtotal = (parseFloat(inputs[0].value) || 0) * (parseFloat(inputs[1].value) || 0);
+    } else if (inputs.length === 1) {
+      // description: amount
+      subtotal = parseFloat(inputs[0].value) || 0;
+    }
+    const subtotalCell = tr.querySelector('td:nth-last-child(2)');
+    if (subtotalCell) subtotalCell.textContent = subtotal.toFixed(2);
     updateTotal();
   }
   
@@ -696,7 +745,7 @@ function loadData(id, mode) {
     const tbody = document.getElementById('linesBody');
     if (!tbody) return;
     const total = Array.from(tbody.querySelectorAll('tr')).reduce((sum, tr) => {
-      const subtotal = parseFloat(tr.querySelector('td:nth-child(5)')?.textContent) || 0;
+      const subtotal = parseFloat(tr.querySelector('td:nth-last-child(2)')?.textContent) || 0;
       return sum + subtotal;
     }, 0);
     const totalInput = document.querySelector('input[name="total_amount"], input[name="total_value"]');

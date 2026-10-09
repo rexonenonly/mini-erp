@@ -1,107 +1,85 @@
 @extends('layouts.app')
 @section('title', 'Pembayaran ke Supplier')
 @section('content')
-<x-ui.page-header />
-    <div class="bg-white border rounded-lg">
-      <div class="p-5 border-b flex justify-between items-center">
-        <div class="flex gap-3">
-          <input type="text" placeholder="Cari nomor pembayaran atau bill..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
-          <select class="h-9 px-3 border rounded-lg text-sm">
-            <option>Metode: Semua</option>
-            <option>Transfer Bank</option>
-            <option>Tunai</option>
-          </select>
-          <select class="h-9 px-3 border rounded-lg text-sm">
-            <option>Status: Semua</option>
-            <option>Diposting</option>
-            <option>Dibalik</option>
-          </select>
-        </div>
-        <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">14</span> pembayaran</div>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm purchasing-table">
-          <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
-            <tr>
-              <th class="py-3.5 px-5 text-left w-44">No. Pembayaran</th>
-              <th class="py-3.5 px-4 text-left w-28">Tanggal</th>
-              <th class="py-3.5 px-4 text-left w-40">No. Bill</th>
-              <th class="py-3.5 px-4 text-left">Supplier</th>
-              <th class="py-3.5 px-4 text-left w-32">Metode</th>
-              <th class="py-3.5 px-4 text-right w-32">Jumlah</th>
-              <th class="py-3.5 px-4 text-center w-24">Status</th>
-              <th class="py-3.5 px-4 text-left w-28">Dibuat Oleh</th>
-              <th class="py-3.5 px-4 text-center w-16">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y">
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">PV-2026-10-0010</td>
-              <td class="py-3.5 px-4 text-slate-600">13 Okt 2026</td>
-              <td class="py-3.5 px-4 font-mono text-xs text-primary">VB-2026-10-0017</td>
-              <td class="py-3.5 px-4 font-medium">PT Schneider Electric Distribution</td>
-              <td class="py-3.5 px-4 text-slate-600">Transfer Bank</td>
-              <td class="py-3.5 px-4 text-right font-medium">Rp 6.000.000</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Diposting</span></td>
-              <td class="py-3.5 px-4 text-slate-600">Budi</td>
-              <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">PV-2026-10-0009</td>
-              <td class="py-3.5 px-4 text-slate-600">09 Okt 2026</td>
-              <td class="py-3.5 px-4 font-mono text-xs text-primary">VB-2026-10-0016</td>
-              <td class="py-3.5 px-4 font-medium">PT Tembaga Nusantara</td>
-              <td class="py-3.5 px-4 text-slate-600">Transfer Bank</td>
-              <td class="py-3.5 px-4 text-right font-medium">Rp 12.000.000</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Diposting</span></td>
-              <td class="py-3.5 px-4 text-slate-600">Budi</td>
-              <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">PV-2026-10-0008</td>
-              <td class="py-3.5 px-4 text-slate-600">04 Okt 2026</td>
-              <td class="py-3.5 px-4 font-mono text-xs text-primary">VB-2026-10-0016</td>
-              <td class="py-3.5 px-4 font-medium">PT Tembaga Nusantara</td>
-              <td class="py-3.5 px-4 text-slate-600">Transfer Bank</td>
-              <td class="py-3.5 px-4 text-right font-medium">Rp 15.000.000</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Diposting</span></td>
-              <td class="py-3.5 px-4 text-slate-600">Budi</td>
-              <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">PV-2026-10-0007</td>
-              <td class="py-3.5 px-4 text-slate-600">03 Okt 2026</td>
-              <td class="py-3.5 px-4 font-mono text-xs text-primary">VB-2026-10-0015</td>
-              <td class="py-3.5 px-4 font-medium">PT Schneider Electric Distribution</td>
-              <td class="py-3.5 px-4 text-slate-600">Tunai</td>
-              <td class="py-3.5 px-4 text-right font-medium">Rp 8.240.000</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Diposting</span></td>
-              <td class="py-3.5 px-4 text-slate-600">Budi</td>
-              <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">PV-2026-10-0006</td>
-              <td class="py-3.5 px-4 text-slate-600">27 Sep 2026</td>
-              <td class="py-3.5 px-4 font-mono text-xs text-primary">VB-2026-10-0014</td>
-              <td class="py-3.5 px-4 font-medium">PT Tembaga Nusantara</td>
-              <td class="py-3.5 px-4 text-slate-600">Transfer Bank</td>
-              <td class="py-3.5 px-4 text-right font-medium">Rp 15.300.000</td>
-              <td class="py-3.5 px-4 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs bg-rose-50 text-rose-700 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Dibalik</span></td>
-              <td class="py-3.5 px-4 text-slate-600">Budi</td>
-              <td class="py-3.5 px-4 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="p-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-sm text-slate-500">Halaman 1 dari 3</div>
-        <div class="flex items-center gap-1">
-          <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Sebelumnya</button>
-          <button class="w-8 h-8 bg-slate-900 text-white text-sm font-medium flex items-center justify-center">1</button>
-          <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">2</button>
-          <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">3</button>
-          <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Selanjutnya</button>
-        </div>
+<x-ui.page-header title="Pembayaran ke Supplier" subtitle="Kelola pembayaran kepada supplier" />
+
+@if(session('success'))
+  <div class="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-700">{{ session('success') }}</div>
+@endif
+
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+  <div class="p-5 border-b border-slate-200 flex flex-wrap justify-between items-center gap-3">
+    <div class="flex gap-3">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
+        <input type="text" id="search" placeholder="Cari nomor pembayaran atau bill..." class="w-72 h-9 pl-9 pr-3 border border-slate-200 rounded-lg text-sm bg-white placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
       </div>
     </div>
+    <div class="flex items-center gap-3">
+      <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">{{ $items->count() }}</span> dari <span class="font-medium text-slate-900">{{ $total }}</span> pembayaran</div>
+      @can('supplier-payments.create')
+        <button type="button" onclick="openModal('create')" class="shrink-0 inline-flex items-center gap-1.5 h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+          <span class="material-symbols-outlined text-lg">add</span><span>Pembayaran Baru</span>
+        </button>
+      @endcan
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" id="dataTable">
+      <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500">
+        <tr>
+          <th class="py-3.5 px-5 text-left w-44">No. Pembayaran</th>
+          <th class="py-3.5 px-5 text-left w-28">Tanggal</th>
+          <th class="py-3.5 px-5 text-left w-40">No. Bill</th>
+          <th class="py-3.5 px-5 text-left">Supplier</th>
+          <th class="py-3.5 px-5 text-left w-32">Metode</th>
+          <th class="py-3.5 px-5 text-right w-32">Jumlah</th>
+          <th class="py-3.5 px-5 text-center w-24">Status</th>
+          <th class="py-3.5 px-5 text-left w-28">Dibuat Oleh</th>
+          <th class="py-3.5 px-5 text-center w-14">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        @forelse($items as $item)
+          <tr class="h-[52px] hover:bg-slate-50">
+            <td class="px-5 py-3.5 font-mono text-xs">{{ $item->number }}</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ $item->payment_date->format('d M Y') }}</td>
+            <td class="px-5 py-3.5 font-mono text-xs text-primary">{{ $item->bill->number ?? '-' }}</td>
+            <td class="px-5 py-3.5 font-medium">{{ $item->supplier->name ?? '-' }}</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ ucfirst($item->method) }}</td>
+            <td class="px-5 py-3.5 text-right font-medium">Rp {{ number_format($item->amount, 0, ',', '.') }}</td>
+            <td class="px-5 py-3.5 text-center">@include('purchasing._status', ['status' => $item->status])</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ $item->creator->name ?? '-' }}</td>
+            <td class="px-5 py-3.5 text-center whitespace-nowrap">
+              @can('supplier-payments.view')
+                <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Lihat" aria-label="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button>
+              @endcan
+              @can('supplier-payments.update')
+                <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah" aria-label="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
+              @endcan
+              @can('supplier-payments.delete')
+                <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600 rounded hover:bg-red-50" title="Hapus" aria-label="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button>
+              @endcan
+            </td>
+          </tr>
+        @empty
+          <tr class="h-[52px]"><td colspan="9" class="px-5 py-8 text-center text-slate-500">Tidak ada data pembayaran.</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+
+  @if($items->hasPages())
+    <div class="p-4 border-t border-slate-200">{{ $items->links() }}</div>
+  @endif
+</div>
+
+@push('scripts')
+<script>
+const resource = 'supplier-payments';
+const canCreate = {{ auth()->user()->can('supplier-payments.create') ? 'true' : 'false' }};
+const canUpdate = {{ auth()->user()->can('supplier-payments.update') ? 'true' : 'false' }};
+</script>
+@endpush
 @endsection

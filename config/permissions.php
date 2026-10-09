@@ -14,10 +14,10 @@ return [
             'stock-transfers' => ['label' => 'Transfer Stok', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
         ],
         'Purchasing' => [
-            'purchase-orders' => ['label' => 'Purchase Order', 'actions' => ['view', 'create', 'update', 'confirm', 'cancel']],
-            'goods-receipts' => ['label' => 'Penerimaan Barang', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
-            'vendor-bills' => ['label' => 'Tagihan', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
-            'supplier-payments' => ['label' => 'Pembayaran ke Supplier', 'actions' => ['view', 'create', 'reverse']],
+            'purchase-orders' => ['label' => 'Purchase Order', 'actions' => ['view', 'create', 'update', 'delete', 'confirm', 'cancel']],
+            'goods-receipts' => ['label' => 'Penerimaan Barang', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
+            'vendor-bills' => ['label' => 'Tagihan', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
+            'supplier-payments' => ['label' => 'Pembayaran ke Supplier', 'actions' => ['view', 'create', 'delete', 'reverse']],
         ],
         'Sales' => [
             'sales-orders' => ['label' => 'Sales Order', 'actions' => ['view', 'create', 'update', 'confirm', 'cancel']],

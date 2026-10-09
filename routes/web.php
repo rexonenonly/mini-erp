@@ -6,6 +6,8 @@ use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\StockBalanceController;
 use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\SalesController;
 
 Route::get('/', fn() => redirect('/login'));
 
@@ -47,10 +49,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'destroy'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
 
     // Sales
-    Route::view('/sales/orders', 'sales.orders')->name('sales.orders')->middleware('can:sales-orders.view');
-    Route::view('/sales/deliveries', 'sales.deliveries')->name('sales.deliveries')->middleware('can:deliveries.view');
-    Route::view('/sales/invoices', 'sales.invoices')->name('sales.invoices')->middleware('can:invoices.view');
-    Route::view('/sales/payments', 'sales.payments')->name('sales.payments')->middleware('can:customer-payments.view');
+    Route::get('/sales/orders', [SalesController::class, 'index'])->defaults('resource', 'sales-orders')->name('sales.orders');
+    Route::get('/sales/deliveries', [SalesController::class, 'index'])->defaults('resource', 'deliveries')->name('sales.deliveries');
+    Route::get('/sales/invoices', [SalesController::class, 'index'])->defaults('resource', 'invoices')->name('sales.invoices');
+    Route::get('/sales/payments', [SalesController::class, 'index'])->defaults('resource', 'customer-payments')->name('sales.payments');
+    Route::post('/sales/{resource}', [SalesController::class, 'store'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
+    Route::get('/sales/{resource}/{id}', [SalesController::class, 'show'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
+    Route::put('/sales/{resource}/{id}', [SalesController::class, 'update'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
+    Route::delete('/sales/{resource}/{id}', [SalesController::class, 'destroy'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
 
     // Accounting
     Route::view('/accounting/journals', 'accounting.journals')->name('accounting.journals')->middleware('can:journals.view');

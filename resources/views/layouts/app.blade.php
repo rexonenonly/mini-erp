@@ -290,6 +290,10 @@
     'goods-receipts': @json(url('/purchasing/goods-receipts')),
     'vendor-bills': @json(url('/purchasing/vendor-bills')),
     'supplier-payments': @json(url('/purchasing/supplier-payments')),
+    'sales-orders': @json(url('/sales/sales-orders')),
+    'deliveries': @json(url('/sales/deliveries')),
+    'invoices': @json(url('/sales/invoices')),
+    'customer-payments': @json(url('/sales/customer-payments')),
   };
   return map[resource] || '/' + (resource || '');
 }
@@ -498,6 +502,87 @@ function loadData(id, mode) {
         <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
       `;
     }
+    if (res === 'sales-orders') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor SO <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal <span class="text-red-500">*</span></label><input type="date" name="order_date" value="${d.order_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Customer <span class="text-red-500">*</span></label><select name="customer_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Customer</option>
+          @foreach(\App\Models\Partner::whereIn('type', ['customer','both'])->where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}" ${Number(d.customer_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Gudang Asal <span class="text-red-500">*</span></label><select name="warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Gudang</option>
+          @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+          <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="confirmed" ${d.status==='confirmed'?'selected':''}>Dikonfirmasi</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="completed" ${d.status==='completed'?'selected':''}>Selesai</option><option value="cancelled" ${d.status==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
+    if (res === 'deliveries') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor Pengiriman <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal <span class="text-red-500">*</span></label><input type="date" name="delivery_date" value="${d.delivery_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Customer <span class="text-red-500">*</span></label><select name="customer_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Customer</option>
+          @foreach(\App\Models\Partner::whereIn('type', ['customer','both'])->where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}" ${Number(d.customer_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Gudang <span class="text-red-500">*</span></label><select name="warehouse_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Gudang</option>
+          @foreach(\App\Models\Warehouse::where('is_active', true)->get() as $w)
+          <option value="{{ $w->id }}" ${Number(d.warehouse_id) === {{ $w->id }} ? 'selected' : ''}>{{ $w->name }}</option>
+          @endforeach
+        </select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total Nilai <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_value" value="${d.total_value||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
+    if (res === 'invoices') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor Invoice <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal Invoice <span class="text-red-500">*</span></label><input type="date" name="invoice_date" value="${d.invoice_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Jatuh Tempo</label><input type="date" name="due_date" value="${d.due_date||''}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Customer <span class="text-red-500">*</span></label><select name="customer_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Customer</option>
+          @foreach(\App\Models\Partner::whereIn('type', ['customer','both'])->where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}" ${Number(d.customer_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
+          @endforeach
+        </select></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Total <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="total_amount" value="${d.total_amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Sudah Dibayar</label><input type="number" min="0" step="0.01" name="paid_amount" value="${d.paid_amount||0}" ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="open" ${d.status==='open'||!d.status?'selected':''}>Terbuka</option><option value="partial" ${d.status==='partial'?'selected':''}>Parsial</option><option value="paid" ${d.status==='paid'?'selected':''}>Dibayar</option><option value="overdue" ${d.status==='overdue'?'selected':''}>Jatuh Tempo</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
+    if (res === 'customer-payments') {
+      return `
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Nomor Pembayaran <span class="text-red-500">*</span></label><input type="text" name="number" value="${d.number||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Tanggal <span class="text-red-500">*</span></label><input type="date" name="payment_date" value="${d.payment_date||''}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Customer <span class="text-red-500">*</span></label><select name="customer_id" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm">
+          <option value="">Pilih Customer</option>
+          @foreach(\App\Models\Partner::whereIn('type', ['customer','both'])->where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}" ${Number(d.customer_id) === {{ $p->id }} ? 'selected' : ''}>{{ $p->name }}</option>
+          @endforeach
+        </select></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Jumlah <span class="text-red-500">*</span></label><input type="number" min="0" step="0.01" name="amount" value="${d.amount||0}" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Metode <span class="text-red-500">*</span></label><select name="method" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="transfer" ${d.method==='transfer'||!d.method?'selected':''}>Transfer</option><option value="cash" ${d.method==='cash'?'selected':''}>Tunai</option><option value="check" ${d.method==='check'?'selected':''}>Cek</option></select></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Status <span class="text-red-500">*</span></label><select name="status" required ${disabled} class="w-full h-9 px-3 border border-slate-200 rounded-lg text-sm"><option value="draft" ${d.status==='draft'||!d.status?'selected':''}>Draft</option><option value="posted" ${d.status==='posted'?'selected':''}>Posted</option><option value="reversed" ${d.status==='reversed'?'selected':''}>Reversed</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-700 uppercase mb-1.5">Catatan</label><textarea name="notes" rows="2" ${disabled} class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">${d.notes||''}</textarea></div>
+      `;
+    }
     return '';
   }
 
@@ -515,6 +600,10 @@ function loadData(id, mode) {
     if (res === 'goods-receipts') return row('Nomor', d.number) + row('Tanggal', d.receipt_date) + row('Supplier', d.supplier?.name || '-') + row('Gudang', d.warehouse?.name || '-') + row('Nilai', fmt(d.total_value)) + row('Status', d.status) + row('Catatan', d.notes || '-');
     if (res === 'vendor-bills') return row('No. Bill', d.number) + row('Tanggal Bill', d.bill_date) + row('Jatuh Tempo', d.due_date || '-') + row('Supplier', d.supplier?.name || '-') + row('Total', fmt(d.total_amount)) + row('Sudah Dibayar', fmt(d.paid_amount)) + row('Sisa', fmt(Math.max(Number(d.total_amount) - Number(d.paid_amount), 0))) + row('Status', d.status) + row('Catatan', d.notes || '-');
     if (res === 'supplier-payments') return row('Nomor', d.number) + row('Tanggal', d.payment_date) + row('Supplier', d.supplier?.name || '-') + row('Jumlah', fmt(d.amount)) + row('Metode', d.method) + row('Status', d.status) + row('Catatan', d.notes || '-');
+    if (res === 'sales-orders') return row('No. SO', d.number) + row('Tanggal', d.order_date) + row('Customer', d.customer?.name || '-') + row('Gudang', d.warehouse?.name || '-') + row('Total', fmt(d.total_amount)) + row('Status', d.status) + row('Catatan', d.notes || '-');
+    if (res === 'deliveries') return row('Nomor', d.number) + row('Tanggal', d.delivery_date) + row('No. SO', d.salesOrder?.number || '-') + row('Customer', d.customer?.name || '-') + row('Gudang', d.warehouse?.name || '-') + row('Nilai', fmt(d.total_value)) + row('Status', d.status) + row('Catatan', d.notes || '-');
+    if (res === 'invoices') return row('No. Invoice', d.number) + row('Tanggal Invoice', d.invoice_date) + row('Jatuh Tempo', d.due_date || '-') + row('No. Pengiriman', d.delivery?.number || '-') + row('Customer', d.customer?.name || '-') + row('Total', fmt(d.total_amount)) + row('Sudah Dibayar', fmt(d.paid_amount)) + row('Sisa', fmt(Math.max(Number(d.total_amount) - Number(d.paid_amount), 0))) + row('Status', d.status) + row('Catatan', d.notes || '-');
+    if (res === 'customer-payments') return row('Nomor', d.number) + row('Tanggal', d.payment_date) + row('No. Invoice', d.invoice?.number || '-') + row('Customer', d.customer?.name || '-') + row('Jumlah', fmt(d.amount)) + row('Metode', d.method) + row('Status', d.status) + row('Catatan', d.notes || '-');
     return '';
   }
 

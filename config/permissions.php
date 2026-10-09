@@ -26,7 +26,7 @@ return [
             'customer-payments' => ['label' => 'Pembayaran dari Customer', 'actions' => ['view', 'create', 'update', 'delete', 'reverse']],
         ],
         'Accounting' => [
-            'journals' => ['label' => 'Jurnal Umum', 'actions' => ['view', 'create', 'reverse']],
+            'journals' => ['label' => 'Jurnal Umum', 'actions' => ['view', 'create', 'delete', 'reverse']],
             'ledger' => ['label' => 'Buku Besar', 'actions' => ['view']],
             'periods' => ['label' => 'Periode', 'actions' => ['view', 'close']],
         ],

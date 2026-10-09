@@ -199,7 +199,11 @@
   </div>
 
   @stack('scripts')
+  @php 
+    $productsJson = \App\Models\Product::where('is_active', true)->get(['id', 'sku', 'name'])->toJson();
+  @endphp
   <script>
+  const PRODUCTS = {!! $productsJson !!};
   let currentDeleteId = null;
 
   function openModal(mode, id = null) {
@@ -657,10 +661,7 @@ function loadData(id, mode) {
       tr.innerHTML = \`
         <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required>
           <option value="">Pilih Produk</option>
-          @php $products = \\App\\Models\\Product::where('is_active', true)->get(); @endphp
-          @foreach($products as $p)
-          <option value="{{ $p->id }}">{{ $p->sku }} - {{ $p->name }}</option>
-          @endforeach
+          \${PRODUCTS.map(p => \`<option value="\${p.id}">\${p.sku} - \${p.name}</option>\`).join('')}
         </select></td>
         <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="1" onchange="calcSubtotal(this)" required></td>
         <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="pcs" required></td>

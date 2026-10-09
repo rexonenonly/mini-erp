@@ -657,7 +657,8 @@ function loadData(id, mode) {
       tr.innerHTML = \`
         <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required>
           <option value="">Pilih Produk</option>
-          @foreach(\\App\\Models\\Product::where('is_active', true)->get() as $p)
+          @php $products = \\App\\Models\\Product::where('is_active', true)->get(); @endphp
+          @foreach($products as $p)
           <option value="{{ $p->id }}">{{ $p->sku }} - {{ $p->name }}</option>
           @endforeach
         </select></td>

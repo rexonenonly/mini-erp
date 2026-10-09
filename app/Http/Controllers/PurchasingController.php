@@ -53,7 +53,12 @@ class PurchasingController extends Controller
         $validated = $request->validate($this->rules($resource));
         $validated['created_by'] = $request->user()->id;
         
-        \DB::transaction(function() use ($model, $validated, $request, &$item) {
+        // ponytail: auto-generate number if empty
+        if (empty($validated['number'])) {
+            $validated['number'] = $this->generateNumber($resource);
+        }
+        
+        \DB::transaction(function() use ($model, $validated, $request, $resource, &$item) {
             $item = $model::create($validated);
             
             // Save lines if resource supports it
@@ -145,7 +150,7 @@ class PurchasingController extends Controller
         $unique = $id ? ",{$id}" : '';
         $baseRules = match ($resource) {
             'purchase-orders' => [
-                'number' => "required|string|max:40|unique:purchase_orders,number{$unique}",
+                'number' => "nullable|string|max:40|unique:purchase_orders,number{$unique}",
                 'order_date' => 'required|date',
                 'supplier_id' => 'required|exists:partners,id',
                 'warehouse_id' => 'required|exists:warehouses,id',
@@ -160,7 +165,7 @@ class PurchasingController extends Controller
                 'lines.*.notes' => 'nullable|string',
             ],
             'goods-receipts' => [
-                'number' => "required|string|max:40|unique:goods_receipts,number{$unique}",
+                'number' => "nullable|string|max:40|unique:goods_receipts,number{$unique}",
                 'receipt_date' => 'required|date',
                 'purchase_order_id' => 'nullable|exists:purchase_orders,id',
                 'supplier_id' => 'required|exists:partners,id',
@@ -176,7 +181,7 @@ class PurchasingController extends Controller
                 'lines.*.notes' => 'nullable|string',
             ],
             'vendor-bills' => [
-                'number' => "required|string|max:40|unique:vendor_bills,number{$unique}",
+                'number' => "nullable|string|max:40|unique:vendor_bills,number{$unique}",
                 'bill_date' => 'required|date',
                 'due_date' => 'nullable|date',
                 'receipt_id' => 'nullable|exists:goods_receipts,id',
@@ -191,7 +196,7 @@ class PurchasingController extends Controller
                 'lines.*.amount' => 'required|numeric|min:0',
             ],
             'supplier-payments' => [
-                'number' => "required|string|max:40|unique:supplier_payments,number{$unique}",
+                'number' => "nullable|string|max:40|unique:supplier_payments,number{$unique}",
                 'payment_date' => 'required|date',
                 'bill_id' => 'nullable|exists:vendor_bills,id',
                 'supplier_id' => 'required|exists:partners,id',
@@ -203,5 +208,28 @@ class PurchasingController extends Controller
             default => [],
         };
         return $baseRules;
+    }
+
+    private function generateNumber(string $resource): string
+    {
+        $prefix = match($resource) {
+            'purchase-orders' => 'PO',
+            'goods-receipts' => 'GR',
+            'vendor-bills' => 'BILL',
+            'supplier-payments' => 'PAY-S',
+            default => 'DOC',
+        };
+        $year = date('Y');
+        $month = date('m');
+        $model = $this->config[$resource]['model'];
+        $lastNumber = $model::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('id', 'desc')
+            ->value('number');
+        $seq = 1;
+        if ($lastNumber && preg_match('/-(\d+)$/', $lastNumber, $m)) {
+            $seq = intval($m[1]) + 1;
+        }
+        return sprintf('%s-%s-%s-%04d', $prefix, $year, $month, $seq);
     }
 }

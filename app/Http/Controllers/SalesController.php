@@ -50,6 +50,10 @@ class SalesController extends Controller
             $validated['created_by'] = $request->user()->id;
         }
         
+        if (empty($validated['number'])) {
+            $validated['number'] = $this->generateNumber($resource);
+        }
+        
         \DB::transaction(function() use ($cfg, $validated, $request, $resource, &$item) {
             $item = $cfg['model']::create($validated);
             
@@ -123,7 +127,7 @@ class SalesController extends Controller
         $u = $id ? ",{$id}" : '';
         return match ($resource) {
             'sales-orders' => [
-                'number'       => "required|string|max:40|unique:sales_orders,number{$u}",
+                'number'       => "nullable|string|max:40|unique:sales_orders,number{$u}",
                 'order_date'   => 'required|date',
                 'customer_id'  => 'required|exists:partners,id',
                 'warehouse_id' => 'required|exists:warehouses,id',
@@ -138,7 +142,7 @@ class SalesController extends Controller
                 'lines.*.notes'       => 'nullable|string',
             ],
             'deliveries' => [
-                'number'          => "required|string|max:40|unique:deliveries,number{$u}",
+                'number'          => "nullable|string|max:40|unique:deliveries,number{$u}",
                 'delivery_date'   => 'required|date',
                 'sales_order_id'  => 'nullable|exists:sales_orders,id',
                 'customer_id'     => 'required|exists:partners,id',
@@ -154,7 +158,7 @@ class SalesController extends Controller
                 'lines.*.notes'      => 'nullable|string',
             ],
             'invoices' => [
-                'number'       => "required|string|max:40|unique:invoices,number{$u}",
+                'number'       => "nullable|string|max:40|unique:invoices,number{$u}",
                 'invoice_date' => 'required|date',
                 'due_date'     => 'nullable|date',
                 'delivery_id'  => 'nullable|exists:deliveries,id',
@@ -170,7 +174,7 @@ class SalesController extends Controller
                 'lines.*.unit_price'  => 'required|numeric|min:0',
             ],
             'customer-payments' => [
-                'number'       => "required|string|max:40|unique:customer_payments,number{$u}",
+                'number'       => "nullable|string|max:40|unique:customer_payments,number{$u}",
                 'payment_date' => 'required|date',
                 'invoice_id'   => 'nullable|exists:invoices,id',
                 'customer_id'  => 'required|exists:partners,id',
@@ -181,5 +185,28 @@ class SalesController extends Controller
             ],
             default => [],
         };
+    }
+
+    private function generateNumber(string $resource): string
+    {
+        $prefix = match($resource) {
+            'sales-orders' => 'SO',
+            'deliveries' => 'DO',
+            'invoices' => 'INV',
+            'customer-payments' => 'PAY-C',
+            default => 'DOC',
+        };
+        $year = date('Y');
+        $month = date('m');
+        $model = $this->config[$resource]['model'];
+        $lastNumber = $model::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('id', 'desc')
+            ->value('number');
+        $seq = 1;
+        if ($lastNumber && preg_match('/-(\d+)$/', $lastNumber, $m)) {
+            $seq = intval($m[1]) + 1;
+        }
+        return sprintf('%s-%s-%s-%04d', $prefix, $year, $month, $seq);
     }
 }

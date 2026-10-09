@@ -1,108 +1,83 @@
 @extends('layouts.app')
 @section('title', 'Sales Order')
 @section('content')
-<x-ui.page-header />
-<div class="space-y-4">
-    <div class="bg-white border rounded-lg">
-      <div class="p-5 border-b flex justify-between items-center">
-        <div class="flex gap-3">
-          <input type="text" placeholder="Cari nomor SO atau customer..." class="w-72 h-9 pl-3 border rounded-lg text-sm">
-          <select class="h-9 px-3 border rounded-lg text-sm">
-            <option>Status: Semua</option>
-            <option>Dikonfirmasi</option>
-            <option>Parsial</option>
-            <option>Selesai</option>
-            <option>Dibatalkan</option>
-          </select>
-          <select class="h-9 px-3 border rounded-lg text-sm">
-            <option>Customer: Semua</option>
-            <option>Toko Sinar Teknik</option>
-            <option>CV Citra Bangun Mandiri</option>
-            <option>PT Mega Konstruksi</option>
-          </select>
-        </div>
-        <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">5</span> dari <span class="font-medium">31</span> SO</div>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead class="bg-slate-50 border-b text-xs uppercase text-slate-500">
-            <tr>
-              <th class="py-3.5 px-5 text-left w-40">No. SO</th>
-              <th class="py-3.5 px-5 text-left w-28">Tanggal</th>
-              <th class="py-3.5 px-5 text-left">Customer</th>
-              <th class="py-3.5 px-5 text-left w-32">Gudang Asal</th>
-              <th class="py-3.5 px-5 text-right w-32">Total</th>
-              <th class="py-3.5 px-5 text-center w-32">Status</th>
-              <th class="py-3.5 px-5 text-left w-28">Dibuat Oleh</th>
-              <th class="py-3.5 px-5 text-center w-16">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y">
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">SO-2026-10-0090</td>
-              <td class="py-3.5 px-5 text-slate-600">14 Okt 2026</td>
-              <td class="py-3.5 px-5 font-medium">Toko Sinar Teknik</td>
-              <td class="py-3.5 px-5 text-slate-600">Gudang Display</td>
-              <td class="py-3.5 px-5 text-right font-medium">Rp 1.100.000</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs border border-slate-400 text-slate-700">Dikonfirmasi</span></td>
-              <td class="py-3.5 px-5">Rina</td>
-              <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">SO-2026-10-0089</td>
-              <td class="py-3.5 px-5 text-slate-600">14 Okt 2026</td>
-              <td class="py-3.5 px-5 font-medium">CV Citra Bangun Mandiri</td>
-              <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-              <td class="py-3.5 px-5 text-right font-medium">Rp 30.400.000</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs border border-slate-400 text-slate-700">Dikonfirmasi</span></td>
-              <td class="py-3.5 px-5">Rina</td>
-              <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">SO-2026-10-0088</td>
-              <td class="py-3.5 px-5 text-slate-600">12 Okt 2026</td>
-              <td class="py-3.5 px-5 font-medium">PT Mega Konstruksi</td>
-              <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-              <td class="py-3.5 px-5 text-right font-medium">Rp 7.120.000</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Parsial</span></td>
-              <td class="py-3.5 px-5">Rina</td>
-              <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">SO-2026-10-0087</td>
-              <td class="py-3.5 px-5 text-slate-600">11 Okt 2026</td>
-              <td class="py-3.5 px-5 font-medium">Toko Sinar Teknik</td>
-              <td class="py-3.5 px-5 text-slate-600">Gudang Surabaya</td>
-              <td class="py-3.5 px-5 text-right font-medium">Rp 19.800.000</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs border border-slate-400 text-slate-700">Dikonfirmasi</span></td>
-              <td class="py-3.5 px-5">Rina</td>
-              <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-3.5 px-5 font-mono text-xs">SO-2026-10-0074</td>
-              <td class="py-3.5 px-5 text-slate-600">08 Okt 2026</td>
-              <td class="py-3.5 px-5 font-medium">PT Mega Konstruksi</td>
-              <td class="py-3.5 px-5 text-slate-600">Gudang Utama</td>
-              <td class="py-3.5 px-5 text-right font-medium">Rp 15.200.000</td>
-              <td class="py-3.5 px-5 text-center"><span class="px-2 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200">Selesai</span></td>
-              <td class="py-3.5 px-5">Rina</td>
-              <td class="py-3.5 px-5 text-center"><button class="w-8 h-8 text-slate-500 hover:text-primary"><span class="material-symbols-outlined text-lg">visibility</span></button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="p-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-sm text-slate-500">Halaman 1 dari 7</div>
-        <div class="flex items-center gap-1">
-          <button class="h-8 px-3 text-slate-400 cursor-not-allowed text-sm" disabled>Sebelumnya</button>
-          <button class="w-8 h-8 bg-slate-900 text-white text-sm font-medium flex items-center justify-center">1</button>
-          <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">2</button>
-          <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">3</button>
-          <span class="w-8 h-8 flex items-center justify-center text-slate-400">...</span>
-          <button class="w-8 h-8 text-slate-500 hover:bg-slate-50 text-sm">7</button>
-          <button class="h-8 px-3 text-slate-500 hover:bg-slate-50 text-sm">Selanjutnya</button>
-        </div>
+<x-ui.page-header title="Sales Order" subtitle="Kelola pesanan penjualan" />
+
+@if(session('success'))
+  <div class="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-700">{{ session('success') }}</div>
+@endif
+
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+  <div class="p-5 border-b border-slate-200 flex flex-wrap justify-between items-center gap-3">
+    <div class="flex gap-3">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
+        <input type="text" id="search" placeholder="Cari nomor SO atau customer..." class="w-72 h-9 pl-9 pr-3 border border-slate-200 rounded-lg text-sm bg-white placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
       </div>
     </div>
+    <div class="flex items-center gap-3">
+      <div class="text-sm text-slate-500">Menampilkan <span class="font-medium text-slate-900">{{ $items->count() }}</span> dari <span class="font-medium text-slate-900">{{ $total }}</span> sales order</div>
+      @can('sales-orders.create')
+        <button type="button" onclick="openModal('create')" class="shrink-0 inline-flex items-center gap-1.5 h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+          <span class="material-symbols-outlined text-lg">add</span><span>SO Baru</span>
+        </button>
+      @endcan
+    </div>
   </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" id="dataTable">
+      <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500">
+        <tr>
+          <th class="py-3.5 px-5 text-left w-40">No. SO</th>
+          <th class="py-3.5 px-5 text-left w-28">Tanggal</th>
+          <th class="py-3.5 px-5 text-left">Customer</th>
+          <th class="py-3.5 px-5 text-left w-32">Gudang Asal</th>
+          <th class="py-3.5 px-5 text-right w-32">Total</th>
+          <th class="py-3.5 px-5 text-center w-28">Status</th>
+          <th class="py-3.5 px-5 text-left w-28">Dibuat Oleh</th>
+          <th class="py-3.5 px-5 text-center w-14">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        @forelse($items as $item)
+          <tr class="h-[52px] hover:bg-slate-50">
+            <td class="px-5 py-3.5 font-mono text-xs">{{ $item->number }}</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ $item->order_date->format('d M Y') }}</td>
+            <td class="px-5 py-3.5 font-medium">{{ $item->customer->name ?? '-' }}</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ $item->warehouse->name ?? '-' }}</td>
+            <td class="px-5 py-3.5 text-right font-medium">Rp {{ number_format($item->total_amount, 0, ',', '.') }}</td>
+            <td class="px-5 py-3.5 text-center">@include('sales._status', ['status' => $item->status])</td>
+            <td class="px-5 py-3.5 text-slate-600">{{ $item->creator->name ?? '-' }}</td>
+            <td class="px-5 py-3.5 text-center whitespace-nowrap">
+              @can('sales-orders.view')
+                <button onclick="openModal('view', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Lihat"><span class="material-symbols-outlined text-lg">visibility</span></button>
+              @endcan
+              @can('sales-orders.update')
+                <button onclick="openModal('edit', {{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-primary rounded hover:bg-slate-100" title="Ubah"><span class="material-symbols-outlined text-lg">edit</span></button>
+              @endcan
+              @can('sales-orders.delete')
+                <button onclick="confirmDelete({{ $item->id }})" class="w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-red-600 rounded hover:bg-red-50" title="Hapus"><span class="material-symbols-outlined text-lg">delete</span></button>
+              @endcan
+            </td>
+          </tr>
+        @empty
+          <tr class="h-[52px]"><td colspan="8" class="px-5 py-8 text-center text-slate-500">Tidak ada data sales order.</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+
+  @if($items->hasPages())
+    <div class="p-4 border-t border-slate-200">{{ $items->links() }}</div>
+  @endif
+</div>
+
+@push('scripts')
+<script>
+const resource = 'sales-orders';
+const canCreate = {{ auth()->user()->can('sales-orders.create') ? 'true' : 'false' }};
+const canUpdate = {{ auth()->user()->can('sales-orders.update') ? 'true' : 'false' }};
+</script>
+@endpush
 @endsection

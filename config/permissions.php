@@ -20,10 +20,10 @@ return [
             'supplier-payments' => ['label' => 'Pembayaran ke Supplier', 'actions' => ['view', 'create', 'delete', 'reverse']],
         ],
         'Sales' => [
-            'sales-orders' => ['label' => 'Sales Order', 'actions' => ['view', 'create', 'update', 'confirm', 'cancel']],
-            'deliveries' => ['label' => 'Pengiriman', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
-            'invoices' => ['label' => 'Invoice', 'actions' => ['view', 'create', 'update', 'post', 'reverse']],
-            'customer-payments' => ['label' => 'Pembayaran dari Customer', 'actions' => ['view', 'create', 'reverse']],
+            'sales-orders' => ['label' => 'Sales Order', 'actions' => ['view', 'create', 'update', 'delete', 'confirm', 'cancel']],
+            'deliveries' => ['label' => 'Pengiriman', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
+            'invoices' => ['label' => 'Invoice', 'actions' => ['view', 'create', 'update', 'delete', 'post', 'reverse']],
+            'customer-payments' => ['label' => 'Pembayaran dari Customer', 'actions' => ['view', 'create', 'update', 'delete', 'reverse']],
         ],
         'Accounting' => [
             'journals' => ['label' => 'Jurnal Umum', 'actions' => ['view', 'create', 'reverse']],

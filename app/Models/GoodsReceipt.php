@@ -39,4 +39,9 @@ class GoodsReceipt extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function lines()
+    {
+        return $this->hasMany(GoodsReceiptLine::class);
+    }
 }

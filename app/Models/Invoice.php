@@ -15,4 +15,5 @@ class Invoice extends Model
     public function delivery() { return $this->belongsTo(Delivery::class); }
     public function customer() { return $this->belongsTo(Partner::class, 'customer_id'); }
     public function payments() { return $this->hasMany(CustomerPayment::class, 'invoice_id'); }
+    public function lines()    { return $this->hasMany(InvoiceLine::class); }
 }

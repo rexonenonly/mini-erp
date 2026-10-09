@@ -35,4 +35,9 @@ class VendorBill extends Model
     {
         return $this->hasMany(SupplierPayment::class, 'bill_id');
     }
+
+    public function lines()
+    {
+        return $this->hasMany(VendorBillLine::class);
+    }
 }

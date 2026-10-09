@@ -44,5 +44,35 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function showDashboard() { return view('dashboard.index'); }
+    public function showDashboard()
+    {
+        $lowStock = \DB::table('stock')
+            ->join('products', 'stock.product_id', '=', 'products.id')
+            ->join('warehouses', 'stock.warehouse_id', '=', 'warehouses.id')
+            ->whereRaw('(stock.on_hand - stock.reserved) < products.min_stock')
+            ->select('products.name', 'products.sku', 'warehouses.name as warehouse', 
+                     \DB::raw('stock.on_hand - stock.reserved as available'), 
+                     'products.min_stock')
+            ->orderByRaw('(stock.on_hand - stock.reserved) / NULLIF(products.min_stock, 0)')
+            ->limit(10)
+            ->get();
+        
+        $overdueInvoices = \App\Models\Invoice::where('status', '!=', 'paid')
+            ->where('due_date', '<', now())
+            ->selectRaw('COUNT(*) as count, SUM(total_amount - COALESCE(paid_amount, 0)) as total')
+            ->first();
+        
+        $salesMTD = \App\Models\SalesOrder::whereYear('order_date', date('Y'))
+            ->whereMonth('order_date', date('m'))
+            ->selectRaw('COUNT(*) as count, SUM(total_amount) as total')
+            ->first();
+        
+        $salesLastMonth = \App\Models\SalesOrder::whereYear('order_date', date('Y'))
+            ->whereMonth('order_date', date('m') - 1)
+            ->sum('total_amount');
+        
+        $pctChange = $salesLastMonth > 0 ? (($salesMTD->total - $salesLastMonth) / $salesLastMonth * 100) : 0;
+        
+        return view('dashboard.index', compact('lowStock', 'overdueInvoices', 'salesMTD', 'pctChange'));
+    }
 }

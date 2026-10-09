@@ -20,21 +20,23 @@
   <div class="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
     <div>
       <div class="text-xs font-medium text-slate-500 h-5 flex items-center">Penjualan Bulan Ini</div>
-      <div class="text-2xl font-semibold text-slate-900 my-2">Rp 996.800.000</div>
+      <div class="text-2xl font-semibold text-slate-900 my-2">Rp {{ number_format($salesMTD->total ?? 0, 0, ',', '.') }}</div>
     </div>
     <div class="text-xs text-slate-500 flex items-center gap-1.5 pt-1">
-      <span>90 sales order</span>
+      <span>{{ $salesMTD->count ?? 0 }} sales order</span>
+      @if($pctChange != 0)
       <span class="text-slate-300">•</span>
-      <span class="font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 text-xs">+12,4% vs bulan lalu</span>
+      <span class="font-medium {{ $pctChange > 0 ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : 'text-red-700 bg-red-50 border-red-100' }} px-1.5 py-0.5 rounded border text-xs">{{ $pctChange > 0 ? '+' : '' }}{{ number_format($pctChange, 1) }}% vs bulan lalu</span>
+      @endif
     </div>
   </div>
 
   <div class="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
     <div>
       <div class="text-xs font-medium text-slate-500 h-5 flex items-center">Piutang Jatuh Tempo</div>
-      <div class="text-2xl font-semibold text-slate-900 my-2">Rp 118.400.000</div>
+      <div class="text-2xl font-semibold text-slate-900 my-2">Rp {{ number_format($overdueInvoices->total ?? 0, 0, ',', '.') }}</div>
     </div>
-    <div class="text-xs text-slate-500 pt-1">14 invoice</div>
+    <div class="text-xs text-slate-500 pt-1">{{ $overdueInvoices->count ?? 0 }} invoice</div>
   </div>
 
   <div class="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
@@ -73,66 +75,22 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-sm">
+          @forelse($lowStock as $item)
           <tr class="h-13 hover:bg-slate-50/70">
             <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">MCB 1P 16A Schneider</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-ELC-003</div>
+              <div class="font-medium text-slate-900">{{ $item->name }}</div>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">{{ $item->sku }}</div>
             </td>
-            <td class="py-2.5 px-3 text-slate-600">Gudang Display</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">2 Pcs</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">10</td>
+            <td class="py-2.5 px-3 text-slate-600">{{ $item->warehouse }}</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-900">{{ $item->available }}</td>
+            <td class="py-2.5 px-3 text-right text-slate-500">{{ $item->min_stock }}</td>
             <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700 border border-red-200">Kritis</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $item->available <= $item->min_stock / 2 ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200' }} border">{{ $item->available <= $item->min_stock / 2 ? 'Kritis' : 'Menipis' }}</span>
             </td>
           </tr>
-          <tr class="h-13 hover:bg-slate-50/70">
-            <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Sakelar Tukar Schneider</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-ELC-007</div>
-            </td>
-            <td class="py-2.5 px-3 text-slate-600">Gudang Display</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">6 Pcs</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">8</td>
-            <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
-            </td>
-          </tr>
-          <tr class="h-13 hover:bg-slate-50/70">
-            <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Bearing Ball Industrial 6205</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-MEC-014</div>
-            </td>
-            <td class="py-2.5 px-3 text-slate-600">Gudang Utama</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">8 Pcs</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">10</td>
-            <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
-            </td>
-          </tr>
-          <tr class="h-13 hover:bg-slate-50/70">
-            <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Oli Pelumas Industri ISO-VG46</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-LUB-082</div>
-            </td>
-            <td class="py-2.5 px-3 text-slate-600">Gudang Surabaya</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">9 Pail</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">10</td>
-            <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
-            </td>
-          </tr>
-          <tr class="h-13 hover:bg-slate-50/70">
-            <td class="py-2.5 px-3">
-              <div class="font-medium text-slate-900">Konektor Pneumatik 1/4 inch</div>
-              <div class="font-mono text-xs text-slate-500 mt-0.5">SKU-PNE-301</div>
-            </td>
-            <td class="py-2.5 px-3 text-slate-600">Gudang Utama</td>
-            <td class="py-2.5 px-3 text-right font-medium text-slate-900">11 Pcs</td>
-            <td class="py-2.5 px-3 text-right text-slate-500">15</td>
-            <td class="py-2.5 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Menipis</span>
-            </td>
-          </tr>
+          @empty
+          <tr><td colspan="5" class="py-8 text-center text-sm text-slate-500">Tidak ada stok menipis</td></tr>
+          @endforelse
         </tbody>
       </table>
     </div>

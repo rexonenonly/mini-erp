@@ -611,6 +611,24 @@ function loadData(id, mode) {
     const form = document.getElementById('dataForm');
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
+    
+    // ponytail: collect lines from DOM table if exists
+    const linesBody = document.getElementById('linesBody');
+    if (linesBody) {
+      data.lines = Array.from(linesBody.querySelectorAll('tr')).map(tr => {
+        const cells = tr.querySelectorAll('td');
+        return {
+          product_id: cells[0]?.querySelector('select')?.value || cells[0]?.dataset.productId,
+          qty: parseFloat(cells[1]?.querySelector('input')?.value || cells[1]?.textContent) || 0,
+          unit: cells[2]?.querySelector('input')?.value || cells[2]?.textContent || '',
+          unit_price: parseFloat(cells[3]?.querySelector('input')?.value || cells[3]?.textContent) || 0,
+          unit_cost: parseFloat(cells[3]?.querySelector('input')?.value || cells[3]?.textContent) || 0,
+          description: cells[0]?.querySelector('input[name*="description"]')?.value || '',
+          notes: cells[5]?.querySelector('input')?.value || ''
+        };
+      });
+    }
+    
     const url = id ? `${resourceBase()}/${id}` : resourceBase();
     const method = id ? 'PUT' : 'POST';
     
@@ -629,6 +647,58 @@ function loadData(id, mode) {
       }
     })
     .catch(() => alert('Terjadi kesalahan'));
+  }
+  
+  function addLine(type) {
+    const tbody = document.getElementById('linesBody');
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-slate-100';
+    if (type === 'product') {
+      tr.innerHTML = \`
+        <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required>
+          <option value="">Pilih Produk</option>
+          @foreach(\\App\\Models\\Product::where('is_active', true)->get() as $p)
+          <option value="{{ $p->id }}">{{ $p->sku }} - {{ $p->name }}</option>
+          @endforeach
+        </select></td>
+        <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="1" onchange="calcSubtotal(this)" required></td>
+        <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="pcs" required></td>
+        <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="0" onchange="calcSubtotal(this)" required></td>
+        <td class="py-2 px-2 text-right text-xs font-medium">0.00</td>
+        <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+      \`;
+    } else {
+      tr.innerHTML = \`
+        <td class="py-2 pr-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" required></td>
+        <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="1" onchange="calcSubtotal(this)"></td>
+        <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value=""></td>
+        <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="0" onchange="calcSubtotal(this)" required></td>
+        <td class="py-2 px-2 text-right text-xs font-medium">0.00</td>
+        <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
+      \`;
+    }
+    tbody.appendChild(tr);
+  }
+  
+  function calcSubtotal(input) {
+    const tr = input.closest('tr');
+    const cells = tr.querySelectorAll('td');
+    const qty = parseFloat(cells[1]?.querySelector('input')?.value) || 0;
+    const price = parseFloat(cells[3]?.querySelector('input')?.value) || 0;
+    const subtotal = qty * price;
+    cells[4].textContent = subtotal.toFixed(2);
+    updateTotal();
+  }
+  
+  function updateTotal() {
+    const tbody = document.getElementById('linesBody');
+    if (!tbody) return;
+    const total = Array.from(tbody.querySelectorAll('tr')).reduce((sum, tr) => {
+      const subtotal = parseFloat(tr.querySelector('td:nth-child(5)')?.textContent) || 0;
+      return sum + subtotal;
+    }, 0);
+    const totalInput = document.querySelector('input[name="total_amount"], input[name="total_value"]');
+    if (totalInput) totalInput.value = total.toFixed(2);
   }
   </script>
 

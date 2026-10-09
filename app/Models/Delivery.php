@@ -16,4 +16,5 @@ class Delivery extends Model
     public function customer()   { return $this->belongsTo(Partner::class, 'customer_id'); }
     public function warehouse()  { return $this->belongsTo(Warehouse::class); }
     public function creator()    { return $this->belongsTo(User::class, 'created_by'); }
+    public function lines()      { return $this->hasMany(DeliveryLine::class); }
 }

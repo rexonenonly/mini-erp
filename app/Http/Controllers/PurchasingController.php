@@ -52,7 +52,20 @@ class PurchasingController extends Controller
 
         $validated = $request->validate($this->rules($resource));
         $validated['created_by'] = $request->user()->id;
-        $item = $model::create($validated);
+        
+        \DB::transaction(function() use ($model, $validated, $request, &$item) {
+            $item = $model::create($validated);
+            
+            // Save lines if resource supports it
+            if ($request->has('lines') && in_array($resource, ['purchase-orders', 'goods-receipts', 'vendor-bills'])) {
+                foreach ($request->lines as $line) {
+                    $line['subtotal'] = ($line['qty'] ?? 1) * $line['unit_price'];
+                    $item->lines()->create($line);
+                }
+                // Recalc header total from lines
+                $item->update(['total_amount' => $item->lines()->sum('subtotal')]);
+            }
+        });
 
         return response()->json([
             'success' => true,
@@ -79,7 +92,20 @@ class PurchasingController extends Controller
         $item = $model::with($this->with($resource))->findOrFail($id);
 
         $validated = $request->validate($this->rules($resource, $id));
-        $item->update($validated);
+        
+        \DB::transaction(function() use ($item, $validated, $request, $resource) {
+            $item->update($validated);
+            
+            // Update lines if resource supports it
+            if ($request->has('lines') && in_array($resource, ['purchase-orders', 'goods-receipts', 'vendor-bills'])) {
+                $item->lines()->delete();
+                foreach ($request->lines as $line) {
+                    $line['subtotal'] = ($line['qty'] ?? 1) * $line['unit_price'];
+                    $item->lines()->create($line);
+                }
+                $item->update(['total_amount' => $item->lines()->sum('subtotal')]);
+            }
+        });
 
         return response()->json([
             'success' => true,
@@ -106,9 +132,9 @@ class PurchasingController extends Controller
     private function with(string $resource): array
     {
         return match ($resource) {
-            'purchase-orders' => ['supplier:id,code,name', 'warehouse:id,name', 'creator:id,name'],
-            'goods-receipts' => ['purchaseOrder:id,number', 'supplier:id,code,name', 'warehouse:id,name', 'creator:id,name'],
-            'vendor-bills' => ['receipt:id,number', 'supplier:id,code,name'],
+            'purchase-orders' => ['supplier:id,code,name', 'warehouse:id,name', 'creator:id,name', 'lines.product:id,sku,name'],
+            'goods-receipts' => ['purchaseOrder:id,number', 'supplier:id,code,name', 'warehouse:id,name', 'creator:id,name', 'lines.product:id,sku,name'],
+            'vendor-bills' => ['receipt:id,number', 'supplier:id,code,name', 'lines.product:id,sku,name'],
             'supplier-payments' => ['bill:id,number', 'supplier:id,code,name', 'creator:id,name'],
             default => [],
         };
@@ -117,7 +143,7 @@ class PurchasingController extends Controller
     private function rules(string $resource, ?int $id = null): array
     {
         $unique = $id ? ",{$id}" : '';
-        return match ($resource) {
+        $baseRules = match ($resource) {
             'purchase-orders' => [
                 'number' => "required|string|max:40|unique:purchase_orders,number{$unique}",
                 'order_date' => 'required|date',
@@ -126,6 +152,12 @@ class PurchasingController extends Controller
                 'total_amount' => 'required|numeric|min:0',
                 'status' => 'required|in:draft,confirmed,partial,completed,cancelled',
                 'notes' => 'nullable|string',
+                'lines' => 'required|array|min:1',
+                'lines.*.product_id' => 'required|exists:products,id',
+                'lines.*.qty' => 'required|numeric|min:0.001',
+                'lines.*.unit' => 'required|string|max:20',
+                'lines.*.unit_price' => 'required|numeric|min:0',
+                'lines.*.notes' => 'nullable|string',
             ],
             'goods-receipts' => [
                 'number' => "required|string|max:40|unique:goods_receipts,number{$unique}",
@@ -136,6 +168,12 @@ class PurchasingController extends Controller
                 'total_value' => 'required|numeric|min:0',
                 'status' => 'required|in:draft,posted,reversed',
                 'notes' => 'nullable|string',
+                'lines' => 'required|array|min:1',
+                'lines.*.product_id' => 'required|exists:products,id',
+                'lines.*.qty' => 'required|numeric|min:0.001',
+                'lines.*.unit' => 'required|string|max:20',
+                'lines.*.unit_cost' => 'required|numeric|min:0',
+                'lines.*.notes' => 'nullable|string',
             ],
             'vendor-bills' => [
                 'number' => "required|string|max:40|unique:vendor_bills,number{$unique}",
@@ -147,6 +185,10 @@ class PurchasingController extends Controller
                 'paid_amount' => 'nullable|numeric|min:0',
                 'status' => 'required|in:open,partial,paid,reversed',
                 'notes' => 'nullable|string',
+                'lines' => 'required|array|min:1',
+                'lines.*.product_id' => 'nullable|exists:products,id',
+                'lines.*.description' => 'required|string',
+                'lines.*.amount' => 'required|numeric|min:0',
             ],
             'supplier-payments' => [
                 'number' => "required|string|max:40|unique:supplier_payments,number{$unique}",
@@ -160,5 +202,6 @@ class PurchasingController extends Controller
             ],
             default => [],
         };
+        return $baseRules;
     }
 }

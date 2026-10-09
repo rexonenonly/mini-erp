@@ -49,7 +49,20 @@ class SalesController extends Controller
         if (in_array('created_by', (new ($cfg['model']))->getFillable())) {
             $validated['created_by'] = $request->user()->id;
         }
-        $item = $cfg['model']::create($validated);
+        
+        \DB::transaction(function() use ($cfg, $validated, $request, $resource, &$item) {
+            $item = $cfg['model']::create($validated);
+            
+            if ($request->has('lines') && in_array($resource, ['sales-orders', 'deliveries', 'invoices'])) {
+                foreach ($request->lines as $line) {
+                    $line['subtotal'] = ($line['qty'] ?? 1) * ($line['unit_price'] ?? $line['unit_cost'] ?? 0);
+                    $item->lines()->create($line);
+                }
+                $totalField = $resource === 'deliveries' ? 'total_value' : 'total_amount';
+                $item->update([$totalField => $item->lines()->sum('subtotal')]);
+            }
+        });
+        
         return response()->json(['success' => true, 'message' => $this->msg($cfg['singular'], 'ditambahkan'), 'item' => $item]);
     }
 
@@ -67,7 +80,21 @@ class SalesController extends Controller
         abort_unless(isset($this->config[$resource]), 404);
         $cfg = $this->config[$resource];
         $item = $cfg['model']::findOrFail($id);
-        $item->update($request->validate($this->rules($resource, $id)));
+        
+        \DB::transaction(function() use ($item, $request, $resource) {
+            $item->update($request->validate($this->rules($resource, $item->id)));
+            
+            if ($request->has('lines') && in_array($resource, ['sales-orders', 'deliveries', 'invoices'])) {
+                $item->lines()->delete();
+                foreach ($request->lines as $line) {
+                    $line['subtotal'] = ($line['qty'] ?? 1) * ($line['unit_price'] ?? $line['unit_cost'] ?? 0);
+                    $item->lines()->create($line);
+                }
+                $totalField = $resource === 'deliveries' ? 'total_value' : 'total_amount';
+                $item->update([$totalField => $item->lines()->sum('subtotal')]);
+            }
+        });
+        
         return response()->json(['success' => true, 'message' => $this->msg($cfg['singular'], 'diperbarui'), 'item' => $item]);
     }
 
@@ -83,9 +110,9 @@ class SalesController extends Controller
     private function with(string $resource): array
     {
         return match ($resource) {
-            'sales-orders'      => ['customer:id,code,name', 'warehouse:id,name', 'creator:id,name'],
-            'deliveries'        => ['salesOrder:id,number', 'customer:id,code,name', 'warehouse:id,name', 'creator:id,name'],
-            'invoices'          => ['delivery:id,number', 'customer:id,code,name'],
+            'sales-orders'      => ['customer:id,code,name', 'warehouse:id,name', 'creator:id,name', 'lines.product:id,sku,name'],
+            'deliveries'        => ['salesOrder:id,number', 'customer:id,code,name', 'warehouse:id,name', 'creator:id,name', 'lines.product:id,sku,name'],
+            'invoices'          => ['delivery:id,number', 'customer:id,code,name', 'lines.product:id,sku,name'],
             'customer-payments' => ['invoice:id,number', 'customer:id,code,name', 'creator:id,name'],
             default             => [],
         };
@@ -103,6 +130,12 @@ class SalesController extends Controller
                 'total_amount' => 'required|numeric|min:0',
                 'status'       => 'required|in:draft,confirmed,partial,completed,cancelled',
                 'notes'        => 'nullable|string',
+                'lines'        => 'required|array|min:1',
+                'lines.*.product_id'  => 'required|exists:products,id',
+                'lines.*.qty'         => 'required|numeric|min:0.001',
+                'lines.*.unit'        => 'required|string|max:20',
+                'lines.*.unit_price'  => 'required|numeric|min:0',
+                'lines.*.notes'       => 'nullable|string',
             ],
             'deliveries' => [
                 'number'          => "required|string|max:40|unique:deliveries,number{$u}",
@@ -113,6 +146,12 @@ class SalesController extends Controller
                 'total_value'     => 'required|numeric|min:0',
                 'status'          => 'required|in:draft,posted,reversed',
                 'notes'           => 'nullable|string',
+                'lines'           => 'required|array|min:1',
+                'lines.*.product_id' => 'required|exists:products,id',
+                'lines.*.qty'        => 'required|numeric|min:0.001',
+                'lines.*.unit'       => 'required|string|max:20',
+                'lines.*.unit_cost'  => 'required|numeric|min:0',
+                'lines.*.notes'      => 'nullable|string',
             ],
             'invoices' => [
                 'number'       => "required|string|max:40|unique:invoices,number{$u}",
@@ -124,6 +163,11 @@ class SalesController extends Controller
                 'paid_amount'  => 'nullable|numeric|min:0',
                 'status'       => 'required|in:open,partial,paid,overdue,reversed',
                 'notes'        => 'nullable|string',
+                'lines'        => 'required|array|min:1',
+                'lines.*.product_id'  => 'nullable|exists:products,id',
+                'lines.*.description' => 'required|string',
+                'lines.*.qty'         => 'required|numeric|min:0.001',
+                'lines.*.unit_price'  => 'required|numeric|min:0',
             ],
             'customer-payments' => [
                 'number'       => "required|string|max:40|unique:customer_payments,number{$u}",

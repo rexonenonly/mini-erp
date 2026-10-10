@@ -64,7 +64,11 @@ class PurchasingController extends Controller
             // Save lines if resource supports it
             if ($request->has('lines') && in_array($resource, ['purchase-orders', 'goods-receipts', 'vendor-bills'])) {
                 foreach ($request->lines as $line) {
-                    $line['subtotal'] = ($line['qty'] ?? 1) * $line['unit_price'];
+                    if ($resource === 'vendor-bills') {
+                        $line['subtotal'] = $line['amount'] ?? 0;
+                    } else {
+                        $line['subtotal'] = ($line['qty'] ?? 1) * ($line['unit_price'] ?? $line['unit_cost'] ?? 0);
+                    }
                     $item->lines()->create($line);
                 }
                 // Recalc header total from lines

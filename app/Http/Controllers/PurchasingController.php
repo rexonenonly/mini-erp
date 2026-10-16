@@ -67,7 +67,17 @@ class PurchasingController extends Controller
                     if ($resource === 'vendor-bills') {
                         $line['subtotal'] = $line['amount'] ?? 0;
                     } else {
-                        $line['subtotal'] = ($line['qty'] ?? 1) * ($line['unit_price'] ?? $line['unit_cost'] ?? 0);
+                        $line['subtotal'] = ($line['qty_ordered'] ?? $line['qty'] ?? 1) * ($line['unit_price'] ?? $line['unit_cost'] ?? 0);
+                        // Map qty → qty_ordered for PO lines
+                        if ($resource === 'purchase-orders' && isset($line['qty']) && !isset($line['qty_ordered'])) {
+                            $line['qty_ordered'] = $line['qty'];
+                            unset($line['qty']);
+                        }
+                        // Map qty → qty_received for GR lines
+                        if ($resource === 'goods-receipts' && isset($line['qty']) && !isset($line['qty_received'])) {
+                            $line['qty_received'] = $line['qty'];
+                            unset($line['qty']);
+                        }
                     }
                     $item->lines()->create($line);
                 }
@@ -163,7 +173,8 @@ class PurchasingController extends Controller
                 'notes' => 'nullable|string',
                 'lines' => 'required|array|min:1',
                 'lines.*.product_id' => 'required|exists:products,id',
-                'lines.*.qty' => 'required|numeric|min:0.001',
+                'lines.*.qty_ordered' => 'sometimes|required|numeric|min:0.001',
+                'lines.*.qty' => 'sometimes|required|numeric|min:0.001',
                 'lines.*.unit' => 'required|string|max:20',
                 'lines.*.unit_price' => 'required|numeric|min:0',
                 'lines.*.notes' => 'nullable|string',

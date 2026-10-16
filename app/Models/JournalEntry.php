@@ -3,16 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JournalEntry extends Model
 {
-    use SoftDeletes;
+    public $timestamps = false;
 
-    protected $fillable = ['number', 'entry_date', 'source_type', 'source_id', 'description', 'status', 'created_by', 'posted_at'];
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = null;
 
-    protected $casts = ['entry_date' => 'date', 'posted_at' => 'datetime'];
+    protected $fillable = [
+        'number', 'entry_date', 'fiscal_period_id', 'description',
+        'source_type', 'source_id', 'kind', 'reverses_entry_id',
+        'status', 'total', 'created_by', 'created_at',
+    ];
 
-    public function lines() { return $this->hasMany(JournalLine::class); }
-    public function creator() { return $this->belongsTo(User::class, 'created_by'); }
+    protected $casts = [
+        'entry_date' => 'date',
+        'total'      => 'decimal:2',
+        'created_at' => 'datetime',
+    ];
+
+    public function lines()
+    {
+        return $this->hasMany(JournalLine::class);
+    }
+
+    public function fiscalPeriod()
+    {
+        return $this->belongsTo(FiscalPeriod::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function reversedEntry()
+    {
+        return $this->belongsTo(JournalEntry::class, 'reverses_entry_id');
+    }
 }

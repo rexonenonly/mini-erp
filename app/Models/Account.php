@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    protected $fillable = ['code', 'name', 'type', 'balance', 'is_active'];
-    protected $casts = ['is_active' => 'boolean', 'balance' => 'decimal:2'];
+    protected $fillable = ['code', 'name', 'type', 'normal_balance', 'system_key', 'is_active'];
+    protected $casts = ['is_active' => 'boolean'];
 }

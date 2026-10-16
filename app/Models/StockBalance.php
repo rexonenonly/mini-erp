@@ -6,12 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class StockBalance extends Model
 {
-    protected $fillable = ['product_id', 'warehouse_id', 'on_hand', 'reserved', 'unit_cost'];
+    protected $fillable = [
+        'product_id', 'warehouse_id',
+        'on_hand', 'reserved', 'unit_cost',   // legacy columns kept for compatibility
+        'qty_reserved', 'total_value', 'avg_cost',
+    ];
 
     protected $casts = [
-        'on_hand' => 'decimal:3',
-        'reserved' => 'decimal:3',
-        'unit_cost' => 'decimal:2',
+        'on_hand'      => 'decimal:4',
+        'reserved'     => 'decimal:4',
+        'unit_cost'    => 'decimal:4',
+        'qty_reserved' => 'decimal:4',
+        'total_value'  => 'decimal:2',
+        'avg_cost'     => 'decimal:4',
     ];
 
     public function product()
@@ -24,9 +31,10 @@ class StockBalance extends Model
         return $this->belongsTo(Warehouse::class);
     }
 
-    public function getAvailableAttribute()
+    /** Available = on_hand - qty_reserved (exact bcmath) */
+    public function getAvailableAttribute(): string
     {
-        return round((float) $this->on_hand - (float) $this->reserved, 3);
+        return bcsub((string) $this->on_hand, (string) $this->qty_reserved, 4);
     }
 
     public function getValueAttribute()

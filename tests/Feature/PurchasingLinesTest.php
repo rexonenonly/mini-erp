@@ -37,15 +37,15 @@ class PurchasingLinesTest extends TestCase
             'status' => 'draft',
             'total_amount' => 225000,
             'lines' => [
-                ['product_id' => $product->id, 'qty' => 10, 'unit' => 'pcs', 'unit_price' => 15000],
-                ['product_id' => $product->id, 'qty' => 5, 'unit' => 'pcs', 'unit_price' => 15000],
+                ['product_id' => $product->id, 'qty_ordered' => 10, 'unit' => 'pcs', 'unit_price' => 15000],
+                ['product_id' => $product->id, 'qty_ordered' => 5, 'unit' => 'pcs', 'unit_price' => 15000],
             ],
         ]);
 
         $response->assertStatus(200);
         $this->assertDatabaseCount('purchase_orders', 1);
         $this->assertDatabaseCount('purchase_order_lines', 2);
-        $this->assertDatabaseHas('purchase_order_lines', ['qty' => 10, 'unit_price' => 15000]);
-        $this->assertDatabaseHas('purchase_order_lines', ['qty' => 5, 'unit_price' => 15000]);
+        $this->assertDatabaseHas('purchase_order_lines', ['qty_ordered' => 10, 'unit_price' => 15000]);
+        $this->assertDatabaseHas('purchase_order_lines', ['qty_ordered' => 5, 'unit_price' => 15000]);
     }
 }

@@ -11,12 +11,15 @@ class SupplierPayment extends Model
 
     protected $fillable = [
         'number', 'payment_date', 'bill_id', 'supplier_id',
-        'amount', 'method', 'status', 'notes', 'created_by',
+        'amount', 'method', 'status', 'notes', 'reference', 'created_by',
+        'posted_at', 'posted_by', 'reversed_by', 'reversed_at',
     ];
 
     protected $casts = [
         'payment_date' => 'date',
-        'amount' => 'decimal:2',
+        'amount'       => 'decimal:2',
+        'posted_at'    => 'datetime',
+        'reversed_at'  => 'datetime',
     ];
 
     public function bill()

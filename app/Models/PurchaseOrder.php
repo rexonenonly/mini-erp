@@ -12,13 +12,15 @@ class PurchaseOrder extends Model
 
     protected $fillable = [
         'number', 'order_date', 'supplier_id', 'warehouse_id',
-        'total_amount', 'status', 'notes', 'created_by', 'confirmed_at',
+        'total_amount', 'status', 'notes', 'created_by',
+        'confirmed_at', 'confirmed_by', 'cancelled_by', 'cancelled_at',
     ];
 
     protected $casts = [
-        'order_date' => 'date',
+        'order_date'   => 'date',
         'total_amount' => 'decimal:2',
         'confirmed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
 
     public function supplier()

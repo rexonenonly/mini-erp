@@ -11,13 +11,15 @@ class GoodsReceipt extends Model
 
     protected $fillable = [
         'number', 'receipt_date', 'purchase_order_id', 'supplier_id',
-        'warehouse_id', 'total_value', 'status', 'notes', 'created_by', 'posted_at',
+        'warehouse_id', 'supplier_ref', 'total_value', 'status', 'notes', 'created_by',
+        'posted_at', 'posted_by', 'reversed_by', 'reversed_at',
     ];
 
     protected $casts = [
         'receipt_date' => 'date',
-        'total_value' => 'decimal:2',
-        'posted_at' => 'datetime',
+        'total_value'  => 'decimal:2',
+        'posted_at'    => 'datetime',
+        'reversed_at'  => 'datetime',
     ];
 
     public function purchaseOrder()

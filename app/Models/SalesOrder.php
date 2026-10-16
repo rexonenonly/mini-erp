@@ -9,8 +9,18 @@ class SalesOrder extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['number', 'order_date', 'customer_id', 'warehouse_id', 'total_amount', 'status', 'notes', 'created_by', 'confirmed_at'];
-    protected $casts = ['order_date' => 'date', 'total_amount' => 'decimal:2', 'confirmed_at' => 'datetime'];
+    protected $fillable = [
+        'number', 'order_date', 'customer_id', 'warehouse_id',
+        'total_amount', 'status', 'notes', 'created_by',
+        'confirmed_at', 'confirmed_by', 'cancelled_by', 'cancelled_at',
+    ];
+
+    protected $casts = [
+        'order_date'   => 'date',
+        'total_amount' => 'decimal:2',
+        'confirmed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
+    ];
 
     public function customer()  { return $this->belongsTo(Partner::class, 'customer_id'); }
     public function warehouse() { return $this->belongsTo(Warehouse::class); }

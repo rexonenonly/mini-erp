@@ -9,8 +9,19 @@ class Delivery extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['number', 'delivery_date', 'sales_order_id', 'customer_id', 'warehouse_id', 'total_value', 'status', 'notes', 'created_by', 'posted_at'];
-    protected $casts = ['delivery_date' => 'date', 'total_value' => 'decimal:2', 'posted_at' => 'datetime'];
+    protected $fillable = [
+        'number', 'delivery_date', 'sales_order_id', 'customer_id',
+        'warehouse_id', 'total_value', 'total_cost', 'status', 'notes', 'created_by',
+        'posted_at', 'posted_by', 'reversed_by', 'reversed_at',
+    ];
+
+    protected $casts = [
+        'delivery_date' => 'date',
+        'total_value'   => 'decimal:2',
+        'total_cost'    => 'decimal:2',
+        'posted_at'     => 'datetime',
+        'reversed_at'   => 'datetime',
+    ];
 
     public function salesOrder() { return $this->belongsTo(SalesOrder::class, 'sales_order_id'); }
     public function customer()   { return $this->belongsTo(Partner::class, 'customer_id'); }

@@ -9,8 +9,20 @@ class Invoice extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['number', 'invoice_date', 'due_date', 'delivery_id', 'customer_id', 'total_amount', 'paid_amount', 'status', 'notes'];
-    protected $casts = ['invoice_date' => 'date', 'due_date' => 'date', 'total_amount' => 'decimal:2', 'paid_amount' => 'decimal:2'];
+    protected $fillable = [
+        'number', 'invoice_date', 'due_date', 'delivery_id', 'sales_order_id', 'customer_id',
+        'total_amount', 'paid_amount', 'status', 'notes', 'created_by',
+        'posted_at', 'posted_by', 'reversed_by', 'reversed_at',
+    ];
+
+    protected $casts = [
+        'invoice_date'  => 'date',
+        'due_date'      => 'date',
+        'total_amount'  => 'decimal:2',
+        'paid_amount'   => 'decimal:2',
+        'posted_at'     => 'datetime',
+        'reversed_at'   => 'datetime',
+    ];
 
     public function delivery() { return $this->belongsTo(Delivery::class); }
     public function customer() { return $this->belongsTo(Partner::class, 'customer_id'); }

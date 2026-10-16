@@ -8,7 +8,7 @@ class DeliveryLine extends Model
 {
     protected $fillable = [
         'delivery_id', 'sales_order_item_id', 'product_id',
-        'qty', 'unit_cost', 'line_cost', 'subtotal', 'notes',
+        'qty', 'unit', 'unit_cost', 'line_cost', 'subtotal', 'notes',
     ];
     protected $casts = [
         'qty'      => 'decimal:4',

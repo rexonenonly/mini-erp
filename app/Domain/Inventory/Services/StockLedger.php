@@ -3,9 +3,9 @@
 namespace App\Domain\Inventory\Services;
 
 use App\Domain\Core\Contracts\StockLedger as StockLedgerContract;
-use App\Domain\Inventory\DTO\StockAdjustment;
-use App\Domain\Inventory\DTO\StockIn;
-use App\Domain\Inventory\DTO\StockOut;
+use App\Domain\Core\DTO\StockAdjustment;
+use App\Domain\Core\DTO\StockIn;
+use App\Domain\Core\DTO\StockOut;
 use App\Models\StockBalance;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;

@@ -4,7 +4,7 @@ namespace App\Domain\Purchasing\Actions;
 
 use App\Domain\Core\Contracts\PeriodGuard;
 use App\Domain\Core\Contracts\StockLedger;
-use App\Domain\Inventory\DTO\StockAdjustment;
+use App\Domain\Core\DTO\StockAdjustment;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
 use App\Domain\Accounting\Services\JournalPoster;

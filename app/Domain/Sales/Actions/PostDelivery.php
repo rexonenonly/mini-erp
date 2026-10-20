@@ -5,7 +5,7 @@ namespace App\Domain\Sales\Actions;
 use App\Domain\Core\Contracts\PeriodGuard;
 use App\Domain\Core\Contracts\StockLedger;
 use App\Domain\Core\Events\DeliveryPosted;
-use App\Domain\Inventory\DTO\StockOut;
+use App\Domain\Core\DTO\StockOut;
 use App\Models\Delivery;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderLine;

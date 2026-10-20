@@ -2,9 +2,9 @@
 
 namespace App\Domain\Core\Contracts;
 
-use App\Domain\Inventory\DTO\StockIn;
-use App\Domain\Inventory\DTO\StockOut;
-use App\Domain\Inventory\DTO\StockAdjustment;
+use App\Domain\Core\DTO\StockIn;
+use App\Domain\Core\DTO\StockOut;
+use App\Domain\Core\DTO\StockAdjustment;
 
 interface StockLedger
 {

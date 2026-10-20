@@ -5,7 +5,7 @@ namespace App\Domain\Purchasing\Actions;
 use App\Domain\Core\Contracts\PeriodGuard;
 use App\Domain\Core\Contracts\StockLedger;
 use App\Domain\Core\Events\GoodsReceiptPosted;
-use App\Domain\Inventory\DTO\StockIn;
+use App\Domain\Core\DTO\StockIn;
 use App\Models\GoodsReceipt;
 use App\Models\PurchaseOrder;
 use Carbon\Carbon;

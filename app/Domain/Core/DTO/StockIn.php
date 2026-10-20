@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Inventory\DTO;
+namespace App\Domain\Core\DTO;
 
 use DateTimeInterface;
 

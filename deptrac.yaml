@@ -1,0 +1,60 @@
+parameters:
+  paths:
+    - ./app/Domain
+
+  layers:
+    - name: Core
+      collectors:
+        - type: directory
+          regex: app/Domain/Core/.*
+
+    - name: MasterData
+      collectors:
+        - type: directory
+          regex: app/Domain/MasterData/.*
+
+    - name: Inventory
+      collectors:
+        - type: directory
+          regex: app/Domain/Inventory/.*
+
+    - name: Purchasing
+      collectors:
+        - type: directory
+          regex: app/Domain/Purchasing/.*
+
+    - name: Sales
+      collectors:
+        - type: directory
+          regex: app/Domain/Sales/.*
+
+    - name: Accounting
+      collectors:
+        - type: directory
+          regex: app/Domain/Accounting/.*
+
+    - name: Reporting
+      collectors:
+        - type: directory
+          regex: app/Domain/Reporting/.*
+
+  ruleset:
+    Core: ~
+    MasterData:
+      - Core
+    Inventory:
+      - Core
+      - MasterData
+    Purchasing:
+      - Core
+      - MasterData
+      - Inventory
+      - Accounting
+    Sales:
+      - Core
+      - MasterData
+      - Inventory
+    Accounting:
+      - Core
+      - MasterData
+    Reporting: ~

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Domain\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Delivery extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $fillable = [
         'number', 'delivery_date', 'sales_order_id', 'customer_id',

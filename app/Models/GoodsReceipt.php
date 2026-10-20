@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Domain\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GoodsReceipt extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $fillable = [
         'number', 'receipt_date', 'purchase_order_id', 'supplier_id',

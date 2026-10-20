@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Domain\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierPayment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $fillable = [
         'number', 'payment_date', 'bill_id', 'supplier_id',

@@ -2,14 +2,36 @@
 
 namespace App\Domain\Core\Traits;
 
+use App\Models\AuditLog;
+
 trait Auditable
 {
-    // ponytail: append-only audit log via observer, implement in Phase 6
-    
     public static function bootAuditable(): void
     {
-        // static::created(fn($m) => AuditLog::record('created', $m));
-        // static::updated(fn($m) => AuditLog::record('updated', $m));
-        // static::deleted(fn($m) => AuditLog::record('deleted', $m));
+        static::created(function ($model) {
+            AuditLog::record('created', $model, [], $model->getAttributes());
+        });
+
+        static::updated(function ($model) {
+            $changed = $model->getChanges();
+            unset($changed['updated_at']);
+            if (empty($changed)) return;
+
+            AuditLog::record(
+                'updated', $model,
+                array_intersect_key($model->getOriginal(), $changed),
+                $changed,
+            );
+        });
+
+        static::deleted(function ($model) {
+            AuditLog::record('deleted', $model, $model->getAttributes());
+        });
+    }
+
+    // Call from Action classes for business events (confirmed, posted, reversed, cancelled)
+    public function auditEvent(string $event, array $context = []): void
+    {
+        AuditLog::record($event, $this, [], $context);
     }
 }

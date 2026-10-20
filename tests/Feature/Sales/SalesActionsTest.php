@@ -203,3 +203,19 @@ test('PostCustomerPayment: overpayment rejected', function () {
     expect(fn () => app(PostCustomerPayment::class)->execute($payment, $user->id))
         ->toThrow(RuntimeException::class, 'melebihi');
 });
+
+test('CloseSalesOrder: releases unreserved stock', function () {
+    extract(salesSetup());
+    $so = SalesOrder::create(['number' => 'SO-CLOSE', 'customer_id' => $customer->id, 'warehouse_id' => $warehouse->id, 'order_date' => now(), 'total_amount' => '15000', 'status' => 'draft', 'created_by' => $user->id]);
+    $so->lines()->create(['product_id' => $product->id, 'qty_ordered' => '10.000', 'qty_reserved' => '0', 'qty_delivered' => '0', 'unit' => 'pcs', 'unit_price' => '1500.00', 'subtotal' => '15000.00']);
+    
+    app(ConfirmSalesOrder::class)->execute($so->fresh(), $user->id);
+    
+    $reservedBefore = \App\Models\StockBalance::where('product_id', $product->id)->where('warehouse_id', $warehouse->id)->value('qty_reserved');
+    $so = app(\App\Domain\Sales\Actions\CloseSalesOrder::class)->execute($so->fresh(), $user->id);
+    
+    expect($so->status)->toBe('cancelled')
+        ->and($so->cancelled_by)->toBe($user->id);
+    $reservedAfter = \App\Models\StockBalance::where('product_id', $product->id)->where('warehouse_id', $warehouse->id)->value('qty_reserved');
+    expect(bccomp($reservedAfter, bcsub($reservedBefore, '10.000', 4), 4))->toBe(0);
+});

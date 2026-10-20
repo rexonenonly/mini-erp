@@ -221,3 +221,25 @@ test('PostSupplierPayment: overpayment rejected', function () {
     expect(fn () => app(PostSupplierPayment::class)->execute($payment, $user->id))
         ->toThrow(RuntimeException::class, 'melebihi');
 });
+
+test('ReverseGoodsReceipt: reverses stock + journal', function () {
+    $user = makeUser();
+    $supplier = makeSupplier();
+    $product = makeProduct();
+    $warehouse = makeWarehouse();
+    ensurePeriodOpen(now());
+    
+    $po = PurchaseOrder::create(['number' => 'PO-REV', 'supplier_id' => $supplier->id, 'warehouse_id' => $warehouse->id, 'order_date' => now(), 'total_amount' => '10000', 'status' => 'confirmed', 'created_by' => $user->id]);
+    $gr = GoodsReceipt::create(['number' => 'GR-REV', 'purchase_order_id' => $po->id, 'supplier_id' => $supplier->id, 'warehouse_id' => $warehouse->id, 'receipt_date' => now(), 'status' => 'draft', 'created_by' => $user->id]);
+    $gr->lines()->create(['product_id' => $product->id, 'purchase_order_line_id' => null, 'qty_received' => '5.000', 'unit' => 'pcs', 'unit_cost' => '2000.00', 'subtotal' => '10000.00']);
+
+    app(PostGoodsReceipt::class)->execute($gr->fresh(), $user->id);
+    $stockBefore = \App\Models\StockBalance::where('product_id', $product->id)->where('warehouse_id', $warehouse->id)->value('on_hand');
+
+    $gr = app(\App\Domain\Purchasing\Actions\ReverseGoodsReceipt::class)->execute($gr->fresh(), $user->id);
+
+    expect($gr->status)->toBe('reversed')
+        ->and($gr->reversed_by)->toBe($user->id);
+    $stockAfter = \App\Models\StockBalance::where('product_id', $product->id)->where('warehouse_id', $warehouse->id)->value('on_hand') ?? '0';
+    expect(bccomp($stockAfter, bcsub($stockBefore, '5.000', 4), 4))->toBe(0);
+});

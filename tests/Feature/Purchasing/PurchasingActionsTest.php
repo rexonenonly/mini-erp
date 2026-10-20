@@ -24,6 +24,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed([\Database\Seeders\ChartOfAccountsSeeder::class]);
+    $this->cashAccount = \App\Models\Account::where('system_key', 'cash')->firstOrFail();
+});
+
 // Minimal factory helpers
 function makeSupplier(): Partner
 {
@@ -182,6 +187,7 @@ test('PostSupplierPayment: posted, updates bill paid_amount', function () {
     $payment = SupplierPayment::create([
         'number' => 'SP-001', 'payment_date' => now(),
         'bill_id' => $bill->id, 'supplier_id' => $supplier->id,
+        'account_id' => test()->cashAccount->id,
         'amount' => '500000', 'method' => 'transfer', 'status' => 'draft', 'created_by' => $user->id,
     ]);
 
@@ -208,6 +214,7 @@ test('PostSupplierPayment: overpayment rejected', function () {
     $payment = SupplierPayment::create([
         'number' => 'SP-002', 'payment_date' => now(),
         'bill_id' => $bill->id, 'supplier_id' => $supplier->id,
+        'account_id' => test()->cashAccount->id,
         'amount' => '500000', 'method' => 'transfer', 'status' => 'draft', 'created_by' => $user->id,
     ]);
 

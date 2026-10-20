@@ -9,11 +9,12 @@ use App\Domain\Core\Events\InvoicePosted;
 use App\Domain\Core\Events\PaymentPosted;
 use App\Domain\Core\Events\StockOpnamePosted;
 use App\Domain\Core\Events\VendorBillPosted;
+use App\Models\CustomerPayment;
 use App\Models\Delivery;
 use App\Models\GoodsReceipt;
 use App\Models\Invoice;
-use App\Models\Payment;
 use App\Models\StockOpname;
+use App\Models\SupplierPayment;
 use App\Models\VendorBill;
 use Carbon\Carbon;
 
@@ -64,26 +65,30 @@ class CreateJournalEntry
 
     public function handlePaymentPosted(PaymentPosted $event): void
     {
-        $payment = Payment::findOrFail($event->paymentId);
+        $payment = $event->direction === 'out'
+            ? SupplierPayment::findOrFail($event->paymentId)
+            : CustomerPayment::findOrFail($event->paymentId);
 
         if ($event->direction === 'out') {
             $lines = [
-                ['account_key' => 'payable',             'debit' => $payment->amount, 'credit' => 0,                'partner_id' => $payment->partner_id],
+                ['account_key' => 'payable',             'debit' => $payment->amount, 'credit' => 0,                'partner_id' => $payment->supplier_id],
                 ['account_id'  => $payment->account_id,  'debit' => 0,               'credit' => $payment->amount],
             ];
         } else {
             $lines = [
                 ['account_id'  => $payment->account_id,  'debit' => $payment->amount, 'credit' => 0],
-                ['account_key' => 'receivable',          'debit' => 0,               'credit' => $payment->amount, 'partner_id' => $payment->partner_id],
+                ['account_key' => 'receivable',          'debit' => 0,               'credit' => $payment->amount, 'partner_id' => $payment->customer_id],
             ];
         }
 
+        $sourceType = $event->direction === 'out' ? 'supplier_payment' : 'customer_payment';
+
         $this->poster->post(
-            sourceType:  'payment',
+            sourceType:  $sourceType,
             sourceId:    $payment->id,
             description: "Payment {$payment->number}",
             lines:       $lines,
-            entryDate:   Carbon::parse($payment->paid_at),
+            entryDate:   Carbon::parse($payment->payment_date),
             createdBy:   $event->userId,
         );
     }

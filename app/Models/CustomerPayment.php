@@ -11,7 +11,7 @@ class CustomerPayment extends Model
     use SoftDeletes, Auditable;
 
     protected $fillable = [
-        'number', 'payment_date', 'invoice_id', 'customer_id',
+        'number', 'payment_date', 'invoice_id', 'customer_id', 'account_id',
         'amount', 'method', 'status', 'notes', 'reference', 'created_by',
         'posted_at', 'posted_by', 'reversed_by', 'reversed_at',
     ];

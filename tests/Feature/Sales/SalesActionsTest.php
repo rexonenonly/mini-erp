@@ -24,6 +24,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed([\Database\Seeders\ChartOfAccountsSeeder::class]);
+    $this->cashAccount = \App\Models\Account::where('system_key', 'cash')->firstOrFail();
+});
+
 function salesSetup(): array
 {
     $user = User::factory()->create();
@@ -167,6 +172,7 @@ test('Full flow: SO → DO → Invoice → Payment', function () {
     $payment = CustomerPayment::create([
         'number' => 'PAY-001', 'payment_date' => now(),
         'invoice_id' => $invoice->id, 'customer_id' => $customer->id,
+        'account_id' => test()->cashAccount->id,
         'amount' => '1500000', 'method' => 'transfer', 'status' => 'draft', 'created_by' => $user->id,
     ]);
     $payment = app(PostCustomerPayment::class)->execute($payment, $user->id);
@@ -190,6 +196,7 @@ test('PostCustomerPayment: overpayment rejected', function () {
     $payment = CustomerPayment::create([
         'number' => 'PAY-002', 'payment_date' => now(),
         'invoice_id' => $invoice->id, 'customer_id' => $customer->id,
+        'account_id' => test()->cashAccount->id,
         'amount' => '999999', 'method' => 'cash', 'status' => 'draft', 'created_by' => $user->id,
     ]);
 

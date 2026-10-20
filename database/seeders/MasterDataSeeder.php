@@ -35,13 +35,5 @@ class MasterDataSeeder extends Seeder
             ['code' => 'CUST-002', 'name' => 'Toko Berkah Abadi', 'type' => 'customer', 'contact_person' => 'Rina', 'phone' => '081444444004', 'email' => 'rina@berkah.id', 'address' => 'Medan'],
             ['code' => 'SUPP-002', 'name' => 'PT Global Supply', 'type' => 'supplier', 'contact_person' => 'Joko', 'phone' => '081555555005', 'email' => 'joko@globalsupply.id', 'address' => 'Semarang'],
         ] as $r) DB::table('partners')->updateOrInsert(['code' => $r['code']], $r + ['is_active' => true]);
-
-        foreach ([
-            ['code' => '1101', 'name' => 'Kas', 'type' => 'asset', 'balance' => 500000000],
-            ['code' => '1102', 'name' => 'Bank BCA', 'type' => 'asset', 'balance' => 1200000000],
-            ['code' => '2101', 'name' => 'Utang Usaha', 'type' => 'liability', 'balance' => 300000000],
-            ['code' => '4101', 'name' => 'Pendapatan Penjualan', 'type' => 'revenue', 'balance' => 0],
-            ['code' => '5101', 'name' => 'Beban Operasional', 'type' => 'expense', 'balance' => 0],
-        ] as $r) DB::table('accounts')->updateOrInsert(['code' => $r['code']], $r + ['is_active' => true]);
     }
 }

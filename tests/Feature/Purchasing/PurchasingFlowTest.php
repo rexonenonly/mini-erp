@@ -17,6 +17,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed([\Database\Seeders\ChartOfAccountsSeeder::class]);
+});
+
 test('full purchasing flow: PO → GR → Bill → Payment', function () {
     $user = User::factory()->create();
     $vendor = Partner::create(['code' => 'V001', 'name' => 'Vendor A', 'type' => 'supplier', 'email' => 'v@example.com']);
@@ -85,12 +89,14 @@ test('full purchasing flow: PO → GR → Bill → Payment', function () {
     expect($journal)->not->toBeNull();
 
     // Step 5: Create + Post Payment
+    $cashAccount = \App\Models\Account::where('system_key', 'cash')->firstOrFail();
     $payment = SupplierPayment::create([
         'number' => 'PAY-TEST-001',
         'supplier_id' => $vendor->id,
         'bill_id' => $bill->id,
         'payment_date' => $today,
         'amount' => '50000.00',
+        'account_id' => $cashAccount->id,
         'status' => 'draft',
         'created_by' => $user->id,
     ]);

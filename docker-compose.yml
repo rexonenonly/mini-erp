@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: minierp_app
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_ENV=local
+      - DB_HOST=postgres
+      - DB_DATABASE=mini_erp
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      - postgres
+    networks:
+      - minierp
+
+  nginx:
+    image: nginx:alpine
+    container_name: minierp_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - minierp
+
+  postgres:
+    image: postgres:16
+    container_name: minierp_postgres
+    environment:
+      POSTGRES_DB: mini_erp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - minierp
+
+volumes:
+  pgdata:
+
+networks:
+  minierp:
+    driver: bridge

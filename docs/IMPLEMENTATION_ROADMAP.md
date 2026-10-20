@@ -313,9 +313,11 @@ Rewrite total ke arsitektur proposed sesuai ARCHITECTURE.md + DATABASE.md. 21 ha
 
 ---
 
-## Phase 7: UI Adjustment (Hari 18-20)
+## Phase 7: UI Adjustment (Hari 18-20) ⚠️ DEFERRED
 
 **Goal:** UI sesuai new schema + config-driven status + post/reverse buttons.
+
+**Decision:** Deferred — backend DDD architecture complete and verified. UI adjustments non-blocking for Phase 8 testing.
 
 ### Tasks
 

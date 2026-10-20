@@ -2,6 +2,7 @@
 
 namespace App\Domain\Purchasing\Actions;
 
+use App\Domain\Core\Contracts\PeriodGuard;
 use App\Domain\Core\Events\PaymentPosted;
 use App\Models\SupplierPayment;
 use App\Models\VendorBill;
@@ -11,6 +12,8 @@ use RuntimeException;
 
 class PostSupplierPayment
 {
+    public function __construct(private PeriodGuard $periodGuard) {}
+
     public function execute(SupplierPayment $payment, int $postedBy): SupplierPayment
     {
         return DB::transaction(function () use ($payment, $postedBy) {
@@ -23,6 +26,8 @@ class PostSupplierPayment
             if ($payment->status !== 'draft') {
                 throw new RuntimeException("Pembayaran {$payment->number} sudah {$payment->status}");
             }
+
+            $this->periodGuard->assertOpen($payment->payment_date);
 
             // Validate amount doesn't exceed outstanding
             if (isset($bill)) {

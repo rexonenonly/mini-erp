@@ -209,4 +209,49 @@ class SalesController extends Controller
         }
         return sprintf('%s-%s-%s-%04d', $prefix, $year, $month, $seq);
     }
+
+    public function confirmSalesOrder(int $id)
+    {
+        $so = \App\Models\SalesOrder::findOrFail($id);
+        $action = app(\App\Domain\Sales\Actions\ConfirmSalesOrder::class);
+        $so = $action->execute($so, auth()->id());
+        return redirect()->route('sales.show', ['resource' => 'sales-orders', 'id' => $id])
+            ->with('success', 'Sales order confirmed');
+    }
+
+    public function postDelivery(int $id)
+    {
+        $delivery = \App\Models\Delivery::findOrFail($id);
+        $action = app(\App\Domain\Sales\Actions\PostDelivery::class);
+        $delivery = $action->execute($delivery, auth()->id());
+        return redirect()->route('sales.show', ['resource' => 'deliveries', 'id' => $id])
+            ->with('success', 'Delivery posted');
+    }
+
+    public function postInvoice(int $id)
+    {
+        $invoice = \App\Models\Invoice::findOrFail($id);
+        $action = app(\App\Domain\Sales\Actions\PostInvoice::class);
+        $invoice = $action->execute($invoice, auth()->id());
+        return redirect()->route('sales.show', ['resource' => 'invoices', 'id' => $id])
+            ->with('success', 'Invoice posted');
+    }
+
+    public function postCustomerPayment(int $id)
+    {
+        $payment = \App\Models\CustomerPayment::findOrFail($id);
+        $action = app(\App\Domain\Sales\Actions\PostCustomerPayment::class);
+        $payment = $action->execute($payment, auth()->id());
+        return redirect()->route('sales.show', ['resource' => 'customer-payments', 'id' => $id])
+            ->with('success', 'Payment posted');
+    }
+
+    public function closeSalesOrder(int $id)
+    {
+        $so = \App\Models\SalesOrder::findOrFail($id);
+        $action = app(\App\Domain\Sales\Actions\CloseSalesOrder::class);
+        $so = $action->execute($so, auth()->id());
+        return redirect()->route('sales.show', ['resource' => 'sales-orders', 'id' => $id])
+            ->with('success', 'Sales order closed');
+    }
 }

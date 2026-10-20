@@ -44,7 +44,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchasing/bills', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'vendor-bills')->name('purchasing.bills');
     Route::get('/purchasing/payments', [\App\Http\Controllers\PurchasingController::class, 'index'])->defaults('resource', 'supplier-payments')->name('purchasing.payments');
     Route::post('/purchasing/{resource}', [\App\Http\Controllers\PurchasingController::class, 'store'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
-    Route::get('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'show'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
+    Route::post('/purchasing/orders/{id}/confirm', [\App\Http\Controllers\PurchasingController::class, 'confirmPurchaseOrder'])->name('purchasing.orders.confirm');
+    Route::post('/purchasing/receipts/{id}/post', [\App\Http\Controllers\PurchasingController::class, 'postGoodsReceipt'])->name('purchasing.receipts.post');
+    Route::post('/purchasing/receipts/{id}/reverse', [\App\Http\Controllers\PurchasingController::class, 'reverseGoodsReceipt'])->name('purchasing.receipts.reverse');
+    Route::post('/purchasing/bills/{id}/post', [\App\Http\Controllers\PurchasingController::class, 'postVendorBill'])->name('purchasing.bills.post');
+    Route::post('/purchasing/payments/{id}/post', [\App\Http\Controllers\PurchasingController::class, 'postSupplierPayment'])->name('purchasing.payments.post');
+    Route::get('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'show'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments'])->name('purchasing.show');
     Route::put('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'update'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
     Route::delete('/purchasing/{resource}/{id}', [\App\Http\Controllers\PurchasingController::class, 'destroy'])->whereIn('resource', ['purchase-orders', 'goods-receipts', 'vendor-bills', 'supplier-payments']);
 
@@ -54,7 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales/invoices', [SalesController::class, 'index'])->defaults('resource', 'invoices')->name('sales.invoices');
     Route::get('/sales/payments', [SalesController::class, 'index'])->defaults('resource', 'customer-payments')->name('sales.payments');
     Route::post('/sales/{resource}', [SalesController::class, 'store'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
-    Route::get('/sales/{resource}/{id}', [SalesController::class, 'show'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
+    Route::post('/sales/orders/{id}/confirm', [SalesController::class, 'confirmSalesOrder'])->name('sales.orders.confirm');
+    Route::post('/sales/orders/{id}/close', [SalesController::class, 'closeSalesOrder'])->name('sales.orders.close');
+    Route::post('/sales/deliveries/{id}/post', [SalesController::class, 'postDelivery'])->name('sales.deliveries.post');
+    Route::post('/sales/invoices/{id}/post', [SalesController::class, 'postInvoice'])->name('sales.invoices.post');
+    Route::post('/sales/payments/{id}/post', [SalesController::class, 'postCustomerPayment'])->name('sales.payments.post');
+    Route::get('/sales/{resource}/{id}', [SalesController::class, 'show'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments'])->name('sales.show');
     Route::put('/sales/{resource}/{id}', [SalesController::class, 'update'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
     Route::delete('/sales/{resource}/{id}', [SalesController::class, 'destroy'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
 

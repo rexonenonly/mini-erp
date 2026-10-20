@@ -184,18 +184,6 @@ Rewrite total ke arsitektur proposed sesuai ARCHITECTURE.md + DATABASE.md. 21 ha
   - [x] 6 feature tests: confirm PO, idempotency, GR stock + event, VB event, payment, overpayment rejected
   - [x] PurchasingLinesTest updated to use qty_ordered
   - Acceptance: ✅ 7/7 tests pass, 21 assertions
-    - `ConfirmPurchaseOrder` → lock PO, cek status, update confirmed_at, fire event
-    - `PostGoodsReceipt` → lock PO+GR, update qty_received, fire GoodsReceiptPosted
-    - `PostVendorBill` → lock GR+Bill, cek tidak ada invoice lain, fire VendorBillPosted
-    - `PostSupplierPayment` → lock Bill, update paid_amount, fire PaymentPosted
-    - `Reversals` → action terpisah untuk reverse
-  - [ ] Setiap action:
-    - Open `DB::transaction(attempts: 3)` (retry deadlock)
-    - Lock dokumen dengan `lockForUpdate()` → urutan tetap (PO, GR, Bills, stock_balances)
-    - Cek status idempoten (already done → return as-is)
-    - Cek period open via `PeriodGuard` contract
-    - Call service, fire event di akhir transaksi
-  - Acceptance: Action class implement, locking logic konsisten
 
 - [ ] **4.2 PurchasingController Refactor**
   - [ ] Update POST /purchasing/orders → call `ConfirmPurchaseOrder` action via new endpoint POST /purchasing/orders/{id}/confirm

@@ -30,7 +30,7 @@ class CreateJournalEntry
 
     public function handleGoodsReceiptPosted(GoodsReceiptPosted $event): void
     {
-        $gr = GoodsReceipt::with('items')->findOrFail($event->receiptId);
+        $gr = GoodsReceipt::with('lines')->findOrFail($event->receiptId);
 
         $this->poster->post(
             sourceType:  'goods_receipt',

@@ -247,4 +247,54 @@ class PurchasingController extends Controller
         }
         return sprintf('%s-%s-%s-%04d', $prefix, $year, $month, $seq);
     }
+
+    public function confirmPurchaseOrder(int $id)
+    {
+        $this->authorizeAction('purchase-orders', 'update');
+        $po = \App\Models\PurchaseOrder::findOrFail($id);
+        $action = app(\App\Domain\Purchasing\Actions\ConfirmPurchaseOrder::class);
+        $po = $action->execute($po, auth()->id());
+        return redirect()->route('purchasing.show', ['resource' => 'purchase-orders', 'id' => $id])
+            ->with('success', 'Purchase order confirmed');
+    }
+
+    public function postGoodsReceipt(int $id)
+    {
+        $this->authorizeAction('goods-receipts', 'update');
+        $gr = \App\Models\GoodsReceipt::findOrFail($id);
+        $action = app(\App\Domain\Purchasing\Actions\PostGoodsReceipt::class);
+        $gr = $action->execute($gr, auth()->id());
+        return redirect()->route('purchasing.show', ['resource' => 'goods-receipts', 'id' => $id])
+            ->with('success', 'Goods receipt posted');
+    }
+
+    public function postVendorBill(int $id)
+    {
+        $this->authorizeAction('vendor-bills', 'update');
+        $bill = \App\Models\VendorBill::findOrFail($id);
+        $action = app(\App\Domain\Purchasing\Actions\PostVendorBill::class);
+        $bill = $action->execute($bill, auth()->id());
+        return redirect()->route('purchasing.show', ['resource' => 'vendor-bills', 'id' => $id])
+            ->with('success', 'Vendor bill posted');
+    }
+
+    public function postSupplierPayment(int $id)
+    {
+        $this->authorizeAction('supplier-payments', 'update');
+        $payment = \App\Models\SupplierPayment::findOrFail($id);
+        $action = app(\App\Domain\Purchasing\Actions\PostSupplierPayment::class);
+        $payment = $action->execute($payment, auth()->id());
+        return redirect()->route('purchasing.show', ['resource' => 'supplier-payments', 'id' => $id])
+            ->with('success', 'Payment posted');
+    }
+
+    public function reverseGoodsReceipt(int $id)
+    {
+        $this->authorizeAction('goods-receipts', 'update');
+        $gr = \App\Models\GoodsReceipt::findOrFail($id);
+        $action = app(\App\Domain\Purchasing\Actions\ReverseGoodsReceipt::class);
+        $gr = $action->execute($gr, auth()->id());
+        return redirect()->route('purchasing.show', ['resource' => 'goods-receipts', 'id' => $id])
+            ->with('success', 'Goods receipt reversed');
+    }
 }

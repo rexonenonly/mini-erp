@@ -23,6 +23,13 @@ class PurchasingController extends Controller
         return ucfirst($singular) . ' berhasil ' . $action;
     }
 
+    private array $viewMap = [
+        'purchase-orders' => 'orders',
+        'goods-receipts' => 'receipts',
+        'vendor-bills' => 'bills',
+        'supplier-payments' => 'payments',
+    ];
+
     private array $config = [
         'purchase-orders' => ['model' => \App\Models\PurchaseOrder::class, 'label' => 'Purchase Order', 'singular' => 'purchase order'],
         'goods-receipts' => ['model' => \App\Models\GoodsReceipt::class, 'label' => 'Penerimaan Barang', 'singular' => 'penerimaan'],
@@ -40,7 +47,7 @@ class PurchasingController extends Controller
         $items = $model::query()->latest()->paginate(15);
         $total = $model::count();
 
-        return view('purchasing.' . str_replace('-', '_', $resource), compact('resource', 'items', 'total'));
+        return view('purchasing.' . $this->viewMap[$resource], compact('resource', 'items', 'total'));
     }
 
     public function store(Request $request, string $resource)

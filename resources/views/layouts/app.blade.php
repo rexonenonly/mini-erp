@@ -703,24 +703,25 @@ function loadData(id, mode) {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-slate-100';
     if (type === 'product') {
-      tr.innerHTML = \`
+      const opts = PRODUCTS.map(p => `<option value="${p.id}">${p.sku} - ${p.name}</option>`).join('');
+      tr.innerHTML = `
         <td class="py-2 pr-2"><select class="w-full h-8 px-2 border border-slate-200 rounded text-xs" required>
           <option value="">Pilih Produk</option>
-          \${PRODUCTS.map(p => \`<option value="\${p.id}">\${p.sku} - \${p.name}</option>\`).join('')}
+          ${opts}
         </select></td>
         <td class="py-2 px-2"><input type="number" step="0.001" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="1" onchange="calcSubtotal(this)" required></td>
         <td class="py-2 px-2"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="pcs" required></td>
         <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="0" onchange="calcSubtotal(this)" required></td>
         <td class="py-2 px-2 text-right text-xs font-medium">0.00</td>
         <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
-      \`;
+      `;
     } else {
-      tr.innerHTML = \`
+      tr.innerHTML = `
         <td class="py-2 pr-2" colspan="3"><input type="text" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" placeholder="Deskripsi" required></td>
         <td class="py-2 px-2"><input type="number" step="0.01" min="0" class="w-full h-8 px-2 border border-slate-200 rounded text-xs" value="0" onchange="calcSubtotal(this)" required></td>
         <td class="py-2 px-2 text-right text-xs font-medium">0.00</td>
         <td class="py-2 pl-2"><button type="button" onclick="this.closest('tr').remove();updateTotal()" class="text-red-600 hover:text-red-800"><span class="material-symbols-outlined text-base">delete</span></button></td>
-      \`;
+      `;
     }
     tbody.appendChild(tr);
   }

@@ -18,6 +18,13 @@ class SalesController extends Controller
         'customer-payments' => ['model' => \App\Models\CustomerPayment::class,  'singular' => 'pembayaran'],
     ];
 
+    private array $viewMap = [
+        'sales-orders' => 'orders',
+        'deliveries' => 'deliveries',
+        'invoices' => 'invoices',
+        'customer-payments' => 'payments',
+    ];
+
     private function authorizeAction(string $resource, string $action): void
     {
         $perm = match ($action) {
@@ -37,7 +44,7 @@ class SalesController extends Controller
         $model = $this->config[$resource]['model'];
         $items = $model::query()->with($this->with($resource))->latest()->paginate(15);
         $total = $model::count();
-        return view('sales.' . str_replace('-', '_', $resource), compact('resource', 'items', 'total'));
+        return view('sales.' . $this->viewMap[$resource], compact('resource', 'items', 'total'));
     }
 
     public function store(Request $request, string $resource)

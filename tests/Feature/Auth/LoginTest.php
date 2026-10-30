@@ -27,4 +27,32 @@ class LoginTest extends TestCase
             ->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($u);
     }
+
+    public function test_wrong_password_returns_error(): void
+    {
+        $u = User::factory()->create(['password' => Hash::make('correct'), 'is_active' => true]);
+        $this->from(route('login'))
+            ->post(route('login.attempt'), ['email' => $u->email, 'password' => 'wrong'])
+            ->assertRedirect(route('login'))
+            ->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
+    public function test_logout_invalidates_session(): void
+    {
+        $u = User::factory()->create(['password' => Hash::make('password'), 'is_active' => true]);
+        $this->actingAs($u);
+        $this->post(route('logout'))
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_active_user_middleware_json_returns_403(): void
+    {
+        $u = User::factory()->create(['password' => Hash::make('password'), 'is_active' => false]);
+        $this->actingAs($u)
+            ->getJson(route('dashboard'))
+            ->assertStatus(403)
+            ->assertJsonFragment(['message' => 'Akun Anda telah dinonaktifkan. Hubungi administrator.']);
+    }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\StockBalanceController;
@@ -11,14 +12,16 @@ use App\Http\Controllers\SalesController;
 
 Route::get('/', fn() => redirect('/login'));
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::middleware('guest')->group(function () {
+    Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt')->middleware('throttle:5,1');
+});
 
 // Authenticated pages
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', [AuthController::class, 'showDashboard'])->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Master Data
     foreach (['products', 'warehouses', 'partners', 'accounts'] as $resource) {

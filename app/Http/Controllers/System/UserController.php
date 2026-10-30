@@ -140,6 +140,9 @@ class UserController extends Controller
                 }
             }
             $user->update(['is_active'=>false]);
+            if (config('session.driver') === 'database') {
+                \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+            }
         } else {
             $user->update(['is_active'=>true]);
         }

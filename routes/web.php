@@ -8,6 +8,9 @@ use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\StockBalanceController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\AccountingController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesController;
 
 Route::get('/', fn() => redirect('/login'));
@@ -71,13 +74,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/sales/{resource}/{id}', [SalesController::class, 'update'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
     Route::delete('/sales/{resource}/{id}', [SalesController::class, 'destroy'])->whereIn('resource', ['sales-orders', 'deliveries', 'invoices', 'customer-payments']);
 
+    // PDF export
+    Route::get('/purchasing/orders/{purchaseOrder}/pdf', [PdfController::class, 'purchaseOrderPdf'])->name('purchasing.orders.pdf');
+    Route::get('/sales/invoices/{invoice}/pdf', [PdfController::class, 'invoicePdf'])->name('sales.invoices.pdf');
+
     // Accounting
-    Route::view('/accounting/journals', 'accounting.journals')->name('accounting.journals')->middleware('can:journals.view');
-    Route::view('/accounting/ledger', 'accounting.ledger')->name('accounting.ledger')->middleware('can:ledger.view');
+    Route::get('/accounting/journals', [AccountingController::class, 'journals'])->name('accounting.journals')->middleware('can:journals.view');
+    Route::get('/accounting/ledger', [AccountingController::class, 'ledger'])->name('accounting.ledger')->middleware('can:ledger.view');
     Route::view('/accounting/periods', 'accounting.periods')->name('accounting.periods')->middleware('can:periods.view');
 
     // Laporan
-    Route::view('/reports/trial-balance', 'reports.trial-balance')->name('reports.trial-balance')->middleware('can:trial-balance.view');
+    Route::get('/reports/trial-balance', [ReportController::class, 'trialBalance'])->name('reports.trial-balance')->middleware('can:trial-balance.view');
     Route::view('/reports/income-statement', 'reports.income-statement')->name('reports.income-statement')->middleware('can:income-statement.view');
     Route::view('/reports/aging', 'reports.aging')->name('reports.aging')->middleware('can:reports.aging.view');
     Route::view('/reports/inventory-valuation', 'reports.inventory-valuation')->name('reports.inventory-valuation')->middleware('can:inventory-valuation.view');

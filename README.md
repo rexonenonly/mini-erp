@@ -1,92 +1,58 @@
 # Mini ERP
 
-[![CI](https://github.com/rexonenonly/mini-erp/workflows/CI/badge.svg)](https://github.com/rexonenonly/mini-erp/actions)
+Lightweight ERP for small businesses. Sales, Purchasing, Inventory, Accounting. Built with Laravel 13.
 
-Domain-Driven Design ERP system built with Laravel 13, PostgreSQL, and DDD principles.
+## Stack
 
-## Features
-
-- **Domain-Driven Architecture**: Core, MasterData, Inventory, Purchasing, Sales, Accounting domains with enforced boundaries
-- **Action Pattern**: All business operations through Action classes with pessimistic locking
-- **Event-Driven Accounting**: Automatic journal entries via domain events
-- **Moving Average Costing**: Exact decimal calculations using bcmath
-- **Stock Ledger**: Append-only stock movements with PostgreSQL triggers
-- **Audit Logging**: Immutable audit trail for all business documents
-- **Sales Reservations**: Stock reserved on SO confirmation, released on delivery
-- **Boundary Enforcement**: Deptrac ensures clean architecture
-- **Invariant Tests**: Balance integrity checks for stock and accounting
+- **Backend**: Laravel 13, PHP 8.3
+- **Frontend**: Blade, Tailwind CSS, Boxicons, Chart.js
+- **Testing**: Pest
 
 ## Quick Start
 
-### Using Docker (Recommended)
+### Docker
 
-\`\`\`bash
+```bash
 git clone https://github.com/rexonenonly/mini-erp.git
 cd mini-erp
 docker-compose up -d
 docker-compose exec app php artisan migrate --seed
-\`\`\`
+```
 
-Access at http://localhost:8080
+Access: http://localhost:8080
 
-### Local Development
+### Local Dev
 
-Requirements: PHP 8.2+, PostgreSQL 16+, Composer, Node.js
+Requirements: PHP 8.3+, Composer
 
-\`\`\`bash
+```bash
 git clone https://github.com/rexonenonly/mini-erp.git
 cd mini-erp
 composer install
-npm install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-npm run build
 php artisan serve
-\`\`\`
+```
 
-## Architecture
+## Modules
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for DDD structure and [docs/DATABASE.md](docs/DATABASE.md) for schema design.
-
-### Domain Layers
-
-- **Core**: Contracts, DTOs, Events, Services (PeriodGuard, StockLedger, JournalPoster)
-- **MasterData**: Partners, Products, Warehouses, Chart of Accounts
-- **Inventory**: Stock movements, balances, moving average costing
-- **Purchasing**: PO → GR → Bill → Payment flow with Actions
-- **Sales**: SO (with reservations) → Delivery → Invoice → Payment flow
-- **Accounting**: Automatic journal posting via event listeners
+- **Sales** — Orders → Invoices → Deliveries → Payments
+- **Purchasing** — POs → Goods Receipts → Bills → Payments
+- **Inventory** — Stock Balances, Movements, Transfers, Opname
+- **Accounting** — Chart of Accounts, Journal Entries, Trial Balance, General Ledger, PDF Export
+- **Master Data** — Customers, Suppliers, Products, Warehouses
 
 ## Testing
 
-\`\`\`bash
-# Run all tests
+```bash
 vendor/bin/pest
+```
 
-# Specific suites
-vendor/bin/pest tests/Unit/
-vendor/bin/pest tests/Feature/Purchasing/
-vendor/bin/pest tests/Feature/Sales/
-vendor/bin/pest tests/Invariants/
+## Status
 
-# Check boundaries
-vendor/bin/deptrac analyse
-
-# Code style
-vendor/bin/pint
-\`\`\`
-
-## Development Roadmap
-
-See [docs/IMPLEMENTATION_ROADMAP.md](docs/IMPLEMENTATION_ROADMAP.md) for completed phases:
-
-- ✅ Phase 1-3: DDD Structure, Core Services, Triggers
-- ✅ Phase 4: Purchasing Actions (PO → GR → Bill → Payment)
-- ✅ Phase 5: Sales Actions (SO → Delivery → Invoice → Payment)
-- ✅ Phase 6: Audit Logs, Deptrac Boundaries, Invariant Tests
-- ⚠️ Phase 7: UI Adjustments (deferred)
-- 🚧 Phase 8: CI/CD & Polish (in progress)
+- ✅ Phase 1: Accounting, Ledger, Trial Balance, PDF Export
+- 🚧 Phase 2+: Feature expansion & UI refinement
 
 ## License
 
